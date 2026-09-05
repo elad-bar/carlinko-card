@@ -49,6 +49,7 @@ import {
   actionStyles,
   metricStyles,
   renderActionButton,
+  renderMdiIcon,
   sharedHostStyles,
 } from "../core/ui";
 
@@ -81,171 +82,6 @@ const WHEEL_ZONES: WheelZone[] = [
 ];
 
 const PRESSURE_SLOTS = ["tyre_fl", "tyre_fr", "tyre_rl", "tyre_rr"] as const;
-
-const ICON_POWER = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M13 3h-2v10h2V3Zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12a7 7 0 1 1-14 0c0-2.12.95-4.03 2.47-5.32L6.05 5.17A8.96 8.96 0 0 0 3 12a9 9 0 1 0 18 0c0-2.74-1.22-5.2-3.17-6.83Z"
-    />
-  </svg>
-`;
-
-const ICON_PLUS = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z" />
-  </svg>
-`;
-
-const ICON_MINUS = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="currentColor" d="M5 11h14v2H5v-2Z" />
-  </svg>
-`;
-
-const ICON_SNOWFLAKE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M12 2v3.5l1.5-1.5 1 1L12 8l-2.5-2.5 1-1L12 5.5V2Zm0 20v-3.5l-1.5 1.5-1-1L12 16l2.5 2.5-1 1L12 18.5V22Zm10-10h-3.5l1.5 1.5-1 1L16 12l2.5-2.5 1 1L18.5 12H22ZM2 12h3.5L4 10.5l1-1L8 12l-2.5 2.5-1-1L5.5 12H2Zm14.95-6.36-1.41 1.41.71.71L14.83 9.5l-1.41-1.41.71-.71 1.41 1.41ZM9.17 14.5l1.41 1.41-.71.71-1.41-1.41.71-.71ZM9.17 9.5l.71.71-1.41 1.41-.71-.71L9.17 9.5Zm5.66 5.66.71.71-1.41 1.41-.71-.71 1.41-1.41Z"
-    />
-  </svg>
-`;
-
-const ICON_FIRE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M17.66 11.2c.03 1.6-1.02 2.96-2.28 4.05C15.31 16.1 14 17.45 13.15 19c-.55.9-.98 1.93-.85 3h.85c.22-1.19.78-2.2 1.4-3.08.68-.96 1.43-1.86 2.07-2.85.89-1.38 1.53-2.9 1.34-4.52-.11-.94-.5-1.86-1.1-2.62.55.9.9 1.97.8 3.07ZM12 2S9 7 9 11c0 2.4 1.34 4.37 3 5.6 1.66-1.23 3-3.2 3-5.6 0-4-3-9-3-9Zm0 12.5c-.83-.9-1.5-2.1-1.5-3.5 0-1.8.9-4.1 1.5-5.7.6 1.6 1.5 3.9 1.5 5.7 0 1.4-.67 2.6-1.5 3.5Z"
-    />
-  </svg>
-`;
-
-const ICON_FAN = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M12 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm4.5-5.5c-1.4 0-2.6.8-3.2 2A3.5 3.5 0 0 1 16 11.5c0 .2 0 .4-.05.6 1.3.5 2.3 1.7 2.3 3.1 0 1.9-1.6 3.4-3.5 3.4-.7 0-1.35-.2-1.9-.55A3.5 3.5 0 0 1 12 20.5a3.5 3.5 0 0 1-.85-6.85A3.5 3.5 0 0 1 8.25 18c-1.9 0-3.5-1.5-3.5-3.4 0-1.4 1-2.6 2.3-3.1A3.5 3.5 0 0 1 7 11.5c0-1.6 1.1-3 2.7-3.4A3.48 3.48 0 0 1 6.5 5.5C4.6 5.5 3 7 3 8.9c0 1.4 1 2.6 2.3 3.1A3.5 3.5 0 0 1 8 8.5c.7 0 1.35.2 1.9.55A3.5 3.5 0 0 1 12 3.5c.9 0 1.75.35 2.4.95A3.48 3.48 0 0 1 16.5 5.5c1.9 0 3.5 1.5 3.5 3.4 0 1.4-1 2.6-2.3 3.1.05-.2.05-.4.05-.6A3.5 3.5 0 0 1 16.5 5.5Z"
-    />
-  </svg>
-`;
-
-const ICON_WINDOW_OPEN = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M4 4h16v16H4V4Zm2 2v12h5V6H6Zm7 0v5h5V6h-5Zm0 7v5h5v-5h-5Z"
-    />
-  </svg>
-`;
-
-const ICON_WINDOW_CLOSE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M4 4h16v16H4V4Zm2 2v12h12V6H6Z"
-    />
-  </svg>
-`;
-
-const ICON_WINDOW_VENT = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M4 4h16v16H4V4Zm2 2v5h12V6H6Zm0 7v5h12v-5H6Z"
-    />
-  </svg>
-`;
-
-const ICON_SUNROOF_OPEN = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M3 6h18v3H3V6Zm2 5h14v8H5v-8Zm3 2v4h8v-4H8Z"
-    />
-  </svg>
-`;
-
-const ICON_SUNROOF_CLOSE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M3 6h18v3H3V6Zm2 5h14v8H5v-8Z"
-    />
-  </svg>
-`;
-
-const ICON_SUNROOF_TILT = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M3 8h18v2H3V8Zm2 4 14 2v6H5v-8Zm2 3.3V18h10v-2.3l-10-1.4Z"
-    />
-  </svg>
-`;
-
-const ICON_LOCK = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm3 8H9V7a3 3 0 1 1 6 0v3Z"
-    />
-  </svg>
-`;
-
-const ICON_UNLOCK = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M12 2a5 5 0 0 0-5 5h2a3 3 0 0 1 6 0v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Z"
-    />
-  </svg>
-`;
-
-const ICON_DEFOG = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M4 18h16v2H4v-2Zm2.5-3.5 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4Zm9 0 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4ZM4 4h16v2H4V4Z"
-    />
-  </svg>
-`;
-
-const ICON_CHARGE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M11 2h2v5h3l-4 7h3l-5 8v-7H7l4-8V2Z"
-    />
-  </svg>
-`;
-
-const ICON_TRUNK = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M5 14h14l-1.5-5H6.5L5 14Zm-1 2v3h2v-1h12v1h2v-3H4Zm3.5-8h9l.8 2.5H6.7L8.5 8Z"
-    />
-  </svg>
-`;
-
-const ICON_ENGINE = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M7 9V7h4v2h1.5l1-2H17v2h1a2 2 0 0 1 2 2v1h1v2h-1v1a2 2 0 0 1-2 2h-1.5l-1 2H11v-2H8.5L7 17H5v-2H3v-2h2v-1a2 2 0 0 1 2-2h0Zm2 2H7v4h2v-4Zm4 0h-2v4h2v-4Zm4 0h-2v4h2v-4Z"
-    />
-  </svg>
-`;
-
-const ICON_FIND = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      fill="currentColor"
-      d="M9.5 3a6.5 6.5 0 0 1 5.2 10.4l4.45 4.45-1.4 1.4-4.45-4.45A6.5 6.5 0 1 1 9.5 3Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"
-    />
-  </svg>
-`;
 
 function domainOf(entityId: string): string {
   return entityId.split(".", 1)[0];
@@ -437,7 +273,9 @@ export class CarlinkoCabin extends LitElement {
         aria-label=${`${roleLabel}: ${stateLabel}`}
         @click=${onClick}
       >
-        ${kind === "H" ? ICON_FIRE : ICON_FAN}
+        ${kind === "H"
+          ? renderMdiIcon("mdi:car-seat-heater")
+          : renderMdiIcon("mdi:car-seat-cooler")}
         <span class="seat-state">${stateLabel}</span>
       </button>
     `;
@@ -579,7 +417,7 @@ export class CarlinkoCabin extends LitElement {
                   label: engineOn
                     ? t(this.hass, "action.engine_off")
                     : t(this.hass, "action.engine_on"),
-                  icon: ICON_ENGINE,
+                  icon: renderMdiIcon("mdi:engine"),
                   disabled: this._busy,
                   variant: engineOn ? "ok" : "danger",
                   onClick: () =>
@@ -593,7 +431,7 @@ export class CarlinkoCabin extends LitElement {
             ${showFind
               ? renderActionButton({
                   label: entityName(this.hass, "button", "find"),
-                  icon: ICON_FIND,
+                  icon: renderMdiIcon("mdi:map-marker"),
                   disabled: this._busy,
                   onClick: () =>
                     this._run(() => pressButton(this.hass!, findId!)),
@@ -607,7 +445,9 @@ export class CarlinkoCabin extends LitElement {
               label: locked
                 ? t(this.hass, "action.unlock_doors")
                 : t(this.hass, "action.lock_doors"),
-              icon: locked ? ICON_LOCK : ICON_UNLOCK,
+              icon: locked
+                ? renderMdiIcon("mdi:car-door-lock")
+                : renderMdiIcon("mdi:lock-open-variant"),
               disabled: this._busy,
               variant: locked ? "ok" : "danger",
               onClick: () =>
@@ -625,7 +465,7 @@ export class CarlinkoCabin extends LitElement {
               label: defogOn
                 ? t(this.hass, "action.defog_off")
                 : t(this.hass, "action.defog_on"),
-              icon: ICON_DEFOG,
+              icon: renderMdiIcon("mdi:car-defrost-front"),
               disabled: this._busy || defogReadOnly,
               variant: defogOn ? "danger" : "",
               onClick: () =>
@@ -637,7 +477,7 @@ export class CarlinkoCabin extends LitElement {
         ? html`<div slot="charge" class="map-actions">
             ${renderActionButton({
               label: entityName(this.hass, "button", "charge_stop"),
-              icon: ICON_CHARGE,
+              icon: renderMdiIcon("mdi:ev-station"),
               disabled: this._busy,
               variant: "danger",
               onClick: () =>
@@ -651,7 +491,7 @@ export class CarlinkoCabin extends LitElement {
               label: trunkOpen
                 ? t(this.hass, "action.close_trunk")
                 : t(this.hass, "action.open_trunk"),
-              icon: ICON_TRUNK,
+              icon: renderMdiIcon("mdi:car-back"),
               disabled: this._busy,
               variant: trunkOpen ? "danger" : "ok",
               onClick: () =>
@@ -683,7 +523,7 @@ export class CarlinkoCabin extends LitElement {
           ? windowsOpen
             ? renderActionButton({
                 label: t(this.hass, "action.close_windows"),
-                icon: ICON_WINDOW_CLOSE,
+                icon: renderMdiIcon("mdi:window-closed"),
                 disabled: this._busy,
                 variant: "danger",
                 onClick: () =>
@@ -691,7 +531,7 @@ export class CarlinkoCabin extends LitElement {
               })
             : renderActionButton({
                 label: t(this.hass, "action.open_windows"),
-                icon: ICON_WINDOW_OPEN,
+                icon: renderMdiIcon("mdi:window-open"),
                 disabled: this._busy,
                 variant: "ok",
                 onClick: () =>
@@ -701,7 +541,7 @@ export class CarlinkoCabin extends LitElement {
         ${hasVent
           ? renderActionButton({
               label: t(this.hass, "action.vent_windows"),
-              icon: ICON_WINDOW_VENT,
+              icon: renderMdiIcon("mdi:window-open-variant"),
               disabled: this._busy,
               onClick: () =>
                 this._run(() => pressButton(this.hass!, ventId!)),
@@ -728,7 +568,7 @@ export class CarlinkoCabin extends LitElement {
           ? sunroofOpen
             ? renderActionButton({
                 label: t(this.hass, "action.close_sunroof"),
-                icon: ICON_SUNROOF_CLOSE,
+                icon: renderMdiIcon("mdi:window-closed"),
                 disabled: this._busy,
                 variant: "danger",
                 onClick: () =>
@@ -736,7 +576,7 @@ export class CarlinkoCabin extends LitElement {
               })
             : renderActionButton({
                 label: t(this.hass, "action.open_sunroof"),
-                icon: ICON_SUNROOF_OPEN,
+                icon: renderMdiIcon("mdi:window-open"),
                 disabled: this._busy,
                 variant: "ok",
                 onClick: () =>
@@ -746,7 +586,7 @@ export class CarlinkoCabin extends LitElement {
         ${hasTilt
           ? renderActionButton({
               label: t(this.hass, "action.tilt_sunroof"),
-              icon: ICON_SUNROOF_TILT,
+              icon: renderMdiIcon("mdi:angle-acute"),
               disabled: this._busy,
               onClick: () =>
                 this._run(() => pressButton(this.hass!, tiltId!)),
@@ -816,14 +656,14 @@ export class CarlinkoCabin extends LitElement {
                             label: climateOn
                               ? t(this.hass, "climate.off")
                               : t(this.hass, "climate.on"),
-                            icon: ICON_POWER,
+                            icon: renderMdiIcon("mdi:power"),
                             disabled: this._busy,
                             variant: climateOn ? "ok" : "",
                             onClick: () => this._toggleClimate(),
                           })}
                           ${renderActionButton({
                             label: t(this.hass, "climate.increase_temp"),
-                            icon: ICON_PLUS,
+                            icon: renderMdiIcon("mdi:plus"),
                             disabled: this._busy || target === undefined,
                             variant: "heat",
                             onClick: () => this._nudgeTemp(1),
@@ -837,7 +677,7 @@ export class CarlinkoCabin extends LitElement {
                           >
                           ${renderActionButton({
                             label: t(this.hass, "climate.decrease_temp"),
-                            icon: ICON_MINUS,
+                            icon: renderMdiIcon("mdi:minus"),
                             disabled: this._busy || target === undefined,
                             variant: "cool",
                             onClick: () => this._nudgeTemp(-1),
@@ -849,7 +689,7 @@ export class CarlinkoCabin extends LitElement {
                     ${s.quick_cool && this.hass.states[s.quick_cool]
                       ? renderActionButton({
                           label: entityName(this.hass, "button", "quick_cool"),
-                          icon: ICON_SNOWFLAKE,
+                          icon: renderMdiIcon("mdi:snowflake"),
                           disabled: this._busy,
                           variant: "cool",
                           onClick: () =>
@@ -861,7 +701,7 @@ export class CarlinkoCabin extends LitElement {
                     ${s.quick_heat && this.hass.states[s.quick_heat]
                       ? renderActionButton({
                           label: entityName(this.hass, "button", "quick_heat"),
-                          icon: ICON_FIRE,
+                          icon: renderMdiIcon("mdi:fire"),
                           disabled: this._busy,
                           variant: "heat",
                           onClick: () =>
@@ -965,7 +805,8 @@ export class CarlinkoCabin extends LitElement {
         padding: 5px 8px;
         font-size: 0.8rem;
       }
-      .seat-btn svg {
+      .seat-btn ha-icon {
+        --mdc-icon-size: 1rem;
         width: 1rem;
         height: 1rem;
         flex-shrink: 0;
@@ -1043,7 +884,8 @@ export class CarlinkoCabin extends LitElement {
         background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
         border-color: currentColor;
       }
-      .map-actions .action.icon svg {
+      .map-actions .action.icon ha-icon {
+        --mdc-icon-size: 1.35rem;
         width: 1.35rem;
         height: 1.35rem;
       }
@@ -1057,7 +899,8 @@ export class CarlinkoCabin extends LitElement {
           font-size: 0.7rem;
           gap: 2px;
         }
-        .seat-btn svg {
+        .seat-btn ha-icon {
+          --mdc-icon-size: 0.85rem;
           width: 0.85rem;
           height: 0.85rem;
         }
@@ -1071,7 +914,8 @@ export class CarlinkoCabin extends LitElement {
           height: 2.1rem;
           min-width: 2.1rem;
         }
-        .map-actions .action.icon svg {
+        .map-actions .action.icon ha-icon {
+          --mdc-icon-size: 1.15rem;
           width: 1.15rem;
           height: 1.15rem;
         }

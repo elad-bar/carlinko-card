@@ -105,7 +105,8 @@ export const actionStyles = css`
     min-width: 2.5rem;
     padding: 0;
   }
-  .action.icon svg {
+  .action.icon ha-icon {
+    --mdc-icon-size: 1.25rem;
     width: 1.25rem;
     height: 1.25rem;
     display: block;
@@ -154,7 +155,8 @@ export const hotspotStyles = css`
     box-shadow: 0 0 0 0 transparent;
     backdrop-filter: blur(2px);
   }
-  .hotspot svg {
+  .hotspot ha-icon {
+    --mdc-icon-size: 22px;
     width: 22px;
     height: 22px;
     display: block;
@@ -198,7 +200,8 @@ export const hotspotStyles = css`
       min-width: 36px;
       min-height: 36px;
     }
-    .hotspot svg {
+    .hotspot ha-icon {
+      --mdc-icon-size: 18px;
       width: 18px;
       height: 18px;
     }
@@ -368,6 +371,12 @@ export const chargeBatteryStyles = css`
     box-shadow: 0 0 12px color-mix(in srgb, var(--ck-ok) 40%, transparent);
   }
   .charge-power-bolt {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+  }
+  .charge-power-bolt ha-icon {
+    --mdc-icon-size: 22px;
     width: 22px;
     height: 22px;
     display: block;
@@ -438,7 +447,8 @@ export const chargingHeroStyles = css`
     align-items: center;
     gap: 8px;
   }
-  .actions .action.with-icon svg {
+  .actions .action.with-icon ha-icon {
+    --mdc-icon-size: 14px;
     width: 14px;
     height: 14px;
     display: block;

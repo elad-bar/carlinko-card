@@ -6,6 +6,7 @@ import {
   type Connection,
   type HassEntities,
 } from "home-assistant-js-websocket";
+import "./ha-icon";
 import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";

@@ -1,4 +1,5 @@
 import { html, nothing, type TemplateResult } from "lit";
+import { renderMdiIcon } from "./mdi-icon";
 
 /** Electricity / charging indicator (SOC ring already shows battery %). */
 export function renderChargeBattery(opts: {
@@ -23,12 +24,9 @@ export function renderChargeBattery(opts: {
         ? `${chargingLabel}${clamped !== undefined ? `, ${batteryLabel} ${Math.round(clamped)}%` : ""}`
         : `${chargingLabel}: off`}
     >
-      <svg class="charge-power-bolt" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          fill="currentColor"
-          d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"
-        />
-      </svg>
+      <span class="charge-power-bolt"
+        >${renderMdiIcon("mdi:lightning-bolt")}</span
+      >
     </div>
   `;
 }

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.6] - 2026-09-05
 
+### Changed
+
+- Control icons use Home Assistant MDI via `ha-icon` (seat heat/vent use `car-seat-heater` / `car-seat-cooler`; online uses `car-wireless`); unused hotspot SVG duplicates removed
+
 ### Fixed
 
 - Cabin: seat heat/vent buttons show translated level labels (Off / Low / Medium / High) from ha-carlinko instead of raw states (`off`, `l1`, …)
