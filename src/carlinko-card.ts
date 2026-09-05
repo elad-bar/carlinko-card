@@ -4,12 +4,6 @@ import { CarlinkoCharging } from "./cards/charging";
 import { CarlinkoChargingEditor } from "./cards/charging-editor";
 import { CarlinkoCabin } from "./cards/cabin";
 import { CarlinkoCabinEditor } from "./cards/cabin-editor";
-import { CarlinkoClimate } from "./cards/climate";
-import { CarlinkoClimateEditor } from "./cards/climate-editor";
-import { CarlinkoTpms } from "./cards/tpms";
-import { CarlinkoTpmsEditor } from "./cards/tpms-editor";
-import { CarlinkoWindows } from "./cards/windows";
-import { CarlinkoWindowsEditor } from "./cards/windows-editor";
 import { CarlinkoCarOutline } from "./core/ui/car-outline";
 import { CarlinkoVehicleStage } from "./core/ui/vehicle-stage";
 
@@ -19,12 +13,6 @@ void CarlinkoCharging;
 void CarlinkoChargingEditor;
 void CarlinkoCabin;
 void CarlinkoCabinEditor;
-void CarlinkoClimate;
-void CarlinkoClimateEditor;
-void CarlinkoTpms;
-void CarlinkoTpmsEditor;
-void CarlinkoWindows;
-void CarlinkoWindowsEditor;
 void CarlinkoCarOutline;
 void CarlinkoVehicleStage;
 

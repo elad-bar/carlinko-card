@@ -21,9 +21,9 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CORE-05 | Core | i18n stubs (en first) | done | Card en catalog + hass.localize entity labels; more card locales later |
 | CARD-01 | Cards | Overview card | done | `custom:carlinko-overview` |
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
-| CARD-03 | Cards | Climate card | done | Merged into Cabin; `carlinko-climate` alias remains |
-| CARD-04 | Cards | TPMS card | done | Merged into Cabin; `carlinko-tpms` alias remains |
-| CARD-05 | Cards | Windows card | done | Merged into Cabin; `carlinko-windows` alias remains |
+| CARD-03 | Cards | Climate card | done | Merged into Cabin; alias removed — use Cabin |
+| CARD-04 | Cards | TPMS card | done | Merged into Cabin; alias removed — use Cabin |
+| CARD-05 | Cards | Windows card | done | Merged into Cabin; alias removed — use Cabin |
 | CARD-06 | Cards | Visual editors (basic) | done | Shared device editor; image override on Overview/Cabin |
 | CARD-07 | Cards | Cabin card (Climate+TPMS) | done | `custom:carlinko-cabin`; always-on seat + wheel map |
 | DEV-01 | Dev | Vite playground + HA WebSocket auth | done | `npm run playground` |

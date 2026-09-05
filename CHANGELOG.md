@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Cabin: Find car (`find` / Search) button next to engine on/off on the hood
 
+### Changed
+
+- Drop unused status-chip / progress-bar UI primitives and Overview `moving` slot
+
+### Removed
+
+- Deprecated `carlinko-climate`, `carlinko-tpms`, and `carlinko-windows` cards and editors (use `carlinko-cabin`)
+
 ### Fixed
 
 - Playground Vite config defines `__CARD_VERSION__` so the card entry module loads and HA connect can run (was stuck on "Not connected")

@@ -85,19 +85,6 @@ export const metricStyles = css`
   }
 `;
 
-export const chipStyles = css`
-  .chip {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 6px;
-    background: color-mix(in srgb, var(--ck-accent) 12%, transparent);
-    border: 1px solid var(--ck-border);
-  }
-  .chip.ok {
-    border-color: var(--ck-accent);
-  }
-`;
-
 export const actionStyles = css`
   .action {
     border: 1px solid var(--ck-border);
@@ -161,20 +148,6 @@ export const actionStyles = css`
   }
   .action.heat:hover:not(:disabled) {
     border-color: var(--ck-seat-heat);
-  }
-`;
-export const progressStyles = css`
-  .bar-wrap {
-    height: 6px;
-    background: var(--ck-track);
-    border-radius: 999px;
-    overflow: hidden;
-    margin: 2px 0 8px;
-  }
-  .bar {
-    height: 100%;
-    background: var(--ck-accent);
-    border-radius: 999px;
   }
 `;
 

@@ -52,9 +52,6 @@ export const CARD_EN = {
     overview: "CarLinko",
     charging: "Charging",
     cabin: "Cabin",
-    climate: "Climate",
-    tpms: "TPMS",
-    windows: "Windows",
   },
 } as const;
 

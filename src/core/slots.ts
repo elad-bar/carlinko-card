@@ -13,16 +13,11 @@ export const OVERVIEW_SLOTS: readonly SlotDef[] = [
   { slot: "consumption", key: "consumption", domain: "sensor" },
   { slot: "fuel_consumption", key: "fuel_consumption", domain: "sensor" },
   { slot: "speed", key: "speed", domain: "sensor" },
-  { slot: "moving", key: "moving", domain: "binary_sensor" },
   { slot: "online", key: "online", domain: "binary_sensor" },
   { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
   { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
   { slot: "engine", key: "engine", domain: "switch" },
 ] as const;
-
-export const OVERVIEW_SLOT_BY_NAME: ReadonlyMap<string, SlotDef> = new Map(
-  OVERVIEW_SLOTS.map((s) => [s.slot, s]),
-);
 
 /** Charging card slots — keys match ha-carlinko EntitySpec.key */
 export const CHARGING_SLOTS: readonly SlotDef[] = [

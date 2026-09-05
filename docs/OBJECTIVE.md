@@ -34,8 +34,6 @@ Three cards. Users compose them on a Lovelace dashboard.
 | **Cabin** | Climate, seats, TPMS, windows/sunroof, and body/access controls on one top-down map |
 | **Charging** | SoC hero, charge status, mode, remaining time, power, stop charging |
 
-Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms`, `custom:carlinko-windows` → Cabin UI.
-
 Optional later (not in the initial set): location/map, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Cabin.
 
 ### Overview

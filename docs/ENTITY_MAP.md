@@ -27,7 +27,6 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | consumption | `consumption` | sensor | optional | kWh/100km |
 | fuel_consumption | `fuel_consumption` | sensor | optional | PHEV L/100km |
 | speed | `speed` | sensor | optional | Headline; show only when engine is on |
-| moving | `moving` | binary_sensor | optional | Resolved but unused in Overview UI today |
 | online | `online` | binary_sensor | optional | Status hotspot |
 | tyres_ok | `tyres_ok` | binary_sensor | optional | Tyre problem binary; with `tyre_status`: problem → red, `check_tyres` → orange, else green |
 | tyre_status | `tyre_status` | sensor | optional | Enum: `normal` / `check_tyres`; weaker than `tyres_ok` problem |
@@ -94,7 +93,3 @@ Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 **INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 
 **Purify:** `purify` switch is not in the Cabin UI (deferred).
-
----
-
-Deprecated aliases (still load Cabin UI): `carlinko-climate`, `carlinko-tpms`, `carlinko-windows`.
