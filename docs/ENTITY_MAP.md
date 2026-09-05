@@ -72,11 +72,12 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ---
 
-## TPMS (`carlinko-tpms`) — stub
+## TPMS (`carlinko-tpms`)
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| tyre_fl | `tyre_fl` | sensor | optional | Direct TPMS only |
+| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback |
+| tyre_fl | `tyre_fl` | sensor | optional | Direct TPMS pressure |
 | tyre_fl_temp | `tyre_fl_temp` | sensor | optional | |
 | tyre_fr | `tyre_fr` | sensor | optional | |
 | tyre_fr_temp | `tyre_fr_temp` | sensor | optional | |
@@ -84,10 +85,10 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | tyre_rl_temp | `tyre_rl_temp` | sensor | optional | |
 | tyre_rr | `tyre_rr` | sensor | optional | |
 | tyre_rr_temp | `tyre_rr_temp` | sensor | optional | |
-| tyre_status | `tyre_status` | sensor | optional | |
-| tyres_ok | `tyres_ok` | binary_sensor | optional | Problem flag |
+| tyre_status | `tyre_status` | sensor | optional | Overall status |
+| tyres_ok | `tyres_ok` | binary_sensor | optional | OK / problem chip |
 
-If no direct TPMS pressure entities exist, show status only.
+**Direct vs indirect:** If any of `tyre_fl` / `tyre_fr` / `tyre_rl` / `tyre_rr` is present, show the wheel map. Otherwise show status / `tyres_ok` only (indirect TPMS).
 
 ---
 

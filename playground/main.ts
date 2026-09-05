@@ -10,6 +10,7 @@ import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";
 import type { CarlinkoClimate } from "../src/cards/climate";
+import type { CarlinkoTpms } from "../src/cards/tpms";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
 /** Minimal ha-card so cards render outside Lovelace. */
@@ -69,6 +70,7 @@ let hass: HomeAssistant | undefined;
 let overviewCard: CarlinkoOverview | undefined;
 let chargingCard: CarlinkoCharging | undefined;
 let climateCard: CarlinkoClimate | undefined;
+let tpmsCard: CarlinkoTpms | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
 function setStatus(text: string, kind: "" | "ok" | "err" = "") {
@@ -174,11 +176,12 @@ function mountCards() {
 
   const title = titleInput.value.trim() || undefined;
 
-  if (!overviewCard || !chargingCard || !climateCard) {
+  if (!overviewCard || !chargingCard || !climateCard || !tpmsCard) {
     overviewCard = document.createElement("carlinko-overview") as CarlinkoOverview;
     chargingCard = document.createElement("carlinko-charging") as CarlinkoCharging;
     climateCard = document.createElement("carlinko-climate") as CarlinkoClimate;
-    host.replaceChildren(overviewCard, chargingCard, climateCard);
+    tpmsCard = document.createElement("carlinko-tpms") as CarlinkoTpms;
+    host.replaceChildren(overviewCard, chargingCard, climateCard, tpmsCard);
   }
 
   overviewCard.hass = hass;
@@ -199,6 +202,12 @@ function mountCards() {
     title: "Climate",
   });
 
+  tpmsCard.hass = hass;
+  tpmsCard.setConfig({
+    device_id: deviceId,
+    title: "TPMS",
+  });
+
   setStatus(`Cards mounted for device ${deviceId}`, "ok");
 }
 
@@ -214,6 +223,9 @@ function syncHass() {
   }
   if (climateCard) {
     climateCard.hass = hass;
+  }
+  if (tpmsCard) {
+    tpmsCard.hass = hass;
   }
 }
 

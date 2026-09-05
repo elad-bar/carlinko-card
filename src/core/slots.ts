@@ -77,6 +77,7 @@ export const CLIMATE_SLOTS: readonly SlotDef[] = [
 ] as const;
 
 export const TPMS_SLOTS: readonly SlotDef[] = [
+  { slot: "image", key: "vehicle_top", domain: "image" },
   { slot: "tyre_fl", key: "tyre_fl", domain: "sensor" },
   { slot: "tyre_fl_temp", key: "tyre_fl_temp", domain: "sensor" },
   { slot: "tyre_fr", key: "tyre_fr", domain: "sensor" },

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Charging card (`custom:carlinko-charging`) with device_id binding and stop-charge action
 - Climate card (`custom:carlinko-climate`): setpoint −/+, HVAC on/off, quick cool/heat, seat heat/vent on car outline
 - Climate helpers: `setHvacMode`, `setTemperature`, `selectOption`, target/current temp attribute readers
+- TPMS card (`custom:carlinko-tpms`): status chips; per-wheel pressure/temp on `vehicle_top` map (status-only when indirect)
 
 ### Changed
 

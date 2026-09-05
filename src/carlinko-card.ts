@@ -4,6 +4,8 @@ import { CarlinkoCharging } from "./cards/charging";
 import { CarlinkoChargingEditor } from "./cards/charging-editor";
 import { CarlinkoClimate } from "./cards/climate";
 import { CarlinkoClimateEditor } from "./cards/climate-editor";
+import { CarlinkoTpms } from "./cards/tpms";
+import { CarlinkoTpmsEditor } from "./cards/tpms-editor";
 import { CarlinkoCarOutline } from "./core/ui/car-outline";
 
 void CarlinkoOverview;
@@ -12,6 +14,8 @@ void CarlinkoCharging;
 void CarlinkoChargingEditor;
 void CarlinkoClimate;
 void CarlinkoClimateEditor;
+void CarlinkoTpms;
+void CarlinkoTpmsEditor;
 void CarlinkoCarOutline;
 
 window.customCards = window.customCards || [];
@@ -35,6 +39,13 @@ window.customCards.push(
     name: "CarLinko Climate",
     description:
       "Cabin climate setpoint, on/off, quick cool/heat, and seat heat/vent.",
+    preview: true,
+  },
+  {
+    type: "carlinko-tpms",
+    name: "CarLinko TPMS",
+    description:
+      "Tyre pressure and temperature per wheel, or overall status for indirect TPMS.",
     preview: true,
   },
 );
