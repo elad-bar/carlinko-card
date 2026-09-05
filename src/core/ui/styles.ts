@@ -224,6 +224,20 @@ export const horizontalLevelStyles = css`
     letter-spacing: 0.04em;
     line-height: 1.2;
   }
+  .hlevel-percent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+  }
   .hlevel-pct {
     font-size: 1.35rem;
     font-weight: 700;
@@ -256,6 +270,19 @@ export const horizontalLevelStyles = css`
     flex-wrap: wrap;
     align-items: baseline;
     gap: 4px 12px;
+  }
+  .hlevel-secondary,
+  .hlevel-meta {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    text-align: left;
+  }
+  button.hlevel-secondary,
+  button.hlevel-meta {
+    cursor: pointer;
   }
   .hlevel-secondary {
     font-size: 0.85rem;

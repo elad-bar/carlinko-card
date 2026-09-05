@@ -296,6 +296,18 @@ export class CarlinkoOverview extends LitElement {
                 secondary: evRangeText,
                 meta: consumptionText,
                 tone: "ok",
+                onPercentClick:
+                  s.battery && this.hass.states[s.battery]
+                    ? () => fireMoreInfo(this, s.battery!)
+                    : undefined,
+                onSecondaryClick:
+                  s.range && this.hass.states[s.range]
+                    ? () => fireMoreInfo(this, s.range!)
+                    : undefined,
+                onMetaClick:
+                  s.consumption && this.hass.states[s.consumption]
+                    ? () => fireMoreInfo(this, s.consumption!)
+                    : undefined,
               })}
               ${renderHorizontalLevel({
                 percent: fuelPct,
@@ -306,6 +318,18 @@ export class CarlinkoOverview extends LitElement {
                 secondary: fuelRangeText,
                 meta: fuelConsumptionText,
                 tone: "info",
+                onPercentClick:
+                  s.fuel && this.hass.states[s.fuel]
+                    ? () => fireMoreInfo(this, s.fuel!)
+                    : undefined,
+                onSecondaryClick:
+                  s.fuel_range && this.hass.states[s.fuel_range]
+                    ? () => fireMoreInfo(this, s.fuel_range!)
+                    : undefined,
+                onMetaClick:
+                  s.fuel_consumption && this.hass.states[s.fuel_consumption]
+                    ? () => fireMoreInfo(this, s.fuel_consumption!)
+                    : undefined,
               })}
             </div>
           </div>
