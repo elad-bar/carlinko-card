@@ -22,7 +22,7 @@ The Vite playground connects over WebSocket and mounts all five cards with a thi
 4. `npm run playground`
 5. Pick a CarLinko vehicle device → Apply
 
-Layout: Overview (full width), then Charging | Climate, then TPMS | Windows.
+Layout: Overview | TPMS, then Charging | Climate, then Windows.
 
 **Secrets:** never commit `.env` / tokens. Redact them from logs and screenshots.
 

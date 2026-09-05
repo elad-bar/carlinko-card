@@ -6,6 +6,7 @@ import { OVERVIEW_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
 import {
   closeCover,
+  fireMoreInfo,
   formatState,
   getNumericState,
   getStateValue,
@@ -20,16 +21,36 @@ import {
   unlockLock,
 } from "../core/hass";
 import {
-  actionStyles,
+  CarlinkoVehicleStage,
   chipStyles,
-  metricStyles,
-  progressStyles,
-  renderActionButton,
-  renderMetricRow,
-  renderProgressBar,
+  hotspotStyles,
+  renderHotspotButton,
   renderStatusChip,
+  renderVerticalGauge,
   sharedHostStyles,
+  verticalGaugeStyles,
+  type HotspotTone,
 } from "../core/ui";
+
+void CarlinkoVehicleStage;
+
+/** ha-carlinko HV enum: off | lv | ready | unknown */
+function hvHotspot(state: string | undefined): {
+  label: string;
+  tone: HotspotTone;
+} {
+  const raw = (state || "unknown").toLowerCase();
+  switch (raw) {
+    case "ready":
+      return { label: "HV ready", tone: "ok" };
+    case "lv":
+      return { label: "HV LV", tone: "info" };
+    case "off":
+      return { label: "HV off", tone: "muted" };
+    default:
+      return { label: "HV unknown", tone: "warn" };
+  }
+}
 
 export type OverviewConfig = CardConfigBase;
 
@@ -104,7 +125,39 @@ export class CarlinkoOverview extends LitElement {
     const engineOn = isOn(this.hass, s.engine);
     const defogOn = isOn(this.hass, s.defog);
     const trunkOpen = getStateValue(this.hass, s.trunk) === "open";
+    const online = isOn(this.hass, s.online);
     const batteryPct = getNumericState(this.hass, s.battery);
+    const fuelPct = getNumericState(this.hass, s.fuel);
+    const defogReadOnly = Boolean(s.defog?.startsWith("binary_sensor."));
+
+    const odometerText =
+      s.odometer && this.hass.states[s.odometer]
+        ? formatState(this.hass, s.odometer)
+        : undefined;
+    const totalRangeText =
+      s.total_range && this.hass.states[s.total_range]
+        ? formatState(this.hass, s.total_range)
+        : undefined;
+    const evRangeText =
+      s.range && this.hass.states[s.range]
+        ? formatState(this.hass, s.range)
+        : undefined;
+    const fuelRangeText =
+      s.fuel_range && this.hass.states[s.fuel_range]
+        ? formatState(this.hass, s.fuel_range)
+        : undefined;
+    const hvState = getStateValue(this.hass, s.hv_state);
+    const hv = s.hv_state ? hvHotspot(hvState) : undefined;
+    const consumptionText =
+      s.consumption && this.hass.states[s.consumption]
+        ? formatState(this.hass, s.consumption)
+        : undefined;
+    const fuelConsumptionText =
+      s.fuel_consumption && this.hass.states[s.fuel_consumption]
+        ? formatState(this.hass, s.fuel_consumption)
+        : undefined;
+
+    const showHeadline = Boolean(odometerText || totalRangeText);
 
     return html`
       <ha-card>
@@ -113,107 +166,154 @@ export class CarlinkoOverview extends LitElement {
           : nothing}
         <div class="body">
           <div class="hero">
-            ${img
-              ? html`<img class="car-img" src=${img} alt="Vehicle" />`
-              : html`<div class="car-placeholder">No image</div>`}
+            <carlinko-vehicle-stage .src=${img}>
+              ${s.engine
+                ? html`<div slot="engine">
+                    ${renderHotspotButton({
+                      icon: "engine",
+                      label: engineOn ? "Turn engine off" : "Turn engine on",
+                      tone: engineOn ? "ok" : "muted",
+                      disabled: this._busy,
+                      onClick: () =>
+                        this._run(() =>
+                          engineOn
+                            ? turnOff(this.hass!, s.engine!)
+                            : turnOn(this.hass!, s.engine!),
+                        ),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.lock
+                ? html`<div slot="lock">
+                    ${renderHotspotButton({
+                      icon: locked ? "lock" : "unlock",
+                      label: locked ? "Unlock doors" : "Lock doors",
+                      tone: locked ? "muted" : "danger",
+                      disabled: this._busy,
+                      onClick: () =>
+                        this._run(() =>
+                          locked
+                            ? unlockLock(this.hass!, s.lock!)
+                            : lockLock(this.hass!, s.lock!),
+                        ),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.online
+                ? html`<div slot="online">
+                    ${renderHotspotButton({
+                      icon: "signal",
+                      label: online ? "Online" : "Offline",
+                      tone: online ? "ok" : "muted",
+                      onClick: () => fireMoreInfo(this, s.online!),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.hv_state && hv
+                ? html`<div slot="hv">
+                    ${renderHotspotButton({
+                      icon: "hv",
+                      label: hv.label,
+                      tone: hv.tone,
+                      onClick: () => fireMoreInfo(this, s.hv_state!),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.defog
+                ? html`<div slot="defog">
+                    ${renderHotspotButton({
+                      icon: "defog",
+                      label: defogOn ? "Turn defog off" : "Turn defog on",
+                      tone: defogOn ? "warn" : "muted",
+                      disabled: this._busy || defogReadOnly,
+                      onClick: () =>
+                        this._run(() => toggleSwitch(this.hass!, s.defog!)),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.charge_stop
+                ? html`<div slot="charge">
+                    ${renderHotspotButton({
+                      icon: "charge",
+                      label: "Stop charge",
+                      tone: "info",
+                      disabled: this._busy,
+                      onClick: () =>
+                        this._run(() =>
+                          pressButton(this.hass!, s.charge_stop!),
+                        ),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.trunk
+                ? html`<div slot="trunk">
+                    ${renderHotspotButton({
+                      icon: "trunk",
+                      label: trunkOpen ? "Close trunk" : "Open trunk",
+                      tone: trunkOpen ? "warn" : "muted",
+                      disabled: this._busy,
+                      onClick: () =>
+                        this._run(() =>
+                          trunkOpen
+                            ? closeCover(this.hass!, s.trunk!)
+                            : openCover(this.hass!, s.trunk!),
+                        ),
+                    })}
+                  </div>`
+                : nothing}
+            </carlinko-vehicle-stage>
           </div>
           <div class="vitals">
-            ${renderMetricRow(this, this.hass, "Battery", s.battery, {
-              numeric: true,
-              suffix: "%",
-            })}
-            ${renderProgressBar(
-              batteryPct,
-              batteryPct !== undefined ? `Battery ${batteryPct}%` : undefined,
-            )}
-            ${renderMetricRow(this, this.hass, "EV range", s.range)}
-            ${renderMetricRow(this, this.hass, "Fuel", s.fuel, {
-              numeric: true,
-              suffix: "%",
-            })}
-            ${renderMetricRow(this, this.hass, "Fuel range", s.fuel_range)}
-            ${renderMetricRow(this, this.hass, "Total range", s.total_range)}
-            <div class="chips">
-              ${s.hv_state && this.hass.states[s.hv_state]
-                ? renderStatusChip(`HV ${formatState(this.hass, s.hv_state)}`)
-                : nothing}
-              ${s.odometer && this.hass.states[s.odometer]
-                ? renderStatusChip(formatState(this.hass, s.odometer))
-                : nothing}
-              ${s.consumption && this.hass.states[s.consumption]
-                ? renderStatusChip(formatState(this.hass, s.consumption))
-                : nothing}
-              ${s.fuel_consumption && this.hass.states[s.fuel_consumption]
-                ? renderStatusChip(formatState(this.hass, s.fuel_consumption))
-                : nothing}
-              ${s.online && this.hass.states[s.online]
-                ? renderStatusChip(isOn(this.hass, s.online) ? "Online" : "Offline", {
-                    ok: isOn(this.hass, s.online),
-                  })
-                : nothing}
-              ${moving && s.speed && this.hass.states[s.speed]
-                ? renderStatusChip(formatState(this.hass, s.speed))
-                : nothing}
+            ${showHeadline
+              ? html`
+                  <div class="headline">
+                    ${odometerText
+                      ? html`<button
+                          type="button"
+                          class="odo"
+                          @click=${() => fireMoreInfo(this, s.odometer!)}
+                        >
+                          <span class="odo-label">Odometer</span>
+                          <span class="odo-value">${odometerText}</span>
+                        </button>`
+                      : nothing}
+                    ${totalRangeText
+                      ? html`<button
+                          type="button"
+                          class="range-total"
+                          @click=${() => fireMoreInfo(this, s.total_range!)}
+                        >
+                          <span class="range-label">Total range</span>
+                          <span class="range-value">${totalRangeText}</span>
+                        </button>`
+                      : nothing}
+                  </div>
+                `
+              : nothing}
+            <div class="gauges">
+              ${renderVerticalGauge({
+                percent: batteryPct,
+                primary:
+                  batteryPct !== undefined || evRangeText ? "SOC" : undefined,
+                secondary: evRangeText,
+                meta: consumptionText,
+                tone: "ok",
+              })}
+              ${renderVerticalGauge({
+                percent: fuelPct,
+                primary:
+                  fuelPct !== undefined || fuelRangeText ? "Fuel" : undefined,
+                secondary: fuelRangeText,
+                meta: fuelConsumptionText,
+                tone: "info",
+              })}
             </div>
+            ${moving && s.speed && this.hass.states[s.speed]
+              ? html`<div class="chips">
+                  ${renderStatusChip(formatState(this.hass, s.speed))}
+                </div>`
+              : nothing}
           </div>
-        </div>
-        <div class="actions">
-          ${s.lock
-            ? renderActionButton({
-                label: locked ? "Unlock" : "Lock",
-                disabled: this._busy,
-                variant: locked ? "danger" : "ok",
-                onClick: () =>
-                  this._run(() =>
-                    locked
-                      ? unlockLock(this.hass!, s.lock!)
-                      : lockLock(this.hass!, s.lock!),
-                  ),
-              })
-            : nothing}
-          ${s.engine
-            ? renderActionButton({
-                label: `Engine ${engineOn ? "Off" : "On"}`,
-                disabled: this._busy,
-                variant: engineOn ? "ok" : "",
-                onClick: () =>
-                  this._run(() =>
-                    engineOn
-                      ? turnOff(this.hass!, s.engine!)
-                      : turnOn(this.hass!, s.engine!),
-                  ),
-              })
-            : nothing}
-          ${s.defog
-            ? renderActionButton({
-                label: `Defog ${defogOn ? "On" : "Off"}`,
-                disabled: this._busy || s.defog.startsWith("binary_sensor."),
-                variant: defogOn ? "ok" : "",
-                onClick: () =>
-                  this._run(() => toggleSwitch(this.hass!, s.defog!)),
-              })
-            : nothing}
-          ${s.charge_stop
-            ? renderActionButton({
-                label: "Stop charge",
-                disabled: this._busy,
-                onClick: () =>
-                  this._run(() => pressButton(this.hass!, s.charge_stop!)),
-              })
-            : nothing}
-          ${s.trunk
-            ? renderActionButton({
-                label: `Trunk ${trunkOpen ? "Close" : "Open"}`,
-                disabled: this._busy,
-                variant: trunkOpen ? "ok" : "",
-                onClick: () =>
-                  this._run(() =>
-                    trunkOpen
-                      ? closeCover(this.hass!, s.trunk!)
-                      : openCover(this.hass!, s.trunk!),
-                  ),
-              })
-            : nothing}
         </div>
       </ha-card>
     `;
@@ -221,48 +321,63 @@ export class CarlinkoOverview extends LitElement {
 
   static styles = [
     sharedHostStyles,
-    metricStyles,
     chipStyles,
-    actionStyles,
-    progressStyles,
+    hotspotStyles,
+    verticalGaugeStyles,
     css`
       .body {
-        display: grid;
-        grid-template-columns: minmax(140px, 1fr) 1.2fr;
+        display: flex;
+        flex-direction: column;
         gap: 16px;
         padding: 16px;
-        align-items: start;
-      }
-      @media (max-width: 520px) {
-        .body {
-          grid-template-columns: 1fr;
-        }
       }
       .hero {
-        border-radius: 8px;
-        overflow: hidden;
-        background: linear-gradient(145deg, #e8eef2, #f7fafc);
-        min-height: 120px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .car-img {
+        min-width: 0;
         width: 100%;
-        height: auto;
-        display: block;
-        object-fit: contain;
-        max-height: 180px;
-      }
-      .car-placeholder {
-        color: var(--ck-muted);
-        font-size: 0.9rem;
-        padding: 24px;
       }
       .vitals {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 12px;
+        min-width: 0;
+      }
+      .headline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 12px 20px;
+      }
+      .odo,
+      .range-total {
+        border: none;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        cursor: pointer;
+        font: inherit;
+        text-align: left;
+        min-width: 0;
+      }
+      .odo-label,
+      .range-label {
+        display: block;
+        color: var(--ck-muted);
+        font-size: 0.75rem;
+      }
+      .odo-value,
+      .range-value {
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+      }
+      .headline .chip {
+        align-self: center;
+      }
+      .gauges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
       }
     `,
   ];

@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shared Lovelace device editor (`CarlinkoDeviceEditor`); Climate/TPMS expose top image override
 - Local development guide (`docs/DEVELOPMENT.md`)
 - `npm run deploy` / `deploy:watch` copy bundle to `CARLINKO_WWW` for HA fidelity testing
+- Overview card: state-colored hotspots on the vehicle image for quick actions; vertical EV/fuel gauges and promoted odometer/total range (text action row removed)
+- Overview hotspot anchors on hood / door / windshield / hatch; odometer and total range side-by-side with HV; consumption beside SOC/fuel gauges
 
 ### Notes
 

@@ -22,7 +22,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | fuel | `fuel` | sensor | optional | PHEV % |
 | fuel_range | `fuel_range` | sensor | optional | PHEV km |
 | total_range | `total_range` | sensor | optional | PHEV blended km |
-| hv_state | `hv_state` | sensor | optional | |
+| hv_state | `hv_state` | sensor | optional | Enum: `off` / `lv` / `ready` / `unknown`; Overview shows as status hotspot |
 | odometer | `odometer` | sensor | optional | |
 | consumption | `consumption` | sensor | optional | kWh/100km |
 | fuel_consumption | `fuel_consumption` | sensor | optional | PHEV L/100km |

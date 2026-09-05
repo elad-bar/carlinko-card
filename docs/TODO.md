@@ -37,7 +37,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | PIPE-05 | Pipeline | GitHub CI (quality + HACS plugin + release) | done | Release on main |
 | PIPE-06 | Pipeline | CONTRIBUTING, SECURITY, CODEOWNERS, PR template | done | |
 | PIPE-07 | Pipeline | Commit `dist/carlinko-card.js` for HACS | done | Main dist no longer gitignored |
-| UX-01 | Polish | Align layout with mockup refinements | deferred | Discuss later |
+| UX-01 | Polish | Align layout with mockup refinements | done | Overview: hotspot hero + visual vitals |
 | UX-02 | Polish | Mobile / responsive layout | deferred | |
 | UX-03 | Polish | Theme tokens / dark HA themes | deferred | |
 | REL-01 | Release | First HACS-ready publish | todo | Pipeline ready; push to main when repo is remote |
@@ -48,7 +48,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
 3. ~~CORE-04 + CARD-02…CARD-05~~ **done** → ~~CARD-06 editors~~ **done**
 4. ~~DOC-05 + PKG-03~~ **done** → REL-01
-5. UX-* when visuals are reviewed
+5. UX-* polish as needed (`UX-01` Overview hotspots done)
 
 ## Progress log
 
@@ -66,6 +66,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CARD-05 Windows: open/close/vent + sunroof open/close/tilt; playground pairs TPMS|Windows. |
 | 2026-09-05 | CARD-06: shared Lovelace device editor; Climate/TPMS top image override in UI. |
 | 2026-09-05 | DOC-05 + PKG-03: DEVELOPMENT.md; `deploy` / `deploy:watch` via `CARLINKO_WWW`. |
+| 2026-09-05 | UX-01: Overview hotspot controls on vehicle image + vertical EV/fuel gauges; text action row removed. |
 
 ## How to update
 

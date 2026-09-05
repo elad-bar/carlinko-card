@@ -8,7 +8,7 @@ Lovelace custom cards for vehicles managed by [ha-carlinko](https://github.com/e
 
 | Type | Description |
 | --- | --- |
-| `custom:carlinko-overview` | Hero image, ranges/vitals, lock / engine / defog / stop charge / trunk |
+| `custom:carlinko-overview` | Hero hotspots (lock / engine / defog / charge / trunk), visual ranges/vitals |
 | `custom:carlinko-charging` | Charge state, mode, remaining, power, stop charging |
 
 Five Lovelace cards (Overview, Charging, Climate, TPMS, Windows) — see [docs/OBJECTIVE.md](docs/OBJECTIVE.md).

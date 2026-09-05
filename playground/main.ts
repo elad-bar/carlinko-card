@@ -192,14 +192,15 @@ function mountCards() {
     windowsCard = document.createElement(
       "carlinko-windows",
     ) as CarlinkoWindows;
-    host.replaceChildren(
-      overviewCard,
-      chargingCard,
-      climateCard,
-      tpmsCard,
-      windowsCard,
-    );
   }
+
+  host.replaceChildren(
+    overviewCard,
+    tpmsCard,
+    chargingCard,
+    climateCard,
+    windowsCard,
+  );
 
   overviewCard.hass = hass;
   overviewCard.setConfig({

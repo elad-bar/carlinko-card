@@ -30,7 +30,7 @@ Five cards. Users compose them on a Lovelace dashboard.
 
 | Card | Purpose |
 | --- | --- |
-| **Overview** | Hero car image, ranges / mileage / power vitals, high-value toggles |
+| **Overview** | Hero car image with state-colored hotspots for quick actions, visual ranges / mileage / power vitals |
 | **Charging** | Charge status, mode, remaining time, power, stop charging |
 | **Climate** | App-like climate control, quick cool/heat, seat heat/vent map |
 | **TPMS** | Top-down per-wheel pressure and temperature |
@@ -43,19 +43,21 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- EV range (km) and battery (%).
-- Fuel range (km) and fuel (%) when PHEV; hide for BEV.
-- Optional blended/total range for PHEV.
-- `hv_state`, odometer, consumption (and fuel consumption on PHEV).
+- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`); hide when the entity is missing.
+- EV range (km) and battery (%) as a vertical gauge.
+- Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
+- Optional blended/total range for PHEV (promoted with odometer).
+- Consumption (and fuel consumption on PHEV) beside the matching gauge.
 - Speed when the vehicle is moving; hide when parked.
 
-**Controls (quick actions)**
+**Controls (quick actions on the vehicle image)**
 
 - Engine on/off
 - Defog on/off
 - Stop / release charging
 - Lock / unlock doors
 - Open / close trunk (liftgate)
+- Online / HV status hotspots open more-info (not remote commands)
 
 ### Charging
 

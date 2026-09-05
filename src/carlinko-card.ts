@@ -9,6 +9,7 @@ import { CarlinkoTpmsEditor } from "./cards/tpms-editor";
 import { CarlinkoWindows } from "./cards/windows";
 import { CarlinkoWindowsEditor } from "./cards/windows-editor";
 import { CarlinkoCarOutline } from "./core/ui/car-outline";
+import { CarlinkoVehicleStage } from "./core/ui/vehicle-stage";
 
 void CarlinkoOverview;
 void CarlinkoOverviewEditor;
@@ -21,6 +22,7 @@ void CarlinkoTpmsEditor;
 void CarlinkoWindows;
 void CarlinkoWindowsEditor;
 void CarlinkoCarOutline;
+void CarlinkoVehicleStage;
 
 window.customCards = window.customCards || [];
 window.customCards.push(
@@ -28,7 +30,7 @@ window.customCards.push(
     type: "carlinko-overview",
     name: "CarLinko Overview",
     description:
-      "Vehicle overview: image, ranges, vitals, and quick controls for ha-carlinko.",
+      "Vehicle overview: hotspot controls on the car image, visual ranges/vitals for ha-carlinko.",
     preview: true,
   },
   {
