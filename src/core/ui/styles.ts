@@ -196,47 +196,15 @@ export const hotspotStyles = css`
   }
 `;
 
-export const verticalGaugeStyles = css`
-  .vgauge {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    min-height: 120px;
-  }
-  .vgauge-bar-wrap {
-    width: 14px;
-    height: 120px;
-    border-radius: 8px;
-    background: var(--ck-border);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    flex-shrink: 0;
-  }
-  .vgauge-bar {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-    background: var(--ck-ok);
-    transition: height 0.2s ease;
-  }
-  .vgauge.tone-info .vgauge-bar {
-    background: var(--ck-info);
-  }
-  .vgauge.tone-info .vgauge-pct {
-    color: var(--ck-info);
-  }
-  .vgauge.tone-ok .vgauge-pct {
-    color: var(--ck-ok);
-  }
-  .vgauge-text {
+export const horizontalLevelStyles = css`
+  .hlevel {
     display: flex;
     flex-direction: column;
     gap: 2px;
     min-width: 0;
-    padding-top: 0;
+    flex: 1 1 140px;
   }
-  .vgauge-primary {
+  .hlevel-primary {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--ck-muted);
@@ -244,19 +212,46 @@ export const verticalGaugeStyles = css`
     letter-spacing: 0.04em;
     line-height: 1.2;
   }
-  .vgauge-pct {
+  .hlevel-pct {
     font-size: 1.35rem;
     font-weight: 700;
     line-height: 1.15;
   }
-  .vgauge-secondary {
+  .hlevel.tone-ok .hlevel-pct {
+    color: var(--ck-ok);
+  }
+  .hlevel.tone-info .hlevel-pct {
+    color: var(--ck-info);
+  }
+  .hlevel-bar-wrap {
+    height: 8px;
+    margin: 4px 0 2px;
+    border-radius: 999px;
+    background: var(--ck-border);
+    overflow: hidden;
+  }
+  .hlevel-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--ck-ok);
+    transition: width 0.2s ease;
+  }
+  .hlevel.tone-info .hlevel-bar {
+    background: var(--ck-info);
+  }
+  .hlevel-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .hlevel-secondary {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--ck-text);
   }
-  .vgauge-meta {
+  .hlevel-meta {
     font-size: 0.75rem;
     color: var(--ck-muted);
-    margin-top: 2px;
   }
 `;

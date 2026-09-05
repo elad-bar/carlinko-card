@@ -44,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tyre status: problem (`tyres_ok`) red > `tyre_status` `check_tyres` orange > green; Cabin wheel readouts and Overview hotspot share tone
 - Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview onto the Cabin top-down map; Overview keeps status chips
 - Cabin body/access controls use the same square icon map-action buttons as windows/sunroof (not Overview circles)
+- Overview SOC/fuel use horizontal level bars under the hero (SOC left, fuel right) instead of vertical gauges
+- Overview: odometer/total range/speed overlay top-left on the hero; status hotspots on bottom-right; SOC/fuel range and consumption inline under each bar
 
 ### Notes
 

@@ -43,12 +43,12 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- State-colored hotspots on the hero for status (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
-- EV range (km) and battery (%) as a vertical gauge.
-- Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
+- Odometer, total range, and speed (when engine on) overlaid top-left on the hero image.
+- State-colored status hotspots bottom-right on the hero (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
+- EV range (km) and battery (%) as a horizontal level bar under the hero (SOC left).
+- Fuel range (km) and fuel (%) as a horizontal level bar when PHEV (fuel right); hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).
-- Consumption (and fuel consumption on PHEV) beside the matching gauge.
-- Speed in the headline with odometer/range when the engine is on; hide when engine is off or missing.
+- Range and consumption (and fuel consumption on PHEV) on one line under the matching level bar.
 
 **Controls (status on the vehicle image)**
 

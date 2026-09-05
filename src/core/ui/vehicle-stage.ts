@@ -17,6 +17,7 @@ export class CarlinkoVehicleStage extends LitElement {
         ${hasImg
           ? html`<img class="car-img" src=${this.src!} alt="Vehicle" />`
           : html`<div class="placeholder"><slot name="placeholder">No image</slot></div>`}
+        <div class="region headline"><slot name="headline"></slot></div>
         <div class="region online"><slot name="online"></slot></div>
         <div class="region hv"><slot name="hv"></slot></div>
         <div class="region tyres"><slot name="tyres"></slot></div>
@@ -59,18 +60,25 @@ export class CarlinkoVehicleStage extends LitElement {
       z-index: 1;
       pointer-events: auto;
     }
-    /* Status row: online, HV, tyres */
+    /* Mileage text: top-left (no centered transform) */
+    .headline {
+      left: 3%;
+      top: 6%;
+      transform: none;
+      max-width: calc(100% - 6%);
+    }
+    /* Status row: online, HV, tyres — bottom-right */
     .online {
-      left: 5%;
-      top: 11%;
+      left: 73%;
+      top: 88%;
     }
     .hv {
-      left: 16%;
-      top: 11%;
+      left: 84%;
+      top: 88%;
     }
     .tyres {
-      left: 27%;
-      top: 11%;
+      left: 95%;
+      top: 88%;
     }
   `;
 }

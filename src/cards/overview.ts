@@ -14,11 +14,11 @@ import {
 } from "../core/hass";
 import {
   CarlinkoVehicleStage,
+  horizontalLevelStyles,
   hotspotStyles,
+  renderHorizontalLevel,
   renderHotspotButton,
-  renderVerticalGauge,
   sharedHostStyles,
-  verticalGaugeStyles,
   type HotspotTone,
 } from "../core/ui";
 
@@ -153,6 +153,40 @@ export class CarlinkoOverview extends LitElement {
         <div class="body">
           <div class="hero">
             <carlinko-vehicle-stage .src=${img}>
+              ${showHeadline
+                ? html`<div slot="headline" class="headline">
+                    ${odometerText
+                      ? html`<button
+                          type="button"
+                          class="odo"
+                          @click=${() => fireMoreInfo(this, s.odometer!)}
+                        >
+                          <span class="odo-label">Odometer</span>
+                          <span class="odo-value">${odometerText}</span>
+                        </button>`
+                      : nothing}
+                    ${totalRangeText
+                      ? html`<button
+                          type="button"
+                          class="range-total"
+                          @click=${() => fireMoreInfo(this, s.total_range!)}
+                        >
+                          <span class="range-label">Total range</span>
+                          <span class="range-value">${totalRangeText}</span>
+                        </button>`
+                      : nothing}
+                    ${speedText
+                      ? html`<button
+                          type="button"
+                          class="speed"
+                          @click=${() => fireMoreInfo(this, s.speed!)}
+                        >
+                          <span class="speed-label">Speed</span>
+                          <span class="speed-value">${speedText}</span>
+                        </button>`
+                      : nothing}
+                  </div>`
+                : nothing}
               ${s.online
                 ? html`<div slot="online">
                     ${renderHotspotButton({
@@ -186,44 +220,8 @@ export class CarlinkoOverview extends LitElement {
             </carlinko-vehicle-stage>
           </div>
           <div class="vitals">
-            ${showHeadline
-              ? html`
-                  <div class="headline">
-                    ${odometerText
-                      ? html`<button
-                          type="button"
-                          class="odo"
-                          @click=${() => fireMoreInfo(this, s.odometer!)}
-                        >
-                          <span class="odo-label">Odometer</span>
-                          <span class="odo-value">${odometerText}</span>
-                        </button>`
-                      : nothing}
-                    ${totalRangeText
-                      ? html`<button
-                          type="button"
-                          class="range-total"
-                          @click=${() => fireMoreInfo(this, s.total_range!)}
-                        >
-                          <span class="range-label">Total range</span>
-                          <span class="range-value">${totalRangeText}</span>
-                        </button>`
-                      : nothing}
-                    ${speedText
-                      ? html`<button
-                          type="button"
-                          class="speed"
-                          @click=${() => fireMoreInfo(this, s.speed!)}
-                        >
-                          <span class="speed-label">Speed</span>
-                          <span class="speed-value">${speedText}</span>
-                        </button>`
-                      : nothing}
-                  </div>
-                `
-              : nothing}
-            <div class="gauges">
-              ${renderVerticalGauge({
+            <div class="levels">
+              ${renderHorizontalLevel({
                 percent: batteryPct,
                 primary:
                   batteryPct !== undefined || evRangeText ? "SOC" : undefined,
@@ -231,7 +229,7 @@ export class CarlinkoOverview extends LitElement {
                 meta: consumptionText,
                 tone: "ok",
               })}
-              ${renderVerticalGauge({
+              ${renderHorizontalLevel({
                 percent: fuelPct,
                 primary:
                   fuelPct !== undefined || fuelRangeText ? "Fuel" : undefined,
@@ -249,7 +247,7 @@ export class CarlinkoOverview extends LitElement {
   static styles = [
     sharedHostStyles,
     hotspotStyles,
-    verticalGaugeStyles,
+    horizontalLevelStyles,
     css`
       .body {
         display: flex;
@@ -266,6 +264,11 @@ export class CarlinkoOverview extends LitElement {
         flex-direction: column;
         gap: 12px;
         min-width: 0;
+      }
+      .levels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 24px;
       }
       .headline {
         display: flex;
@@ -291,6 +294,8 @@ export class CarlinkoOverview extends LitElement {
         display: block;
         color: var(--ck-muted);
         font-size: 0.75rem;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
+          0 0 8px rgba(255, 255, 255, 0.55);
       }
       .odo-value,
       .range-value,
@@ -299,11 +304,8 @@ export class CarlinkoOverview extends LitElement {
         font-weight: 700;
         letter-spacing: 0.02em;
         line-height: 1.2;
-      }
-      .gauges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
+          0 0 8px rgba(255, 255, 255, 0.55);
       }
     `,
   ];

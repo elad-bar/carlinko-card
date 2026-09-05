@@ -3,7 +3,7 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const te = globalThis, _e = te.ShadowRoot && (te.ShadyCSS === void 0 || te.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, me = Symbol(), Ae = /* @__PURE__ */ new WeakMap();
+const te = globalThis, ge = te.ShadowRoot && (te.ShadyCSS === void 0 || te.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, me = Symbol(), Ae = /* @__PURE__ */ new WeakMap();
 let tt = class {
   constructor(e, s, r) {
     if (this._$cssResult$ = !0, r !== me) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -12,7 +12,7 @@ let tt = class {
   get styleSheet() {
     let e = this.o;
     const s = this.t;
-    if (_e && e === void 0) {
+    if (ge && e === void 0) {
       const r = s !== void 0 && s.length === 1;
       r && (e = Ae.get(s)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), r && Ae.set(s, e));
     }
@@ -22,30 +22,30 @@ let tt = class {
     return this.cssText;
   }
 };
-const ft = (t) => new tt(typeof t == "string" ? t : t + "", void 0, me), y = (t, ...e) => {
+const _t = (t) => new tt(typeof t == "string" ? t : t + "", void 0, me), b = (t, ...e) => {
   const s = t.length === 1 ? t[0] : e.reduce((r, i, n) => r + ((o) => {
     if (o._$cssResult$ === !0) return o.cssText;
     if (typeof o == "number") return o;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + o + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(i) + t[n + 1], t[0]);
   return new tt(s, t, me);
-}, _t = (t, e) => {
-  if (_e) t.adoptedStyleSheets = e.map((s) => s instanceof CSSStyleSheet ? s : s.styleSheet);
+}, gt = (t, e) => {
+  if (ge) t.adoptedStyleSheets = e.map((s) => s instanceof CSSStyleSheet ? s : s.styleSheet);
   else for (const s of e) {
     const r = document.createElement("style"), i = te.litNonce;
     i !== void 0 && r.setAttribute("nonce", i), r.textContent = s.cssText, t.appendChild(r);
   }
-}, Oe = _e ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((e) => {
+}, Oe = ge ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((e) => {
   let s = "";
   for (const r of e.cssRules) s += r.cssText;
-  return ft(s);
+  return _t(s);
 })(t) : t;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: mt, defineProperty: yt, getOwnPropertyDescriptor: bt, getOwnPropertyNames: wt, getOwnPropertySymbols: $t, getPrototypeOf: kt } = Object, O = globalThis, Se = O.trustedTypes, xt = Se ? Se.emptyScript : "", ce = O.reactiveElementPolyfillSupport, j = (t, e) => t, se = { toAttribute(t, e) {
+const { is: mt, defineProperty: bt, getOwnPropertyDescriptor: yt, getOwnPropertyNames: wt, getOwnPropertySymbols: $t, getPrototypeOf: kt } = Object, O = globalThis, Se = O.trustedTypes, xt = Se ? Se.emptyScript : "", ce = O.reactiveElementPolyfillSupport, z = (t, e) => t, se = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
       t = t ? xt : null;
@@ -73,7 +73,7 @@ const { is: mt, defineProperty: yt, getOwnPropertyDescriptor: bt, getOwnProperty
       }
   }
   return s;
-} }, ye = (t, e) => !mt(t, e), Ee = { attribute: !0, type: String, converter: se, reflect: !1, useDefault: !1, hasChanged: ye };
+} }, be = (t, e) => !mt(t, e), Ee = { attribute: !0, type: String, converter: se, reflect: !1, useDefault: !1, hasChanged: be };
 Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), O.litPropertyMetadata ?? (O.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let T = class extends HTMLElement {
   static addInitializer(e) {
@@ -85,11 +85,11 @@ let T = class extends HTMLElement {
   static createProperty(e, s = Ee) {
     if (s.state && (s.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((s = Object.create(s)).wrapped = !0), this.elementProperties.set(e, s), !s.noAccessor) {
       const r = Symbol(), i = this.getPropertyDescriptor(e, r, s);
-      i !== void 0 && yt(this.prototype, e, i);
+      i !== void 0 && bt(this.prototype, e, i);
     }
   }
   static getPropertyDescriptor(e, s, r) {
-    const { get: i, set: n } = bt(this.prototype, e) ?? { get() {
+    const { get: i, set: n } = yt(this.prototype, e) ?? { get() {
       return this[s];
     }, set(o) {
       this[s] = o;
@@ -103,13 +103,13 @@ let T = class extends HTMLElement {
     return this.elementProperties.get(e) ?? Ee;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(j("elementProperties"))) return;
+    if (this.hasOwnProperty(z("elementProperties"))) return;
     const e = kt(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(j("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(j("properties"))) {
+    if (this.hasOwnProperty(z("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(z("properties"))) {
       const s = this.properties, r = [...wt(s), ...$t(s)];
       for (const i of r) this.createProperty(i, s[i]);
     }
@@ -159,7 +159,7 @@ let T = class extends HTMLElement {
   }
   createRenderRoot() {
     const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return _t(e, this.constructor.elementStyles), e;
+    return gt(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
     var e;
@@ -202,7 +202,7 @@ let T = class extends HTMLElement {
     var o;
     if (e !== void 0) {
       const l = this.constructor;
-      if (i === !1 && (n = this[e]), r ?? (r = l.getPropertyOptions(e)), !((r.hasChanged ?? ye)(n, s) || r.useDefault && r.reflect && n === ((o = this._$Ej) == null ? void 0 : o.get(e)) && !this.hasAttribute(l._$Eu(e, r)))) return;
+      if (i === !1 && (n = this[e]), r ?? (r = l.getPropertyOptions(e)), !((r.hasChanged ?? be)(n, s) || r.useDefault && r.reflect && n === ((o = this._$Ej) == null ? void 0 : o.get(e)) && !this.hasAttribute(l._$Eu(e, r)))) return;
       this.C(e, s, r);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
@@ -278,17 +278,17 @@ let T = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[j("elementProperties")] = /* @__PURE__ */ new Map(), T[j("finalized")] = /* @__PURE__ */ new Map(), ce == null || ce({ ReactiveElement: T }), (O.reactiveElementVersions ?? (O.reactiveElementVersions = [])).push("2.1.2");
+T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[z("elementProperties")] = /* @__PURE__ */ new Map(), T[z("finalized")] = /* @__PURE__ */ new Map(), ce == null || ce({ ReactiveElement: T }), (O.reactiveElementVersions ?? (O.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const z = globalThis, Pe = (t) => t, re = z.trustedTypes, He = re ? re.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, st = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, rt = "?" + A, Ct = `<${rt}>`, H = document, I = () => H.createComment(""), W = (t) => t === null || typeof t != "object" && typeof t != "function", be = Array.isArray, At = (t) => be(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", he = `[ 	
+const I = globalThis, Pe = (t) => t, re = I.trustedTypes, He = re ? re.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, st = "$lit$", A = `lit$${Math.random().toFixed(9).slice(2)}$`, rt = "?" + A, Ct = `<${rt}>`, H = document, j = () => H.createComment(""), W = (t) => t === null || typeof t != "object" && typeof t != "function", ye = Array.isArray, At = (t) => ye(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", he = `[ 	
 \f\r]`, R = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Me = /-->/g, Te = />/g, S = RegExp(`>|${he}(?:([^\\s"'>=/]+)(${he}*=${he}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Ne = /'/g, Ze = /"/g, it = /^(?:script|style|textarea|title)$/i, Ot = (t) => (e, ...s) => ({ _$litType$: t, strings: e, values: s }), a = Ot(1), Z = Symbol.for("lit-noChange"), h = Symbol.for("lit-nothing"), Le = /* @__PURE__ */ new WeakMap(), E = H.createTreeWalker(H, 129);
 function nt(t, e) {
-  if (!be(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  if (!ye(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return He !== void 0 ? He.createHTML(e) : e;
 }
 const St = (t, e) => {
@@ -296,10 +296,10 @@ const St = (t, e) => {
   let i, n = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", o = R;
   for (let l = 0; l < s; l++) {
     const c = t[l];
-    let u, p, d = -1, g = 0;
-    for (; g < c.length && (o.lastIndex = g, p = o.exec(c), p !== null); ) g = o.lastIndex, o === R ? p[1] === "!--" ? o = Me : p[1] !== void 0 ? o = Te : p[2] !== void 0 ? (it.test(p[2]) && (i = RegExp("</" + p[2], "g")), o = S) : p[3] !== void 0 && (o = S) : o === S ? p[0] === ">" ? (o = i ?? R, d = -1) : p[1] === void 0 ? d = -2 : (d = o.lastIndex - p[2].length, u = p[1], o = p[3] === void 0 ? S : p[3] === '"' ? Ze : Ne) : o === Ze || o === Ne ? o = S : o === Me || o === Te ? o = R : (o = S, i = void 0);
-    const _ = o === S && t[l + 1].startsWith("/>") ? " " : "";
-    n += o === R ? c + Ct : d >= 0 ? (r.push(u), c.slice(0, d) + st + c.slice(d) + A + _) : c + A + (d === -2 ? l : _);
+    let u, p, d = -1, f = 0;
+    for (; f < c.length && (o.lastIndex = f, p = o.exec(c), p !== null); ) f = o.lastIndex, o === R ? p[1] === "!--" ? o = Me : p[1] !== void 0 ? o = Te : p[2] !== void 0 ? (it.test(p[2]) && (i = RegExp("</" + p[2], "g")), o = S) : p[3] !== void 0 && (o = S) : o === S ? p[0] === ">" ? (o = i ?? R, d = -1) : p[1] === void 0 ? d = -2 : (d = o.lastIndex - p[2].length, u = p[1], o = p[3] === void 0 ? S : p[3] === '"' ? Ze : Ne) : o === Ze || o === Ne ? o = S : o === Me || o === Te ? o = R : (o = S, i = void 0);
+    const g = o === S && t[l + 1].startsWith("/>") ? " " : "";
+    n += o === R ? c + Ct : d >= 0 ? (r.push(u), c.slice(0, d) + st + c.slice(d) + A + g) : c + A + (d === -2 ? l : g);
   }
   return [nt(t, n + (t[s] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), r];
 };
@@ -316,15 +316,15 @@ class q {
     for (; (i = E.nextNode()) !== null && c.length < l; ) {
       if (i.nodeType === 1) {
         if (i.hasAttributes()) for (const d of i.getAttributeNames()) if (d.endsWith(st)) {
-          const g = p[o++], _ = i.getAttribute(d).split(A), $ = /([.?@])?(.*)/.exec(g);
-          c.push({ type: 1, index: n, name: $[2], strings: _, ctor: $[1] === "." ? Pt : $[1] === "?" ? Ht : $[1] === "@" ? Mt : oe }), i.removeAttribute(d);
+          const f = p[o++], g = i.getAttribute(d).split(A), $ = /([.?@])?(.*)/.exec(f);
+          c.push({ type: 1, index: n, name: $[2], strings: g, ctor: $[1] === "." ? Pt : $[1] === "?" ? Ht : $[1] === "@" ? Mt : oe }), i.removeAttribute(d);
         } else d.startsWith(A) && (c.push({ type: 6, index: n }), i.removeAttribute(d));
         if (it.test(i.tagName)) {
-          const d = i.textContent.split(A), g = d.length - 1;
-          if (g > 0) {
+          const d = i.textContent.split(A), f = d.length - 1;
+          if (f > 0) {
             i.textContent = re ? re.emptyScript : "";
-            for (let _ = 0; _ < g; _++) i.append(d[_], I()), E.nextNode(), c.push({ type: 2, index: ++n });
-            i.append(d[g], I());
+            for (let g = 0; g < f; g++) i.append(d[g], j()), E.nextNode(), c.push({ type: 2, index: ++n });
+            i.append(d[f], j());
           }
         }
       } else if (i.nodeType === 8) if (i.data === rt) c.push({ type: 2, index: n });
@@ -420,10 +420,10 @@ class J {
     return s === void 0 && Le.set(e.strings, s = new q(e)), s;
   }
   k(e) {
-    be(this._$AH) || (this._$AH = [], this._$AR());
+    ye(this._$AH) || (this._$AH = [], this._$AR());
     const s = this._$AH;
     let r, i = 0;
-    for (const n of e) i === s.length ? s.push(r = new J(this.O(I()), this.O(I()), this, this.options)) : r = s[i], r._$AI(n), i++;
+    for (const n of e) i === s.length ? s.push(r = new J(this.O(j()), this.O(j()), this, this.options)) : r = s[i], r._$AI(n), i++;
     i < s.length && (this._$AR(r && r._$AB.nextSibling, i), s.length = i);
   }
   _$AR(e = this._$AA.nextSibling, s) {
@@ -504,14 +504,14 @@ class Tt {
     L(this, e);
   }
 }
-const de = z.litHtmlPolyfillSupport;
-de == null || de(q, J), (z.litHtmlVersions ?? (z.litHtmlVersions = [])).push("3.3.3");
+const de = I.litHtmlPolyfillSupport;
+de == null || de(q, J), (I.litHtmlVersions ?? (I.litHtmlVersions = [])).push("3.3.3");
 const Nt = (t, e, s) => {
   const r = (s == null ? void 0 : s.renderBefore) ?? e;
   let i = r._$litPart$;
   if (i === void 0) {
     const n = (s == null ? void 0 : s.renderBefore) ?? null;
-    r._$litPart$ = i = new J(e.insertBefore(I(), n), n, void 0, s ?? {});
+    r._$litPart$ = i = new J(e.insertBefore(j(), n), n, void 0, s ?? {});
   }
   return i._$AI(t), i;
 };
@@ -556,7 +556,7 @@ ue == null || ue({ LitElement: w });
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const f = (t) => (e, s) => {
+const _ = (t) => (e, s) => {
   s !== void 0 ? s.addInitializer(() => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
@@ -566,7 +566,7 @@ const f = (t) => (e, s) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Zt = { attribute: !0, type: String, converter: se, reflect: !1, hasChanged: ye }, Lt = (t = Zt, e, s) => {
+const Zt = { attribute: !0, type: String, converter: se, reflect: !1, hasChanged: be }, Lt = (t = Zt, e, s) => {
   const { kind: r, metadata: i } = s;
   let n = globalThis.litPropertyMetadata.get(i);
   if (n === void 0 && globalThis.litPropertyMetadata.set(i, n = /* @__PURE__ */ new Map()), r === "setter" && ((t = Object.create(t)).wrapped = !0), n.set(s.name, t), r === "accessor") {
@@ -669,14 +669,14 @@ const ot = [
 new Map(
   ot.map((t) => [t.slot, t])
 );
-const jt = [
+const zt = [
   { slot: "charging", key: "charging", domain: "binary_sensor" },
   { slot: "charge_state", key: "charge_state", domain: "sensor" },
   { slot: "charge_mode", key: "charge_mode", domain: "sensor" },
   { slot: "charge_remaining", key: "charge_remaining", domain: "sensor" },
   { slot: "charge_power", key: "charge_power", domain: "sensor" },
   { slot: "charge_stop", key: "charge_stop", domain: "button" }
-], zt = [
+], It = [
   { slot: "image", key: "vehicle_top", domain: "image" },
   { slot: "climate", key: "climate", domain: "climate" },
   { slot: "quick_cool", key: "quick_cool", domain: "button" },
@@ -753,7 +753,7 @@ function K(t, e) {
   const s = m(t, e);
   return s === "on" || s === "open" || s === "unlocked";
 }
-function It(t, e) {
+function jt(t, e) {
   const s = U(t, e);
   if (!s)
     return !1;
@@ -761,7 +761,7 @@ function It(t, e) {
   return s.attributes.device_class === "problem" ? r : !r;
 }
 function at(t, e, s) {
-  return It(t, e) ? "danger" : m(t, s) === "check_tyres" ? "warn" : "ok";
+  return jt(t, e) ? "danger" : m(t, s) === "check_tyres" ? "warn" : "ok";
 }
 function k(t, e, s = "—") {
   const r = U(t, e);
@@ -789,39 +789,39 @@ function lt(t, e) {
     `/api/image_proxy/${e}?token=${encodeURIComponent(i)}`
   ) : pe(t, `/api/image_proxy/${e}`);
 }
-async function b(t, e, s, r, i = {}) {
+async function y(t, e, s, r, i = {}) {
   await t.callService(e, s, { ...i, entity_id: r });
 }
 async function Wt(t, e) {
-  await b(t, "lock", "lock", e);
+  await y(t, "lock", "lock", e);
 }
 async function qt(t, e) {
-  await b(t, "lock", "unlock", e);
+  await y(t, "lock", "unlock", e);
 }
 async function Ve(t, e) {
   const s = e.split(".", 1)[0];
-  await b(t, s, "turn_on", e);
+  await y(t, s, "turn_on", e);
 }
 async function Ue(t, e) {
   const s = e.split(".", 1)[0];
-  await b(t, s, "turn_off", e);
+  await y(t, s, "turn_off", e);
 }
 async function Kt(t, e) {
   const s = e.split(".", 1)[0];
-  await b(t, s, "toggle", e);
+  await y(t, s, "toggle", e);
 }
 async function ve(t, e) {
-  await b(t, "cover", "open_cover", e);
+  await y(t, "cover", "open_cover", e);
 }
-async function ge(t, e) {
-  await b(t, "cover", "close_cover", e);
+async function fe(t, e) {
+  await y(t, "cover", "close_cover", e);
 }
 function De(t, e) {
   const s = m(t, e);
   return s === "open" || s === "opening";
 }
 async function N(t, e) {
-  await b(t, "button", "press", e);
+  await y(t, "button", "press", e);
 }
 function Q(t, e, s) {
   const r = U(t, e);
@@ -848,22 +848,22 @@ function Jt(t, e) {
 function Qt(t, e) {
   return Q(t, e, "max_temp") ?? 30;
 }
-function je(t, e) {
+function ze(t, e) {
   const s = m(t, e);
   return s === "cool" || s === "heat" || s === "heat_cool" || s === "auto" || s === "fan_only" || s === "dry" || s === "on";
 }
 async function Xt(t, e, s) {
-  await b(t, "climate", "set_hvac_mode", e, {
+  await y(t, "climate", "set_hvac_mode", e, {
     hvac_mode: s
   });
 }
 async function Yt(t, e, s) {
-  await b(t, "climate", "set_temperature", e, {
+  await y(t, "climate", "set_temperature", e, {
     temperature: s
   });
 }
 async function es(t, e, s) {
-  await b(t, "select", "select_option", e, {
+  await y(t, "select", "select_option", e, {
     option: s
   });
 }
@@ -880,7 +880,7 @@ function C(t, e) {
     })
   );
 }
-const $e = y`
+const $e = b`
   :host {
     display: block;
     --ck-accent: #0d9488;
@@ -925,7 +925,7 @@ const $e = y`
     padding: 12px 16px 16px;
     border-top: 1px solid var(--ck-border);
   }
-`, ct = y`
+`, ct = b`
   .metric {
     display: flex;
     justify-content: space-between;
@@ -946,7 +946,7 @@ const $e = y`
   .metric-value {
     font-weight: 600;
   }
-`, ss = y`
+`, ss = b`
   .chip {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -957,7 +957,7 @@ const $e = y`
   .chip.ok {
     border-color: var(--ck-accent);
   }
-`, ht = y`
+`, ht = b`
   .action {
     border: 1px solid var(--ck-border);
     background: var(--ck-bg);
@@ -998,7 +998,7 @@ const $e = y`
     color: var(--ck-danger);
   }
 `;
-y`
+b`
   .bar-wrap {
     height: 6px;
     background: var(--ck-border);
@@ -1012,7 +1012,7 @@ y`
     border-radius: 999px;
   }
 `;
-const rs = y`
+const rs = b`
   .hotspot {
     width: 44px;
     height: 44px;
@@ -1066,47 +1066,15 @@ const rs = y`
     border-color: var(--ck-info);
     box-shadow: 0 0 12px color-mix(in srgb, var(--ck-info) 45%, transparent);
   }
-`, is = y`
-  .vgauge {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    min-height: 120px;
-  }
-  .vgauge-bar-wrap {
-    width: 14px;
-    height: 120px;
-    border-radius: 8px;
-    background: var(--ck-border);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    flex-shrink: 0;
-  }
-  .vgauge-bar {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-    background: var(--ck-ok);
-    transition: height 0.2s ease;
-  }
-  .vgauge.tone-info .vgauge-bar {
-    background: var(--ck-info);
-  }
-  .vgauge.tone-info .vgauge-pct {
-    color: var(--ck-info);
-  }
-  .vgauge.tone-ok .vgauge-pct {
-    color: var(--ck-ok);
-  }
-  .vgauge-text {
+`, is = b`
+  .hlevel {
     display: flex;
     flex-direction: column;
     gap: 2px;
     min-width: 0;
-    padding-top: 0;
+    flex: 1 1 140px;
   }
-  .vgauge-primary {
+  .hlevel-primary {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--ck-muted);
@@ -1114,20 +1082,47 @@ const rs = y`
     letter-spacing: 0.04em;
     line-height: 1.2;
   }
-  .vgauge-pct {
+  .hlevel-pct {
     font-size: 1.35rem;
     font-weight: 700;
     line-height: 1.15;
   }
-  .vgauge-secondary {
+  .hlevel.tone-ok .hlevel-pct {
+    color: var(--ck-ok);
+  }
+  .hlevel.tone-info .hlevel-pct {
+    color: var(--ck-info);
+  }
+  .hlevel-bar-wrap {
+    height: 8px;
+    margin: 4px 0 2px;
+    border-radius: 999px;
+    background: var(--ck-border);
+    overflow: hidden;
+  }
+  .hlevel-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--ck-ok);
+    transition: width 0.2s ease;
+  }
+  .hlevel.tone-info .hlevel-bar {
+    background: var(--ck-info);
+  }
+  .hlevel-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .hlevel-secondary {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--ck-text);
   }
-  .vgauge-meta {
+  .hlevel-meta {
     font-size: 0.75rem;
     color: var(--ck-muted);
-    margin-top: 2px;
   }
 `;
 function ee(t, e, s, r, i) {
@@ -1237,7 +1232,7 @@ const os = {
     </svg>
   `
 };
-function fe(t) {
+function _e(t) {
   const e = t.tone ?? "muted";
   return a`
     <button
@@ -1252,25 +1247,25 @@ function fe(t) {
     </button>
   `;
 }
-function ze(t) {
+function Ie(t) {
   const { percent: e, primary: s, secondary: r, meta: i } = t;
   if (e === void 0 && !s && !r && !i)
     return h;
   const n = t.tone ?? "ok", o = e === void 0 || Number.isNaN(e) ? void 0 : Math.max(0, Math.min(100, e));
   return a`
-    <div class="vgauge tone-${n}">
+    <div class="hlevel tone-${n}">
+      ${s ? a`<div class="hlevel-primary">${s}</div>` : h}
+      ${o !== void 0 ? a`<div class="hlevel-pct">${Math.round(o)}%</div>` : h}
       <div
-        class="vgauge-bar-wrap"
+        class="hlevel-bar-wrap"
         aria-hidden=${o === void 0 ? "true" : "false"}
       >
-        ${o !== void 0 ? a`<div class="vgauge-bar" style="height:${o}%"></div>` : h}
+        ${o !== void 0 ? a`<div class="hlevel-bar" style="width:${o}%"></div>` : h}
       </div>
-      <div class="vgauge-text">
-        ${s ? a`<div class="vgauge-primary">${s}</div>` : h}
-        ${o !== void 0 ? a`<div class="vgauge-pct">${Math.round(o)}%</div>` : h}
-        ${r ? a`<div class="vgauge-secondary">${r}</div>` : h}
-        ${i ? a`<div class="vgauge-meta">${i}</div>` : h}
-      </div>
+      ${r || i ? a`<div class="hlevel-details">
+            ${r ? a`<span class="hlevel-secondary">${r}</span>` : h}
+            ${i ? a`<span class="hlevel-meta">${i}</span>` : h}
+          </div>` : h}
     </div>
   `;
 }
@@ -1331,7 +1326,7 @@ let ie = class extends w {
     `;
   }
 };
-ie.styles = y`
+ie.styles = b`
     :host {
       display: block;
       width: 100%;
@@ -1447,7 +1442,7 @@ dt([
   M({ type: String })
 ], ie.prototype, "src", 2);
 ie = dt([
-  f("carlinko-car-outline")
+  _("carlinko-car-outline")
 ], ie);
 var cs = Object.defineProperty, hs = Object.getOwnPropertyDescriptor, ut = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? hs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1460,6 +1455,7 @@ let ne = class extends w {
     return a`
       <div class="wrap ${t ? "has-img" : ""}">
         ${t ? a`<img class="car-img" src=${this.src} alt="Vehicle" />` : a`<div class="placeholder"><slot name="placeholder">No image</slot></div>`}
+        <div class="region headline"><slot name="headline"></slot></div>
         <div class="region online"><slot name="online"></slot></div>
         <div class="region hv"><slot name="hv"></slot></div>
         <div class="region tyres"><slot name="tyres"></slot></div>
@@ -1467,7 +1463,7 @@ let ne = class extends w {
     `;
   }
 };
-ne.styles = y`
+ne.styles = b`
     :host {
       display: block;
       width: 100%;
@@ -1502,25 +1498,32 @@ ne.styles = y`
       z-index: 1;
       pointer-events: auto;
     }
-    /* Status row: online, HV, tyres */
+    /* Mileage text: top-left (no centered transform) */
+    .headline {
+      left: 3%;
+      top: 6%;
+      transform: none;
+      max-width: calc(100% - 6%);
+    }
+    /* Status row: online, HV, tyres — bottom-right */
     .online {
-      left: 5%;
-      top: 11%;
+      left: 73%;
+      top: 88%;
     }
     .hv {
-      left: 16%;
-      top: 11%;
+      left: 84%;
+      top: 88%;
     }
     .tyres {
-      left: 27%;
-      top: 11%;
+      left: 95%;
+      top: 88%;
     }
   `;
 ut([
   M({ type: String })
 ], ne.prototype, "src", 2);
 ne = ut([
-  f("carlinko-vehicle-stage")
+  _("carlinko-vehicle-stage")
 ], ne);
 var ds = Object.defineProperty, us = Object.getOwnPropertyDescriptor, ke = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? us(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1570,42 +1573,14 @@ let F = class extends w {
       >`;
     if (!this.hass)
       return a`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
-    const t = this._slots(), e = lt(this.hass, t.image), s = K(this.hass, t.engine), r = K(this.hass, t.online), i = Be(this.hass, t.battery), n = Be(this.hass, t.fuel), o = t.odometer && this.hass.states[t.odometer] ? k(this.hass, t.odometer) : void 0, l = t.total_range && this.hass.states[t.total_range] ? k(this.hass, t.total_range) : void 0, c = s && t.engine && t.speed && this.hass.states[t.speed] ? k(this.hass, t.speed) : void 0, u = t.range && this.hass.states[t.range] ? k(this.hass, t.range) : void 0, p = t.fuel_range && this.hass.states[t.fuel_range] ? k(this.hass, t.fuel_range) : void 0, d = m(this.hass, t.hv_state), g = t.hv_state ? ps(d) : void 0, _ = t.consumption && this.hass.states[t.consumption] ? k(this.hass, t.consumption) : void 0, $ = t.fuel_consumption && this.hass.states[t.fuel_consumption] ? k(this.hass, t.fuel_consumption) : void 0, D = !!(o || l || c), Y = t.tyres_ok || t.tyre_status ? at(this.hass, t.tyres_ok, t.tyre_status) : void 0, gt = Y === "danger" ? "Tyre problem" : Y === "warn" ? "Check tyres" : "Tyres OK", xe = t.tyres_ok ?? t.tyre_status;
+    const t = this._slots(), e = lt(this.hass, t.image), s = K(this.hass, t.engine), r = K(this.hass, t.online), i = Be(this.hass, t.battery), n = Be(this.hass, t.fuel), o = t.odometer && this.hass.states[t.odometer] ? k(this.hass, t.odometer) : void 0, l = t.total_range && this.hass.states[t.total_range] ? k(this.hass, t.total_range) : void 0, c = s && t.engine && t.speed && this.hass.states[t.speed] ? k(this.hass, t.speed) : void 0, u = t.range && this.hass.states[t.range] ? k(this.hass, t.range) : void 0, p = t.fuel_range && this.hass.states[t.fuel_range] ? k(this.hass, t.fuel_range) : void 0, d = m(this.hass, t.hv_state), f = t.hv_state ? ps(d) : void 0, g = t.consumption && this.hass.states[t.consumption] ? k(this.hass, t.consumption) : void 0, $ = t.fuel_consumption && this.hass.states[t.fuel_consumption] ? k(this.hass, t.fuel_consumption) : void 0, D = !!(o || l || c), Y = t.tyres_ok || t.tyre_status ? at(this.hass, t.tyres_ok, t.tyre_status) : void 0, ft = Y === "danger" ? "Tyre problem" : Y === "warn" ? "Check tyres" : "Tyres OK", xe = t.tyres_ok ?? t.tyre_status;
     return a`
       <ha-card>
         ${this._config.title ? a`<div class="header">${this._config.title}</div>` : h}
         <div class="body">
           <div class="hero">
             <carlinko-vehicle-stage .src=${e}>
-              ${t.online ? a`<div slot="online">
-                    ${fe({
-      icon: "signal",
-      label: r ? "Online" : "Offline",
-      tone: r ? "ok" : "muted",
-      onClick: () => C(this, t.online)
-    })}
-                  </div>` : h}
-              ${t.hv_state && g ? a`<div slot="hv">
-                    ${fe({
-      icon: "hv",
-      label: g.label,
-      tone: g.tone,
-      onClick: () => C(this, t.hv_state)
-    })}
-                  </div>` : h}
-              ${Y && xe ? a`<div slot="tyres">
-                    ${fe({
-      icon: "tyre",
-      label: gt,
-      tone: Y,
-      onClick: () => C(this, xe)
-    })}
-                  </div>` : h}
-            </carlinko-vehicle-stage>
-          </div>
-          <div class="vitals">
-            ${D ? a`
-                  <div class="headline">
+              ${D ? a`<div slot="headline" class="headline">
                     ${o ? a`<button
                           type="button"
                           class="odo"
@@ -1630,17 +1605,43 @@ let F = class extends w {
                           <span class="speed-label">Speed</span>
                           <span class="speed-value">${c}</span>
                         </button>` : h}
-                  </div>
-                ` : h}
-            <div class="gauges">
-              ${ze({
+                  </div>` : h}
+              ${t.online ? a`<div slot="online">
+                    ${_e({
+      icon: "signal",
+      label: r ? "Online" : "Offline",
+      tone: r ? "ok" : "muted",
+      onClick: () => C(this, t.online)
+    })}
+                  </div>` : h}
+              ${t.hv_state && f ? a`<div slot="hv">
+                    ${_e({
+      icon: "hv",
+      label: f.label,
+      tone: f.tone,
+      onClick: () => C(this, t.hv_state)
+    })}
+                  </div>` : h}
+              ${Y && xe ? a`<div slot="tyres">
+                    ${_e({
+      icon: "tyre",
+      label: ft,
+      tone: Y,
+      onClick: () => C(this, xe)
+    })}
+                  </div>` : h}
+            </carlinko-vehicle-stage>
+          </div>
+          <div class="vitals">
+            <div class="levels">
+              ${Ie({
       percent: i,
       primary: i !== void 0 || u ? "SOC" : void 0,
       secondary: u,
-      meta: _,
+      meta: g,
       tone: "ok"
     })}
-              ${ze({
+              ${Ie({
       percent: n,
       primary: n !== void 0 || p ? "Fuel" : void 0,
       secondary: p,
@@ -1658,7 +1659,7 @@ F.styles = [
   $e,
   rs,
   is,
-  y`
+  b`
       .body {
         display: flex;
         flex-direction: column;
@@ -1674,6 +1675,11 @@ F.styles = [
         flex-direction: column;
         gap: 12px;
         min-width: 0;
+      }
+      .levels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 24px;
       }
       .headline {
         display: flex;
@@ -1699,6 +1705,8 @@ F.styles = [
         display: block;
         color: var(--ck-muted);
         font-size: 0.75rem;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
+          0 0 8px rgba(255, 255, 255, 0.55);
       }
       .odo-value,
       .range-value,
@@ -1707,11 +1715,8 @@ F.styles = [
         font-weight: 700;
         letter-spacing: 0.02em;
         line-height: 1.2;
-      }
-      .gauges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
+          0 0 8px rgba(255, 255, 255, 0.55);
       }
     `
 ];
@@ -1722,14 +1727,14 @@ ke([
   V()
 ], F.prototype, "_config", 2);
 F = ke([
-  f("carlinko-overview")
+  _("carlinko-overview")
 ], F);
 var vs = Object.defineProperty, pt = (t, e, s, r) => {
   for (var i = void 0, n = t.length - 1, o; n >= 0; n--)
     (o = t[n]) && (i = o(e, s, i) || i);
   return i && vs(e, s, i), i;
 };
-const gs = [
+const fs = [
   {
     name: "device_id",
     label: "Vehicle device",
@@ -1744,7 +1749,7 @@ const gs = [
     label: "Title",
     selector: { text: {} }
   }
-], fs = {
+], _s = {
   name: "image_entity",
   label: "Image override (optional)",
   selector: {
@@ -1753,7 +1758,7 @@ const gs = [
       filter: { integration: "carlinko" }
     }
   }
-}, _s = {
+}, gs = {
   name: "image_entity",
   label: "Top image override (optional)",
   selector: {
@@ -1772,7 +1777,7 @@ class X extends w {
     return [];
   }
   _schema() {
-    return [...gs, ...this.extraSchema()];
+    return [...fs, ...this.extraSchema()];
   }
   _valueChanged(e) {
     var r;
@@ -1804,19 +1809,19 @@ pt([
 pt([
   V()
 ], X.prototype, "_config");
-var ms = Object.getOwnPropertyDescriptor, ys = (t, e, s, r) => {
+var ms = Object.getOwnPropertyDescriptor, bs = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? ms(e, s) : e, n = t.length - 1, o; n >= 0; n--)
     (o = t[n]) && (i = o(i) || i);
   return i;
 };
-let Ie = class extends X {
+let je = class extends X {
   extraSchema() {
-    return [fs];
+    return [_s];
   }
 };
-Ie = ys([
-  f("carlinko-overview-editor")
-], Ie);
+je = bs([
+  _("carlinko-overview-editor")
+], je);
 async function vt(t, e, s, r) {
   if (t())
     return !1;
@@ -1829,10 +1834,10 @@ async function vt(t, e, s, r) {
     e(!1);
   }
 }
-var bs = Object.defineProperty, ws = Object.getOwnPropertyDescriptor, ae = (t, e, s, r) => {
+var ys = Object.defineProperty, ws = Object.getOwnPropertyDescriptor, ae = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? ws(e, s) : e, n = t.length - 1, o; n >= 0; n--)
     (o = t[n]) && (i = (r ? o(e, s, i) : o(i)) || i);
-  return r && i && bs(e, s, i), i;
+  return r && i && ys(e, s, i), i;
 };
 let B = class extends w {
   constructor() {
@@ -1856,7 +1861,7 @@ let B = class extends w {
     };
   }
   _slots() {
-    return this._config ? we(this.hass, this._config, jt) : {};
+    return this._config ? we(this.hass, this._config, zt) : {};
   }
   _run(t) {
     this.hass && vt(
@@ -1922,7 +1927,7 @@ ae([
   V()
 ], B.prototype, "_busy", 2);
 B = ae([
-  f("carlinko-charging")
+  _("carlinko-charging")
 ], B);
 var $s = Object.getOwnPropertyDescriptor, ks = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? $s(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1932,7 +1937,7 @@ var $s = Object.getOwnPropertyDescriptor, ks = (t, e, s, r) => {
 let We = class extends X {
 };
 We = ks([
-  f("carlinko-charging-editor")
+  _("carlinko-charging-editor")
 ], We);
 var xs = Object.defineProperty, Cs = Object.getOwnPropertyDescriptor, le = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Cs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2048,21 +2053,21 @@ const qe = [
       d="M4 18h16v2H4v-2Zm2.5-3.5 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4Zm9 0 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4ZM4 4h16v2H4V4Z"
     />
   </svg>
-`, js = a`
+`, zs = a`
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       fill="currentColor"
       d="M11 2h2v5h3l-4 7h3l-5 8v-7H7l4-8V2Z"
     />
   </svg>
-`, zs = a`
+`, Is = a`
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       fill="currentColor"
       d="M5 14h14l-1.5-5H6.5L5 14Zm-1 2v3h2v-1h12v1h2v-3H4Zm3.5-8h9l.8 2.5H6.7L8.5 8Z"
     />
   </svg>
-`, Is = a`
+`, js = a`
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       fill="currentColor"
@@ -2098,7 +2103,7 @@ let x = class extends w {
     };
   }
   _slots() {
-    return this._config ? we(this.hass, this._config, zt) : {};
+    return this._config ? we(this.hass, this._config, It) : {};
   }
   _run(t) {
     this.hass && vt(
@@ -2124,7 +2129,7 @@ let x = class extends w {
     const t = this._slots().climate;
     if (!this.hass || !t)
       return;
-    const e = je(this.hass, t);
+    const e = ze(this.hass, t);
     this._run(
       () => Xt(this.hass, t, e ? "off" : "cool")
     );
@@ -2232,7 +2237,7 @@ let x = class extends w {
       ${this._entityExists(s) ? a`<div slot="engine" class="map-actions">
             ${v({
       label: c ? "Turn engine off" : "Turn engine on",
-      icon: Is,
+      icon: js,
       disabled: this._busy,
       variant: c ? "ok" : "",
       onClick: () => this._run(
@@ -2263,7 +2268,7 @@ let x = class extends w {
       ${this._entityExists(i) ? a`<div slot="charge" class="map-actions">
             ${v({
       label: "Stop charge",
-      icon: js,
+      icon: zs,
       disabled: this._busy,
       variant: "danger",
       onClick: () => this._run(() => N(this.hass, i))
@@ -2272,11 +2277,11 @@ let x = class extends w {
       ${this._entityExists(n) ? a`<div slot="trunk" class="map-actions">
             ${v({
       label: d ? "Close trunk" : "Open trunk",
-      icon: zs,
+      icon: Is,
       disabled: this._busy,
       variant: d ? "ok" : "",
       onClick: () => this._run(
-        () => d ? ge(this.hass, n) : ve(this.hass, n)
+        () => d ? fe(this.hass, n) : ve(this.hass, n)
       )
     })}
           </div>` : h}
@@ -2293,7 +2298,7 @@ let x = class extends w {
       label: "Close windows",
       icon: Ns,
       disabled: this._busy,
-      onClick: () => this._run(() => ge(this.hass, e))
+      onClick: () => this._run(() => fe(this.hass, e))
     } : {
       label: "Open windows",
       icon: Ts,
@@ -2320,7 +2325,7 @@ let x = class extends w {
       label: "Close sunroof",
       icon: Bs,
       disabled: this._busy,
-      onClick: () => this._run(() => ge(this.hass, e))
+      onClick: () => this._run(() => fe(this.hass, e))
     } : {
       label: "Open sunroof",
       icon: Ls,
@@ -2346,12 +2351,12 @@ let x = class extends w {
       >`;
     if (!this.hass)
       return a`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
-    const t = this._slots(), e = t.climate, s = e ? this.hass.states[e] : void 0, r = je(this.hass, e), i = Re(this.hass, e), n = Ft(this.hass, e), o = (typeof (s == null ? void 0 : s.attributes.temperature_unit) == "string" ? s.attributes.temperature_unit : void 0) || (typeof (s == null ? void 0 : s.attributes.unit_of_measurement) == "string" ? s.attributes.unit_of_measurement : "°C"), l = this._hasSeats(t), c = this._hasDirectTpms(t), u = this._hasWindowsControls(t), p = this._hasBodyControls(t), d = lt(this.hass, t.image), g = l || c || u || p, _ = !!(s || t.quick_cool && this.hass.states[t.quick_cool] || t.quick_heat && this.hass.states[t.quick_heat]);
+    const t = this._slots(), e = t.climate, s = e ? this.hass.states[e] : void 0, r = ze(this.hass, e), i = Re(this.hass, e), n = Ft(this.hass, e), o = (typeof (s == null ? void 0 : s.attributes.temperature_unit) == "string" ? s.attributes.temperature_unit : void 0) || (typeof (s == null ? void 0 : s.attributes.unit_of_measurement) == "string" ? s.attributes.unit_of_measurement : "°C"), l = this._hasSeats(t), c = this._hasDirectTpms(t), u = this._hasWindowsControls(t), p = this._hasBodyControls(t), d = lt(this.hass, t.image), f = l || c || u || p, g = !!(s || t.quick_cool && this.hass.states[t.quick_cool] || t.quick_heat && this.hass.states[t.quick_heat]);
     return a`
       <ha-card>
         ${this._config.title ? a`<div class="header">${this._config.title}</div>` : h}
         <div class="body-pad">
-          ${_ ? a`
+          ${g ? a`
                 <div class="controls-row">
                   <div class="controls-left">
                     ${s ? a`
@@ -2405,7 +2410,7 @@ let x = class extends w {
                   <span class="metric-value">${n}${o}</span>
                 </div>
               ` : h}
-          ${g ? a`
+          ${f ? a`
                 <carlinko-car-outline .src=${d}>
                   ${this._bodyActions(t)} ${this._windowsCluster(t)}
                   ${this._sunroofCluster(t)}
@@ -2422,7 +2427,7 @@ x.styles = [
   $e,
   ct,
   ht,
-  y`
+  b`
       .controls-row {
         display: flex;
         flex-wrap: wrap;
@@ -2589,7 +2594,7 @@ le([
   V()
 ], x.prototype, "_busy", 2);
 x = le([
-  f("carlinko-cabin")
+  _("carlinko-cabin")
 ], x);
 var Ks = Object.getOwnPropertyDescriptor, Fs = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Ks(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2598,11 +2603,11 @@ var Ks = Object.getOwnPropertyDescriptor, Fs = (t, e, s, r) => {
 };
 let G = class extends X {
   extraSchema() {
-    return [_s];
+    return [gs];
   }
 };
 G = Fs([
-  f("carlinko-cabin-editor")
+  _("carlinko-cabin-editor")
 ], G);
 var Gs = Object.getOwnPropertyDescriptor, Js = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Gs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2621,7 +2626,7 @@ let Fe = class extends x {
   }
 };
 Fe = Js([
-  f("carlinko-climate")
+  _("carlinko-climate")
 ], Fe);
 var Qs = Object.getOwnPropertyDescriptor, Xs = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Qs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2631,7 +2636,7 @@ var Qs = Object.getOwnPropertyDescriptor, Xs = (t, e, s, r) => {
 let Ge = class extends G {
 };
 Ge = Xs([
-  f("carlinko-climate-editor")
+  _("carlinko-climate-editor")
 ], Ge);
 var Ys = Object.getOwnPropertyDescriptor, er = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Ys(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2650,7 +2655,7 @@ let Je = class extends x {
   }
 };
 Je = er([
-  f("carlinko-tpms")
+  _("carlinko-tpms")
 ], Je);
 var tr = Object.getOwnPropertyDescriptor, sr = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? tr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2660,7 +2665,7 @@ var tr = Object.getOwnPropertyDescriptor, sr = (t, e, s, r) => {
 let Qe = class extends G {
 };
 Qe = sr([
-  f("carlinko-tpms-editor")
+  _("carlinko-tpms-editor")
 ], Qe);
 var rr = Object.getOwnPropertyDescriptor, ir = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? rr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2679,7 +2684,7 @@ let Xe = class extends x {
   }
 };
 Xe = ir([
-  f("carlinko-windows")
+  _("carlinko-windows")
 ], Xe);
 var nr = Object.getOwnPropertyDescriptor, or = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? nr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2689,7 +2694,7 @@ var nr = Object.getOwnPropertyDescriptor, or = (t, e, s, r) => {
 let Ye = class extends G {
 };
 Ye = or([
-  f("carlinko-windows-editor")
+  _("carlinko-windows-editor")
 ], Ye);
 window.customCards = window.customCards || [];
 window.customCards.push(
