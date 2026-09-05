@@ -42,7 +42,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | UX-02 | Polish | Mobile / responsive layout | done | Container queries ~360px; Overview/Cabin density |
 | UX-03 | Polish | Theme tokens / dark HA themes | done | `--ck-*` mapped to HA theme vars; no light-only hardcodes |
 | REL-01 | Release | First HACS-ready publish | done | Public `elad-bar/carlinko-card`; `v0.1.0` release; `dist/` + `hacs.json`; CI HACS job green |
-| REL-02 | Release | Submit to HACS default store | todo | Optional: PR to `hacs/default` `./plugin` after custom-repo install works |
+| REL-02 | Release | Submit to HACS default store | in_progress | PR: https://github.com/hacs/default/pull/10652 (queue can take months) |
 
 ## Suggested order
 
@@ -77,6 +77,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CORE-05: card i18n stubs (en) + reuse ha-carlinko entity name/state via `hass.localize` (no device prefix). |
 | 2026-09-05 | UX-03 theme tokens (HA CSS vars) + UX-02 container-query density for Overview/Cabin overlays. |
 | 2026-09-05 | REL-01 done: repo public with description/topics, `v0.1.0` GitHub release, HACS CI green; install via custom Dashboard repo. REL-02 added for optional `hacs/default` PR. |
+| 2026-09-05 | REL-02: opened https://github.com/hacs/default/pull/10652 to add `elad-bar/carlinko-card` under `./plugin`. |
 
 ## How to update
 
