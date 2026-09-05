@@ -128,14 +128,19 @@ function withHassBase(
   if (/^https?:\/\//i.test(path)) {
     return path;
   }
-  const hassUrl = hass?.hassUrl;
-  // Home Assistant exposes hassUrl(path); playground may pass an origin string.
-  if (typeof hassUrl === "function") {
-    return hassUrl(path);
-  }
-  if (typeof hassUrl === "string" && hassUrl) {
-    const base = hassUrl.replace(/\/$/, "");
-    return path.startsWith("/") ? `${base}${path}` : `${base}/${path}`;
+  try {
+    const hassUrl = hass?.hassUrl;
+    // Home Assistant exposes hassUrl(path); playground may pass an origin string.
+    if (typeof hassUrl === "function") {
+      return hassUrl(path);
+    }
+    if (typeof hassUrl === "string" && hassUrl) {
+      const base = hassUrl.replace(/\/$/, "");
+      return path.startsWith("/") ? `${base}${path}` : `${base}/${path}`;
+    }
+  } catch (err) {
+    // Never throw from render paths — HA entity updates would spam-freeze the UI.
+    console.warn("carlinko-card: withHassBase failed", err);
   }
   return path;
 }

@@ -1,11 +1,2 @@
-/// <reference types="vite/client" />
-
-interface ImportMetaEnv {
-  readonly VITE_HA_URL?: string;
-  readonly VITE_HA_TOKEN?: string;
-  readonly VITE_DEVICE_ID?: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
+/** Injected at build time from package.json via Vite `define`. */
+declare const __CARD_VERSION__: string;

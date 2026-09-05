@@ -54,7 +54,7 @@ window.customCards.push(
 );
 
 console.info(
-  "%c CARLINKO-CARD %c 0.1.0 ",
+  `%c CARLINKO-CARD %c ${__CARD_VERSION__} `,
   "color:#fff;background:#0d9488;font-weight:700",
   "color:#0d9488;background:transparent;font-weight:700",
 );
