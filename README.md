@@ -10,7 +10,7 @@ Lovelace custom cards for vehicles managed by [ha-carlinko](https://github.com/e
 | --- | --- |
 | `custom:carlinko-overview` | Hero hotspots (lock / engine / defog / charge / trunk / online / HV / tyres), visual ranges/vitals |
 | `custom:carlinko-cabin` | Climate, seats, TPMS, and windows/sunroof on a top-down map |
-| `custom:carlinko-charging` | Charge state, mode, remaining, power, stop charging |
+| `custom:carlinko-charging` | SoC ring, plugged status, remaining, power, stop charging |
 
 Three Lovelace cards (Overview, Cabin, Charging) — see [docs/OBJECTIVE.md](docs/OBJECTIVE.md). Legacy `custom:carlinko-climate` / `custom:carlinko-tpms` / `custom:carlinko-windows` still load as Cabin aliases.
 

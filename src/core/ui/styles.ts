@@ -255,3 +255,184 @@ export const horizontalLevelStyles = css`
     color: var(--ck-muted);
   }
 `;
+
+export const socRingStyles = css`
+  .soc-ring {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 112px;
+    height: 112px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+  }
+  button.soc-ring {
+    cursor: pointer;
+  }
+  button.soc-ring:hover .soc-ring-meter {
+    filter: brightness(0.95);
+  }
+  .soc-ring-meter {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    /* Donut hole — keep green arc visible as a thick ring */
+    -webkit-mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 12px),
+      #000 calc(100% - 12px)
+    );
+    mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 12px),
+      #000 calc(100% - 12px)
+    );
+  }
+  .soc-ring-center {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    pointer-events: none;
+  }
+  .soc-ring-pct {
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #16a34a;
+  }
+  .soc-ring-pct.muted {
+    color: var(--ck-muted, #667);
+  }
+  .soc-ring-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ck-muted, #667);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+`;
+
+export const chargeBatteryStyles = css`
+  .charge-batt {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    color: var(--ck-ok, #16a34a);
+  }
+  .charge-batt-body {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    border: 2.5px solid currentColor;
+    border-radius: 4px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--ck-bg) 90%, transparent);
+  }
+  .charge-batt-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--ck-ok, #16a34a);
+    opacity: 0.9;
+    transition: width 0.25s ease;
+  }
+  .charge-batt-bolt {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 14px;
+    height: 14px;
+    color: #fff;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
+    z-index: 1;
+  }
+  .charge-batt-cap {
+    width: 4px;
+    height: 12px;
+    border-radius: 0 2px 2px 0;
+    background: currentColor;
+  }
+`;
+
+export const chargingHeroStyles = css`
+  .charge-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+  }
+  .charge-hero-link {
+    width: 16px;
+    height: 2px;
+    background: var(--ck-border);
+    flex-shrink: 0;
+  }
+  .charge-hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    flex: 1 1 120px;
+  }
+  .charge-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 6px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .charge-meta-row:disabled {
+    cursor: default;
+  }
+  .charge-meta-label {
+    color: var(--ck-muted);
+    font-size: 0.85rem;
+  }
+  .charge-meta-value {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .charge-meta-value.ok {
+    color: var(--ck-ok);
+  }
+  .charge-meta-value.muted {
+    color: var(--ck-muted);
+    font-weight: 500;
+  }
+  .charge-secondary {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--ck-border);
+  }
+  .actions .action.with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .actions .action.with-icon svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+    flex-shrink: 0;
+  }
+`;

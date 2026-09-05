@@ -4,18 +4,35 @@ import { runBusy } from "../core/busy";
 import { resolveAllSlots } from "../core/resolve";
 import { CHARGING_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
-import { isOn, pressButton } from "../core/hass";
+import {
+  fireMoreInfo,
+  formatMinutesRemaining,
+  formatState,
+  getNumericState,
+  isChargerConnected,
+  isOn,
+  pressButton,
+} from "../core/hass";
 import {
   actionStyles,
-  chipStyles,
+  chargeBatteryStyles,
+  chargingHeroStyles,
   metricStyles,
   renderActionButton,
+  renderChargeBattery,
   renderMetricRow,
-  renderStatusChip,
+  renderSocRing,
   sharedHostStyles,
+  socRingStyles,
 } from "../core/ui";
 
 export type ChargingConfig = CardConfigBase;
+
+const ICON_STOP = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" />
+  </svg>
+`;
 
 @customElement("carlinko-charging")
 export class CarlinkoCharging extends LitElement {
@@ -67,6 +84,29 @@ export class CarlinkoCharging extends LitElement {
     );
   }
 
+  private _metaRow(
+    label: string,
+    value: string,
+    entityId: string | undefined,
+    valueClass?: string,
+  ) {
+    if (!entityId || !this.hass?.states[entityId]) {
+      return nothing;
+    }
+    return html`
+      <button
+        type="button"
+        class="charge-meta-row"
+        @click=${() => fireMoreInfo(this, entityId)}
+      >
+        <span class="charge-meta-label">${label}:</span>
+        <span class="charge-meta-value${valueClass ? ` ${valueClass}` : ""}"
+          >${value}</span
+        >
+      </button>
+    `;
+  }
+
   protected render() {
     if (!this._config) {
       return html`<ha-card><div class="pad">Not configured</div></ha-card>`;
@@ -82,6 +122,27 @@ export class CarlinkoCharging extends LitElement {
 
     const s = this._slots();
     const charging = isOn(this.hass, s.charging);
+    const batteryPct = getNumericState(this.hass, s.battery);
+    const hasBattery = Boolean(s.battery && this.hass.states[s.battery]);
+    const hasCharging = Boolean(s.charging && this.hass.states[s.charging]);
+    const hasPower = Boolean(s.charge_power && this.hass.states[s.charge_power]);
+    const hasRemaining = Boolean(
+      s.charge_remaining && this.hass.states[s.charge_remaining],
+    );
+    const hasSecondary =
+      (s.charge_state && this.hass.states[s.charge_state]) ||
+      (s.charge_mode && this.hass.states[s.charge_mode]);
+    const showStop =
+      Boolean(s.charge_stop && this.hass.states[s.charge_stop]) &&
+      isChargerConnected(this.hass, s.charge_mode);
+
+    const showHero =
+      hasBattery || hasCharging || hasPower || hasRemaining;
+
+    const pluggedValue = charging ? "Charging" : "Not charging";
+    const pluggedClass = charging ? "ok" : "muted";
+    const powerText = formatState(this.hass, s.charge_power);
+    const timeText = formatMinutesRemaining(this.hass, s.charge_remaining);
 
     return html`
       <ha-card>
@@ -89,23 +150,62 @@ export class CarlinkoCharging extends LitElement {
           ? html`<div class="header">${this._config.title}</div>`
           : nothing}
         <div class="body-pad">
-          <div class="chips">
-            ${s.charging && this.hass.states[s.charging]
-              ? renderStatusChip(charging ? "Charging" : "Not charging", {
-                  ok: charging,
-                })
-              : nothing}
-          </div>
-          ${renderMetricRow(this, this.hass, "Charge state", s.charge_state)}
-          ${renderMetricRow(this, this.hass, "Mode", s.charge_mode)}
-          ${renderMetricRow(this, this.hass, "Remaining", s.charge_remaining)}
-          ${renderMetricRow(this, this.hass, "Power", s.charge_power)}
+          ${showHero
+            ? html`
+                <div class="charge-hero">
+                  ${hasBattery
+                    ? renderSocRing({
+                        percent: batteryPct,
+                        onClick: () => fireMoreInfo(this, s.battery!),
+                      })
+                    : nothing}
+                  ${hasBattery
+                    ? html`<div class="charge-hero-link" aria-hidden="true"></div>
+                        ${renderChargeBattery({
+                          percent: batteryPct,
+                          charging,
+                        })}`
+                    : nothing}
+                  <div class="charge-hero-meta">
+                    ${hasCharging
+                      ? this._metaRow(
+                          "Plugged",
+                          pluggedValue,
+                          s.charging,
+                          pluggedClass,
+                        )
+                      : nothing}
+                    ${hasPower
+                      ? this._metaRow("Power", powerText, s.charge_power)
+                      : nothing}
+                    ${hasRemaining
+                      ? this._metaRow("Time", timeText, s.charge_remaining)
+                      : nothing}
+                  </div>
+                </div>
+              `
+            : nothing}
+          ${hasSecondary
+            ? html`
+                <div class="charge-secondary">
+                  ${renderMetricRow(
+                    this,
+                    this.hass,
+                    "Charge state",
+                    s.charge_state,
+                  )}
+                  ${renderMetricRow(this, this.hass, "Mode", s.charge_mode)}
+                </div>
+              `
+            : nothing}
         </div>
-        ${s.charge_stop
+        ${showStop
           ? html`
               <div class="actions">
                 ${renderActionButton({
                   label: "Stop charging",
+                  icon: ICON_STOP,
+                  showLabel: true,
                   disabled: this._busy,
                   onClick: () =>
                     this._run(() => pressButton(this.hass!, s.charge_stop!)),
@@ -120,8 +220,10 @@ export class CarlinkoCharging extends LitElement {
   static styles = [
     sharedHostStyles,
     metricStyles,
-    chipStyles,
     actionStyles,
+    socRingStyles,
+    chargeBatteryStyles,
+    chargingHeroStyles,
   ];
 }
 

@@ -41,7 +41,7 @@ window.customCards.push(
     type: "carlinko-charging",
     name: "CarLinko Charging",
     description:
-      "Charging status, mode, remaining time, power, and stop charging.",
+      "SoC ring, charging status, remaining time, power, and stop charging.",
     preview: true,
   },
   {

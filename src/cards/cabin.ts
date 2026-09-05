@@ -17,6 +17,7 @@ import {
   getStateValue,
   getTyreTone,
   imageEntityUrl,
+  isChargerConnected,
   isClimateOn,
   isCoverOpen,
   isOn,
@@ -471,8 +472,7 @@ export class CarlinkoCabin extends LitElement {
   private _chargerConnected(
     slots: Record<string, string | undefined>,
   ): boolean {
-    const mode = getStateValue(this.hass, slots.charge_mode);
-    return mode === "ac" || mode === "dc";
+    return isChargerConnected(this.hass, slots.charge_mode);
   }
 
   private _hasBodyControls(

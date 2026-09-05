@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Cabin Stop charge map button is hidden when the charger is not connected (`charge_mode` is not `ac`/`dc`)
+- Charging card Stop charging is hidden when the charger is not connected (`charge_mode` is not `ac`/`dc`)
 
 ### Added
 
@@ -50,6 +51,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cabin body/access controls use the same square icon map-action buttons as windows/sunroof (not Overview circles)
 - Overview SOC/fuel use horizontal level bars under the hero (SOC left, fuel right) instead of vertical gauges
 - Overview: odometer/total range/speed overlay top-left on the hero; status hotspots on bottom-right; SOC/fuel range and consumption inline under each bar
+- Charging card: SoC ring + battery hero with plugged/power/time metrics; battery slot; charge state/mode as secondary rows
+- Charging SoC ring keeps green fill/% when not actively charging
+- Charging SoC ring draws a clear green progress arc (SVG stroke) matching the mockup
+- Charging SoC ring uses a CSS conic-gradient so the green fill always renders (SVG stroke was staying gray)
 
 ### Notes
 

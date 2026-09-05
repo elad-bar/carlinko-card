@@ -32,7 +32,7 @@ Three cards. Users compose them on a Lovelace dashboard.
 | --- | --- |
 | **Overview** | Hero car image with status hotspots, visual ranges / mileage / power vitals |
 | **Cabin** | Climate, seats, TPMS, windows/sunroof, and body/access controls on one top-down map |
-| **Charging** | Charge status, mode, remaining time, power, stop charging |
+| **Charging** | SoC hero, charge status, mode, remaining time, power, stop charging |
 
 Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms`, `custom:carlinko-windows` → Cabin UI.
 
@@ -58,7 +58,8 @@ Body/access actions (engine, lock, trunk, defog, charge stop) live on the Cabin 
 
 ### Charging
 
-- Charging active, charge state, charge mode, remaining time, charge power
+- SoC donut + battery fill (from `battery`), plugged/charging status, remaining time, charge power
+- Charge state and mode as secondary metrics
 - Stop charging action
 - `charge_stop` may also appear on Cabin as a shortcut; Charging remains the detail card
 

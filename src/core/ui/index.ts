@@ -6,6 +6,9 @@ export {
   progressStyles,
   hotspotStyles,
   horizontalLevelStyles,
+  socRingStyles,
+  chargeBatteryStyles,
+  chargingHeroStyles,
 } from "./styles";
 export { renderMetricRow } from "./metric-row";
 export { renderActionButton } from "./action-button";
@@ -14,5 +17,7 @@ export { renderProgressBar } from "./progress-bar";
 export { renderHotspotButton } from "./hotspot-button";
 export type { HotspotIcon, HotspotTone } from "./hotspot-button";
 export { renderHorizontalLevel } from "./horizontal-level";
+export { renderSocRing } from "./soc-ring";
+export { renderChargeBattery } from "./charge-battery";
 export { CarlinkoCarOutline } from "./car-outline";
 export { CarlinkoVehicleStage } from "./vehicle-stage";

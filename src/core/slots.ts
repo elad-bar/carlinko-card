@@ -24,8 +24,9 @@ export const OVERVIEW_SLOT_BY_NAME: ReadonlyMap<string, SlotDef> = new Map(
   OVERVIEW_SLOTS.map((s) => [s.slot, s]),
 );
 
-/** Stubs for later cards (typed for shared tooling). */
+/** Charging card slots — keys match ha-carlinko EntitySpec.key */
 export const CHARGING_SLOTS: readonly SlotDef[] = [
+  { slot: "battery", key: "battery", domain: "sensor" },
   { slot: "charging", key: "charging", domain: "binary_sensor" },
   { slot: "charge_state", key: "charge_state", domain: "sensor" },
   { slot: "charge_mode", key: "charge_mode", domain: "sensor" },

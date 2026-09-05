@@ -39,12 +39,13 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| charging | `charging` | binary_sensor | optional | Status chip |
-| charge_state | `charge_state` | sensor | optional | |
-| charge_mode | `charge_mode` | sensor | optional | |
-| charge_remaining | `charge_remaining` | sensor | optional | minutes |
+| battery | `battery` | sensor | optional | SoC ring % + battery fill |
+| charging | `charging` | binary_sensor | optional | Plugged status + bolt / active tone |
+| charge_state | `charge_state` | sensor | optional | Secondary metric |
+| charge_mode | `charge_mode` | sensor | optional | Secondary metric; Enum `none` / `ac` / `dc`; gates Stop charging |
+| charge_remaining | `charge_remaining` | sensor | optional | minutes → `Xh Ym` |
 | charge_power | `charge_power` | sensor | optional | kW |
-| charge_stop | `charge_stop` | button | optional | Stop charging action |
+| charge_stop | `charge_stop` | button | optional | Stop charging; hidden when `charge_mode` is not `ac`/`dc` |
 
 ---
 

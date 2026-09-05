@@ -37,6 +37,15 @@ export function isOn(
   return state === "on" || state === "open" || state === "unlocked";
 }
 
+/** True when charge_mode indicates AC/DC plug connected. */
+export function isChargerConnected(
+  hass: HomeAssistant | undefined,
+  chargeModeEntityId: string | undefined,
+): boolean {
+  const mode = getStateValue(hass, chargeModeEntityId);
+  return mode === "ac" || mode === "dc";
+}
+
 /**
  * True when a binary sensor indicates an active problem.
  * For `device_class: problem`, HA uses on=problem / off=clear.
@@ -88,6 +97,28 @@ export function formatState(
   }
   const unit = entity.attributes.unit_of_measurement;
   return unit ? `${entity.state} ${unit}` : String(entity.state);
+}
+
+/** Format a charge-remaining sensor (minutes) as `4h 15m` / `45m`. */
+export function formatMinutesRemaining(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+  fallback = "—",
+): string {
+  const minutes = getNumericState(hass, entityId);
+  if (minutes === undefined || minutes < 0) {
+    return fallback;
+  }
+  const total = Math.round(minutes);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  if (h <= 0) {
+    return `${m}m`;
+  }
+  if (m <= 0) {
+    return `${h}h`;
+  }
+  return `${h}h ${m}m`;
 }
 
 function withHassBase(
