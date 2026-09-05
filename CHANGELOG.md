@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Cabin: seat heat/vent buttons show translated level labels (Off / Low / Medium / High) from ha-carlinko instead of raw states (`off`, `l1`, …)
 - Lovelace card editors: stop re-rendering ha-form on every hass state tick (cached schema, stable labels) so the filtered device/entity selectors stay responsive
 - Cards: skip re-renders when unrelated entities update; cache slot→entity_id resolution so busy HA instances do not re-scan the registry every state_changed
 

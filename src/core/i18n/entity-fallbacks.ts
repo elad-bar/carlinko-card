@@ -52,6 +52,13 @@ export const ENTITY_NAME_FALLBACKS: Readonly<
   },
 };
 
+const SEAT_LEVEL_STATES: Readonly<Record<string, string>> = {
+  off: "Off",
+  l1: "Low",
+  l2: "Medium",
+  l3: "High",
+};
+
 export const ENTITY_STATE_FALLBACKS: Readonly<
   Record<string, Record<string, Record<string, string>>>
 > = {
@@ -79,5 +86,15 @@ export const ENTITY_STATE_FALLBACKS: Readonly<
       ac: "AC",
       dc: "DC",
     },
+  },
+  select: {
+    seat_heat_l: SEAT_LEVEL_STATES,
+    seat_heat_r: SEAT_LEVEL_STATES,
+    seat_heat_lr: SEAT_LEVEL_STATES,
+    seat_heat_rr: SEAT_LEVEL_STATES,
+    seat_vent_l: SEAT_LEVEL_STATES,
+    seat_vent_r: SEAT_LEVEL_STATES,
+    seat_vent_lr: SEAT_LEVEL_STATES,
+    seat_vent_rr: SEAT_LEVEL_STATES,
   },
 };

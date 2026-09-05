@@ -11,6 +11,7 @@ import { runBusy } from "../core/busy";
 import {
   ensureCarlinkoTranslations,
   entityName,
+  entityState,
   t,
 } from "../core/i18n";
 import { SlotMapCache, relevantEntityChanged } from "../core/card-update";
@@ -250,16 +251,6 @@ function domainOf(entityId: string): string {
   return entityId.split(".", 1)[0];
 }
 
-function shortSeatLabel(state: string | undefined): string {
-  if (!state || state === "unknown" || state === "unavailable") {
-    return "—";
-  }
-  if (state === "off" || state === "on") {
-    return state;
-  }
-  return state.replace(/^level_?/i, "l").slice(0, 4);
-}
-
 @customElement("carlinko-cabin")
 export class CarlinkoCabin extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
@@ -421,9 +412,10 @@ export class CarlinkoCabin extends LitElement {
 
   private _seatControl(
     entityId: string | undefined,
+    entityKey: string | undefined,
     kind: "H" | "V",
   ): TemplateResult | typeof nothing {
-    if (!entityId || !this.hass?.states[entityId]) {
+    if (!entityId || !entityKey || !this.hass?.states[entityId]) {
       return nothing;
     }
     const state = getStateValue(this.hass, entityId);
@@ -431,7 +423,7 @@ export class CarlinkoCabin extends LitElement {
     const role = kind === "H" ? "heat" : "vent";
     const roleLabel =
       kind === "H" ? t(this.hass, "status.heat") : t(this.hass, "status.vent");
-    const stateLabel = shortSeatLabel(state);
+    const stateLabel = entityState(this.hass, "select", entityKey, state);
     const onClick =
       domain === "select"
         ? () => this._cycleSelect(entityId)
@@ -441,8 +433,8 @@ export class CarlinkoCabin extends LitElement {
         type="button"
         class="seat-btn ${role}"
         ?disabled=${this._busy}
-        title=${`${roleLabel}: ${state ?? "—"}`}
-        aria-label=${`${roleLabel}: ${state ?? "—"}`}
+        title=${`${roleLabel}: ${stateLabel}`}
+        aria-label=${`${roleLabel}: ${stateLabel}`}
         @click=${onClick}
       >
         ${kind === "H" ? ICON_FIRE : ICON_FAN}
@@ -465,7 +457,8 @@ export class CarlinkoCabin extends LitElement {
     }
     return html`
       <div slot=${zone.slot} class="seat-zone">
-        ${this._seatControl(heat, "H")} ${this._seatControl(vent, "V")}
+        ${this._seatControl(heat, zone.heat, "H")}
+        ${this._seatControl(vent, zone.vent, "V")}
       </div>
     `;
   }
@@ -987,6 +980,9 @@ export class CarlinkoCabin extends LitElement {
       }
       .seat-btn .seat-state {
         color: var(--ck-text);
+        font-size: 0.72rem;
+        white-space: nowrap;
+        line-height: 1.1;
       }
       .wheel-pressure {
         font-weight: 600;
