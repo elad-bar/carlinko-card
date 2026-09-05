@@ -468,6 +468,13 @@ export class CarlinkoCabin extends LitElement {
     );
   }
 
+  private _chargerConnected(
+    slots: Record<string, string | undefined>,
+  ): boolean {
+    const mode = getStateValue(this.hass, slots.charge_mode);
+    return mode === "ac" || mode === "dc";
+  }
+
   private _hasBodyControls(
     slots: Record<string, string | undefined>,
   ): boolean {
@@ -475,7 +482,8 @@ export class CarlinkoCabin extends LitElement {
       this._entityExists(slots.lock) ||
       this._entityExists(slots.engine) ||
       this._entityExists(slots.defog) ||
-      this._entityExists(slots.charge_stop) ||
+      (this._entityExists(slots.charge_stop) &&
+        this._chargerConnected(slots)) ||
       this._entityExists(slots.trunk)
     );
   }
@@ -488,7 +496,16 @@ export class CarlinkoCabin extends LitElement {
     const defogId = slots.defog;
     const chargeId = slots.charge_stop;
     const trunkId = slots.trunk;
-    if (!lockId && !engineId && !defogId && !chargeId && !trunkId) {
+    const chargerConnected = this._chargerConnected(slots);
+    const showCharge =
+      this._entityExists(chargeId) && chargerConnected;
+    if (
+      !lockId &&
+      !engineId &&
+      !defogId &&
+      !showCharge &&
+      !trunkId
+    ) {
       return nothing;
     }
 
@@ -544,7 +561,7 @@ export class CarlinkoCabin extends LitElement {
             })}
           </div>`
         : nothing}
-      ${this._entityExists(chargeId)
+      ${showCharge
         ? html`<div slot="charge" class="map-actions">
             ${renderActionButton({
               label: "Stop charge",

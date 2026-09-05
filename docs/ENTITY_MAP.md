@@ -83,7 +83,8 @@ Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 | lock | `lock` | lock | optional | Lock / unlock map button (door side) |
 | engine | `engine` | switch | optional | Engine on/off map button (hood) |
 | defog | `defrost_cmd` | switch | optional | Fallback key `defrost` (binary, read-only); windshield map button |
-| charge_stop | `charge_stop` | button | optional | Stop / release charging map button (rear-left); Charging card remains detail |
+| charge_mode | `charge_mode` | sensor | optional | Enum `none` / `ac` / `dc`; gates Stop charge visibility (show only when plugged in) |
+| charge_stop | `charge_stop` | button | optional | Stop / release charging map button (rear-left); hidden when `charge_mode` is not `ac`/`dc`; Charging card remains detail |
 | trunk | `liftgate` | cover | optional | Open / close map button (rear) |
 
 **Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); windows icons below lock height; sunroof icons on glass roof; engine / lock / defog / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, windows/sunroof, nor body controls exist.

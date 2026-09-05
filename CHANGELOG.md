@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-09-05
 
+### Fixed
+
+- Cabin Stop charge map button is hidden when the charger is not connected (`charge_mode` is not `ac`/`dc`)
+
 ### Added
 
 - Phase 1 Overview card (`custom:carlinko-overview`) with device_id binding, vitals, and quick controls

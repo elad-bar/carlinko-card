@@ -194,8 +194,8 @@ let T = class extends HTMLElement {
     if (i !== void 0 && this._$Em !== i) {
       const l = r.getPropertyOptions(i), c = typeof l.converter == "function" ? { fromAttribute: l.converter } : ((n = l.converter) == null ? void 0 : n.fromAttribute) !== void 0 ? l.converter : se;
       this._$Em = i;
-      const u = c.fromAttribute(s, l.type);
-      this[i] = u ?? ((o = this._$Ej) == null ? void 0 : o.get(i)) ?? u, this._$Em = null;
+      const d = c.fromAttribute(s, l.type);
+      this[i] = d ?? ((o = this._$Ej) == null ? void 0 : o.get(i)) ?? d, this._$Em = null;
     }
   }
   requestUpdate(e, s, r, i = !1, n) {
@@ -296,10 +296,10 @@ const St = (t, e) => {
   let i, n = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", o = R;
   for (let l = 0; l < s; l++) {
     const c = t[l];
-    let u, p, d = -1, f = 0;
-    for (; f < c.length && (o.lastIndex = f, p = o.exec(c), p !== null); ) f = o.lastIndex, o === R ? p[1] === "!--" ? o = Me : p[1] !== void 0 ? o = Te : p[2] !== void 0 ? (it.test(p[2]) && (i = RegExp("</" + p[2], "g")), o = S) : p[3] !== void 0 && (o = S) : o === S ? p[0] === ">" ? (o = i ?? R, d = -1) : p[1] === void 0 ? d = -2 : (d = o.lastIndex - p[2].length, u = p[1], o = p[3] === void 0 ? S : p[3] === '"' ? Ze : Ne) : o === Ze || o === Ne ? o = S : o === Me || o === Te ? o = R : (o = S, i = void 0);
-    const g = o === S && t[l + 1].startsWith("/>") ? " " : "";
-    n += o === R ? c + Ct : d >= 0 ? (r.push(u), c.slice(0, d) + st + c.slice(d) + A + g) : c + A + (d === -2 ? l : g);
+    let d, p, u = -1, v = 0;
+    for (; v < c.length && (o.lastIndex = v, p = o.exec(c), p !== null); ) v = o.lastIndex, o === R ? p[1] === "!--" ? o = Me : p[1] !== void 0 ? o = Te : p[2] !== void 0 ? (it.test(p[2]) && (i = RegExp("</" + p[2], "g")), o = S) : p[3] !== void 0 && (o = S) : o === S ? p[0] === ">" ? (o = i ?? R, u = -1) : p[1] === void 0 ? u = -2 : (u = o.lastIndex - p[2].length, d = p[1], o = p[3] === void 0 ? S : p[3] === '"' ? Ze : Ne) : o === Ze || o === Ne ? o = S : o === Me || o === Te ? o = R : (o = S, i = void 0);
+    const _ = o === S && t[l + 1].startsWith("/>") ? " " : "";
+    n += o === R ? c + Ct : u >= 0 ? (r.push(d), c.slice(0, u) + st + c.slice(u) + A + _) : c + A + (u === -2 ? l : _);
   }
   return [nt(t, n + (t[s] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), r];
 };
@@ -308,29 +308,29 @@ class q {
     let i;
     this.parts = [];
     let n = 0, o = 0;
-    const l = e.length - 1, c = this.parts, [u, p] = St(e, s);
-    if (this.el = q.createElement(u, r), E.currentNode = this.el.content, s === 2 || s === 3) {
-      const d = this.el.content.firstChild;
-      d.replaceWith(...d.childNodes);
+    const l = e.length - 1, c = this.parts, [d, p] = St(e, s);
+    if (this.el = q.createElement(d, r), E.currentNode = this.el.content, s === 2 || s === 3) {
+      const u = this.el.content.firstChild;
+      u.replaceWith(...u.childNodes);
     }
     for (; (i = E.nextNode()) !== null && c.length < l; ) {
       if (i.nodeType === 1) {
-        if (i.hasAttributes()) for (const d of i.getAttributeNames()) if (d.endsWith(st)) {
-          const f = p[o++], g = i.getAttribute(d).split(A), $ = /([.?@])?(.*)/.exec(f);
-          c.push({ type: 1, index: n, name: $[2], strings: g, ctor: $[1] === "." ? Pt : $[1] === "?" ? Ht : $[1] === "@" ? Mt : oe }), i.removeAttribute(d);
-        } else d.startsWith(A) && (c.push({ type: 6, index: n }), i.removeAttribute(d));
+        if (i.hasAttributes()) for (const u of i.getAttributeNames()) if (u.endsWith(st)) {
+          const v = p[o++], _ = i.getAttribute(u).split(A), $ = /([.?@])?(.*)/.exec(v);
+          c.push({ type: 1, index: n, name: $[2], strings: _, ctor: $[1] === "." ? Pt : $[1] === "?" ? Ht : $[1] === "@" ? Mt : oe }), i.removeAttribute(u);
+        } else u.startsWith(A) && (c.push({ type: 6, index: n }), i.removeAttribute(u));
         if (it.test(i.tagName)) {
-          const d = i.textContent.split(A), f = d.length - 1;
-          if (f > 0) {
+          const u = i.textContent.split(A), v = u.length - 1;
+          if (v > 0) {
             i.textContent = re ? re.emptyScript : "";
-            for (let g = 0; g < f; g++) i.append(d[g], j()), E.nextNode(), c.push({ type: 2, index: ++n });
-            i.append(d[f], j());
+            for (let _ = 0; _ < v; _++) i.append(u[_], j()), E.nextNode(), c.push({ type: 2, index: ++n });
+            i.append(u[v], j());
           }
         }
       } else if (i.nodeType === 8) if (i.data === rt) c.push({ type: 2, index: n });
       else {
-        let d = -1;
-        for (; (d = i.data.indexOf(A, d + 1)) !== -1; ) c.push({ type: 7, index: n }), d += A.length - 1;
+        let u = -1;
+        for (; (u = i.data.indexOf(A, u + 1)) !== -1; ) c.push({ type: 7, index: n }), u += A.length - 1;
       }
       n++;
     }
@@ -363,8 +363,8 @@ class Et {
     let n = E.nextNode(), o = 0, l = 0, c = r[0];
     for (; c !== void 0; ) {
       if (o === c.index) {
-        let u;
-        c.type === 2 ? u = new J(n, n.nextSibling, this, e) : c.type === 1 ? u = new c.ctor(n, c.name, c.strings, this, e) : c.type === 6 && (u = new Tt(n, this, e)), this._$AV.push(u), c = r[++l];
+        let d;
+        c.type === 2 ? d = new J(n, n.nextSibling, this, e) : c.type === 1 ? d = new c.ctor(n, c.name, c.strings, this, e) : c.type === 6 && (d = new Tt(n, this, e)), this._$AV.push(d), c = r[++l];
       }
       o !== (c == null ? void 0 : c.index) && (n = E.nextNode(), o++);
     }
@@ -454,8 +454,8 @@ class oe {
     if (n === void 0) e = L(this, e, s, 0), o = !W(e) || e !== this._$AH && e !== Z, o && (this._$AH = e);
     else {
       const l = e;
-      let c, u;
-      for (e = n[0], c = 0; c < n.length - 1; c++) u = L(this, l[r + c], s, c), u === Z && (u = this._$AH[c]), o || (o = !W(u) || u !== this._$AH[c]), u === h ? e = h : e !== h && (e += (u ?? "") + n[c + 1]), this._$AH[c] = u;
+      let c, d;
+      for (e = n[0], c = 0; c < n.length - 1; c++) d = L(this, l[r + c], s, c), d === Z && (d = this._$AH[c]), o || (o = !W(d) || d !== this._$AH[c]), d === h ? e = h : e !== h && (e += (d ?? "") + n[c + 1]), this._$AH[c] = d;
     }
     o && !i && this.j(e);
   }
@@ -556,7 +556,7 @@ ue == null || ue({ LitElement: w });
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const _ = (t) => (e, s) => {
+const g = (t) => (e, s) => {
   s !== void 0 ? s.addInitializer(() => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
@@ -637,7 +637,7 @@ function Rt(t, e, s) {
     return;
   const n = [s.key, ...s.fallbackKeys ?? []];
   for (const c of n) {
-    const u = Vt(s.domain, c), p = Dt(t, i, c, u);
+    const d = Vt(s.domain, c), p = Dt(t, i, c, d);
     if (p)
       return p;
   }
@@ -731,6 +731,7 @@ const zt = [
     domain: "switch",
     fallbackKeys: ["defrost"]
   },
+  { slot: "charge_mode", key: "charge_mode", domain: "sensor" },
   { slot: "charge_stop", key: "charge_stop", domain: "button" },
   { slot: "trunk", key: "liftgate", domain: "cover" }
 ];
@@ -1140,7 +1141,7 @@ function ee(t, e, s, r, i) {
     </button>
   `;
 }
-function v(t) {
+function f(t) {
   const e = t.variant || "", s = t.icon ? " icon" : "";
   return a`
     <button
@@ -1442,7 +1443,7 @@ dt([
   M({ type: String })
 ], ie.prototype, "src", 2);
 ie = dt([
-  _("carlinko-car-outline")
+  g("carlinko-car-outline")
 ], ie);
 var cs = Object.defineProperty, hs = Object.getOwnPropertyDescriptor, ut = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? hs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1523,7 +1524,7 @@ ut([
   M({ type: String })
 ], ne.prototype, "src", 2);
 ne = ut([
-  _("carlinko-vehicle-stage")
+  g("carlinko-vehicle-stage")
 ], ne);
 var ds = Object.defineProperty, us = Object.getOwnPropertyDescriptor, ke = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? us(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1573,7 +1574,7 @@ let F = class extends w {
       >`;
     if (!this.hass)
       return a`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
-    const t = this._slots(), e = lt(this.hass, t.image), s = K(this.hass, t.engine), r = K(this.hass, t.online), i = Be(this.hass, t.battery), n = Be(this.hass, t.fuel), o = t.odometer && this.hass.states[t.odometer] ? k(this.hass, t.odometer) : void 0, l = t.total_range && this.hass.states[t.total_range] ? k(this.hass, t.total_range) : void 0, c = s && t.engine && t.speed && this.hass.states[t.speed] ? k(this.hass, t.speed) : void 0, u = t.range && this.hass.states[t.range] ? k(this.hass, t.range) : void 0, p = t.fuel_range && this.hass.states[t.fuel_range] ? k(this.hass, t.fuel_range) : void 0, d = m(this.hass, t.hv_state), f = t.hv_state ? ps(d) : void 0, g = t.consumption && this.hass.states[t.consumption] ? k(this.hass, t.consumption) : void 0, $ = t.fuel_consumption && this.hass.states[t.fuel_consumption] ? k(this.hass, t.fuel_consumption) : void 0, D = !!(o || l || c), Y = t.tyres_ok || t.tyre_status ? at(this.hass, t.tyres_ok, t.tyre_status) : void 0, ft = Y === "danger" ? "Tyre problem" : Y === "warn" ? "Check tyres" : "Tyres OK", xe = t.tyres_ok ?? t.tyre_status;
+    const t = this._slots(), e = lt(this.hass, t.image), s = K(this.hass, t.engine), r = K(this.hass, t.online), i = Be(this.hass, t.battery), n = Be(this.hass, t.fuel), o = t.odometer && this.hass.states[t.odometer] ? k(this.hass, t.odometer) : void 0, l = t.total_range && this.hass.states[t.total_range] ? k(this.hass, t.total_range) : void 0, c = s && t.engine && t.speed && this.hass.states[t.speed] ? k(this.hass, t.speed) : void 0, d = t.range && this.hass.states[t.range] ? k(this.hass, t.range) : void 0, p = t.fuel_range && this.hass.states[t.fuel_range] ? k(this.hass, t.fuel_range) : void 0, u = m(this.hass, t.hv_state), v = t.hv_state ? ps(u) : void 0, _ = t.consumption && this.hass.states[t.consumption] ? k(this.hass, t.consumption) : void 0, $ = t.fuel_consumption && this.hass.states[t.fuel_consumption] ? k(this.hass, t.fuel_consumption) : void 0, D = !!(o || l || c), Y = t.tyres_ok || t.tyre_status ? at(this.hass, t.tyres_ok, t.tyre_status) : void 0, ft = Y === "danger" ? "Tyre problem" : Y === "warn" ? "Check tyres" : "Tyres OK", xe = t.tyres_ok ?? t.tyre_status;
     return a`
       <ha-card>
         ${this._config.title ? a`<div class="header">${this._config.title}</div>` : h}
@@ -1614,11 +1615,11 @@ let F = class extends w {
       onClick: () => C(this, t.online)
     })}
                   </div>` : h}
-              ${t.hv_state && f ? a`<div slot="hv">
+              ${t.hv_state && v ? a`<div slot="hv">
                     ${_e({
       icon: "hv",
-      label: f.label,
-      tone: f.tone,
+      label: v.label,
+      tone: v.tone,
       onClick: () => C(this, t.hv_state)
     })}
                   </div>` : h}
@@ -1636,9 +1637,9 @@ let F = class extends w {
             <div class="levels">
               ${Ie({
       percent: i,
-      primary: i !== void 0 || u ? "SOC" : void 0,
-      secondary: u,
-      meta: g,
+      primary: i !== void 0 || d ? "SOC" : void 0,
+      secondary: d,
+      meta: _,
       tone: "ok"
     })}
               ${Ie({
@@ -1727,7 +1728,7 @@ ke([
   V()
 ], F.prototype, "_config", 2);
 F = ke([
-  _("carlinko-overview")
+  g("carlinko-overview")
 ], F);
 var vs = Object.defineProperty, pt = (t, e, s, r) => {
   for (var i = void 0, n = t.length - 1, o; n >= 0; n--)
@@ -1820,7 +1821,7 @@ let je = class extends X {
   }
 };
 je = bs([
-  _("carlinko-overview-editor")
+  g("carlinko-overview-editor")
 ], je);
 async function vt(t, e, s, r) {
   if (t())
@@ -1900,7 +1901,7 @@ let B = class extends w {
         </div>
         ${t.charge_stop ? a`
               <div class="actions">
-                ${v({
+                ${f({
       label: "Stop charging",
       disabled: this._busy,
       onClick: () => this._run(() => N(this.hass, t.charge_stop))
@@ -1927,7 +1928,7 @@ ae([
   V()
 ], B.prototype, "_busy", 2);
 B = ae([
-  _("carlinko-charging")
+  g("carlinko-charging")
 ], B);
 var $s = Object.getOwnPropertyDescriptor, ks = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? $s(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -1937,7 +1938,7 @@ var $s = Object.getOwnPropertyDescriptor, ks = (t, e, s, r) => {
 let We = class extends X {
 };
 We = ks([
-  _("carlinko-charging-editor")
+  g("carlinko-charging-editor")
 ], We);
 var xs = Object.defineProperty, Cs = Object.getOwnPropertyDescriptor, le = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Cs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2225,48 +2226,52 @@ let x = class extends w {
   _hasWindowsControls(t) {
     return this._entityExists(t.windows) || this._entityExists(t.windows_vent) || this._entityExists(t.sunroof) || this._entityExists(t.sunroof_tilt);
   }
+  _chargerConnected(t) {
+    const e = m(this.hass, t.charge_mode);
+    return e === "ac" || e === "dc";
+  }
   _hasBodyControls(t) {
-    return this._entityExists(t.lock) || this._entityExists(t.engine) || this._entityExists(t.defog) || this._entityExists(t.charge_stop) || this._entityExists(t.trunk);
+    return this._entityExists(t.lock) || this._entityExists(t.engine) || this._entityExists(t.defog) || this._entityExists(t.charge_stop) && this._chargerConnected(t) || this._entityExists(t.trunk);
   }
   _bodyActions(t) {
-    const e = t.lock, s = t.engine, r = t.defog, i = t.charge_stop, n = t.trunk;
-    if (!e && !s && !r && !i && !n)
+    const e = t.lock, s = t.engine, r = t.defog, i = t.charge_stop, n = t.trunk, o = this._chargerConnected(t), l = this._entityExists(i) && o;
+    if (!e && !s && !r && !l && !n)
       return h;
-    const l = m(this.hass, e) === "locked", c = K(this.hass, s), u = K(this.hass, r), p = !!(r != null && r.startsWith("binary_sensor.")), d = m(this.hass, n) === "open";
+    const d = m(this.hass, e) === "locked", p = K(this.hass, s), u = K(this.hass, r), v = !!(r != null && r.startsWith("binary_sensor.")), _ = m(this.hass, n) === "open";
     return a`
       ${this._entityExists(s) ? a`<div slot="engine" class="map-actions">
-            ${v({
-      label: c ? "Turn engine off" : "Turn engine on",
+            ${f({
+      label: p ? "Turn engine off" : "Turn engine on",
       icon: js,
       disabled: this._busy,
-      variant: c ? "ok" : "",
+      variant: p ? "ok" : "",
       onClick: () => this._run(
-        () => c ? Ue(this.hass, s) : Ve(this.hass, s)
+        () => p ? Ue(this.hass, s) : Ve(this.hass, s)
       )
     })}
           </div>` : h}
       ${this._entityExists(e) ? a`<div slot="lock" class="map-actions">
-            ${v({
-      label: l ? "Unlock doors" : "Lock doors",
-      icon: l ? Us : Ds,
+            ${f({
+      label: d ? "Unlock doors" : "Lock doors",
+      icon: d ? Us : Ds,
       disabled: this._busy,
-      variant: l ? "" : "danger",
+      variant: d ? "" : "danger",
       onClick: () => this._run(
-        () => l ? qt(this.hass, e) : Wt(this.hass, e)
+        () => d ? qt(this.hass, e) : Wt(this.hass, e)
       )
     })}
           </div>` : h}
       ${this._entityExists(r) ? a`<div slot="defog" class="map-actions">
-            ${v({
+            ${f({
       label: u ? "Turn defog off" : "Turn defog on",
       icon: Rs,
-      disabled: this._busy || p,
+      disabled: this._busy || v,
       variant: u ? "ok" : "",
       onClick: () => this._run(() => Kt(this.hass, r))
     })}
           </div>` : h}
-      ${this._entityExists(i) ? a`<div slot="charge" class="map-actions">
-            ${v({
+      ${l ? a`<div slot="charge" class="map-actions">
+            ${f({
       label: "Stop charge",
       icon: zs,
       disabled: this._busy,
@@ -2275,13 +2280,13 @@ let x = class extends w {
     })}
           </div>` : h}
       ${this._entityExists(n) ? a`<div slot="trunk" class="map-actions">
-            ${v({
-      label: d ? "Close trunk" : "Open trunk",
+            ${f({
+      label: _ ? "Close trunk" : "Open trunk",
       icon: Is,
       disabled: this._busy,
-      variant: d ? "ok" : "",
+      variant: _ ? "ok" : "",
       onClick: () => this._run(
-        () => d ? fe(this.hass, n) : ve(this.hass, n)
+        () => _ ? fe(this.hass, n) : ve(this.hass, n)
       )
     })}
           </div>` : h}
@@ -2294,7 +2299,7 @@ let x = class extends w {
     const n = r && De(this.hass, e);
     return a`
       <div slot="windows" class="map-actions">
-        ${r ? v(n ? {
+        ${r ? f(n ? {
       label: "Close windows",
       icon: Ns,
       disabled: this._busy,
@@ -2305,7 +2310,7 @@ let x = class extends w {
       disabled: this._busy,
       onClick: () => this._run(() => ve(this.hass, e))
     }) : h}
-        ${i ? v({
+        ${i ? f({
       label: "Vent windows",
       icon: Zs,
       disabled: this._busy,
@@ -2321,7 +2326,7 @@ let x = class extends w {
     const n = r && De(this.hass, e);
     return a`
       <div slot="sunroof" class="map-actions">
-        ${r ? v(n ? {
+        ${r ? f(n ? {
       label: "Close sunroof",
       icon: Bs,
       disabled: this._busy,
@@ -2332,7 +2337,7 @@ let x = class extends w {
       disabled: this._busy,
       onClick: () => this._run(() => ve(this.hass, e))
     }) : h}
-        ${i ? v({
+        ${i ? f({
       label: "Tilt sunroof",
       icon: Vs,
       disabled: this._busy,
@@ -2351,23 +2356,23 @@ let x = class extends w {
       >`;
     if (!this.hass)
       return a`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
-    const t = this._slots(), e = t.climate, s = e ? this.hass.states[e] : void 0, r = ze(this.hass, e), i = Re(this.hass, e), n = Ft(this.hass, e), o = (typeof (s == null ? void 0 : s.attributes.temperature_unit) == "string" ? s.attributes.temperature_unit : void 0) || (typeof (s == null ? void 0 : s.attributes.unit_of_measurement) == "string" ? s.attributes.unit_of_measurement : "°C"), l = this._hasSeats(t), c = this._hasDirectTpms(t), u = this._hasWindowsControls(t), p = this._hasBodyControls(t), d = lt(this.hass, t.image), f = l || c || u || p, g = !!(s || t.quick_cool && this.hass.states[t.quick_cool] || t.quick_heat && this.hass.states[t.quick_heat]);
+    const t = this._slots(), e = t.climate, s = e ? this.hass.states[e] : void 0, r = ze(this.hass, e), i = Re(this.hass, e), n = Ft(this.hass, e), o = (typeof (s == null ? void 0 : s.attributes.temperature_unit) == "string" ? s.attributes.temperature_unit : void 0) || (typeof (s == null ? void 0 : s.attributes.unit_of_measurement) == "string" ? s.attributes.unit_of_measurement : "°C"), l = this._hasSeats(t), c = this._hasDirectTpms(t), d = this._hasWindowsControls(t), p = this._hasBodyControls(t), u = lt(this.hass, t.image), v = l || c || d || p, _ = !!(s || t.quick_cool && this.hass.states[t.quick_cool] || t.quick_heat && this.hass.states[t.quick_heat]);
     return a`
       <ha-card>
         ${this._config.title ? a`<div class="header">${this._config.title}</div>` : h}
         <div class="body-pad">
-          ${g ? a`
+          ${_ ? a`
                 <div class="controls-row">
                   <div class="controls-left">
                     ${s ? a`
-                          ${v({
+                          ${f({
       label: r ? "Climate off" : "Climate on",
       icon: Ss,
       disabled: this._busy,
       variant: r ? "ok" : "",
       onClick: () => this._toggleClimate()
     })}
-                          ${v({
+                          ${f({
       label: "Increase temperature",
       icon: Es,
       disabled: this._busy || i === void 0,
@@ -2376,7 +2381,7 @@ let x = class extends w {
                           <span class="setpoint-value" title="Setpoint"
                             >${i !== void 0 ? `${i}${o}` : "—"}</span
                           >
-                          ${v({
+                          ${f({
       label: "Decrease temperature",
       icon: Ps,
       disabled: this._busy || i === void 0,
@@ -2385,7 +2390,7 @@ let x = class extends w {
                         ` : h}
                   </div>
                   <div class="controls-right">
-                    ${t.quick_cool && this.hass.states[t.quick_cool] ? v({
+                    ${t.quick_cool && this.hass.states[t.quick_cool] ? f({
       label: "Quick cool",
       icon: Hs,
       disabled: this._busy,
@@ -2393,7 +2398,7 @@ let x = class extends w {
         () => N(this.hass, t.quick_cool)
       )
     }) : h}
-                    ${t.quick_heat && this.hass.states[t.quick_heat] ? v({
+                    ${t.quick_heat && this.hass.states[t.quick_heat] ? f({
       label: "Quick heat",
       icon: Ke,
       disabled: this._busy,
@@ -2410,8 +2415,8 @@ let x = class extends w {
                   <span class="metric-value">${n}${o}</span>
                 </div>
               ` : h}
-          ${f ? a`
-                <carlinko-car-outline .src=${d}>
+          ${v ? a`
+                <carlinko-car-outline .src=${u}>
                   ${this._bodyActions(t)} ${this._windowsCluster(t)}
                   ${this._sunroofCluster(t)}
                   ${qe.map((D) => this._seatZone(D, t))}
@@ -2594,7 +2599,7 @@ le([
   V()
 ], x.prototype, "_busy", 2);
 x = le([
-  _("carlinko-cabin")
+  g("carlinko-cabin")
 ], x);
 var Ks = Object.getOwnPropertyDescriptor, Fs = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Ks(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2607,7 +2612,7 @@ let G = class extends X {
   }
 };
 G = Fs([
-  _("carlinko-cabin-editor")
+  g("carlinko-cabin-editor")
 ], G);
 var Gs = Object.getOwnPropertyDescriptor, Js = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Gs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2626,7 +2631,7 @@ let Fe = class extends x {
   }
 };
 Fe = Js([
-  _("carlinko-climate")
+  g("carlinko-climate")
 ], Fe);
 var Qs = Object.getOwnPropertyDescriptor, Xs = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Qs(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2636,7 +2641,7 @@ var Qs = Object.getOwnPropertyDescriptor, Xs = (t, e, s, r) => {
 let Ge = class extends G {
 };
 Ge = Xs([
-  _("carlinko-climate-editor")
+  g("carlinko-climate-editor")
 ], Ge);
 var Ys = Object.getOwnPropertyDescriptor, er = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? Ys(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2655,7 +2660,7 @@ let Je = class extends x {
   }
 };
 Je = er([
-  _("carlinko-tpms")
+  g("carlinko-tpms")
 ], Je);
 var tr = Object.getOwnPropertyDescriptor, sr = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? tr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2665,7 +2670,7 @@ var tr = Object.getOwnPropertyDescriptor, sr = (t, e, s, r) => {
 let Qe = class extends G {
 };
 Qe = sr([
-  _("carlinko-tpms-editor")
+  g("carlinko-tpms-editor")
 ], Qe);
 var rr = Object.getOwnPropertyDescriptor, ir = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? rr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2684,7 +2689,7 @@ let Xe = class extends x {
   }
 };
 Xe = ir([
-  _("carlinko-windows")
+  g("carlinko-windows")
 ], Xe);
 var nr = Object.getOwnPropertyDescriptor, or = (t, e, s, r) => {
   for (var i = r > 1 ? void 0 : r ? nr(e, s) : e, n = t.length - 1, o; n >= 0; n--)
@@ -2694,7 +2699,7 @@ var nr = Object.getOwnPropertyDescriptor, or = (t, e, s, r) => {
 let Ye = class extends G {
 };
 Ye = or([
-  _("carlinko-windows-editor")
+  g("carlinko-windows-editor")
 ], Ye);
 window.customCards = window.customCards || [];
 window.customCards.push(

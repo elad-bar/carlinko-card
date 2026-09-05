@@ -90,6 +90,7 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
     domain: "switch",
     fallbackKeys: ["defrost"],
   },
+  { slot: "charge_mode", key: "charge_mode", domain: "sensor" },
   { slot: "charge_stop", key: "charge_stop", domain: "button" },
   { slot: "trunk", key: "liftgate", domain: "cover" },
 ] as const;
