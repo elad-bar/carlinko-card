@@ -115,16 +115,66 @@ function mergeRegistry(
   return out;
 }
 
+/** HA language code for playground (maps browser locale toward carlinko files). */
+function playgroundLanguage(): string {
+  const nav = (navigator.language || "en").replace("_", "-");
+  const lower = nav.toLowerCase();
+  if (
+    lower.startsWith("zh-hant") ||
+    lower.startsWith("zh-tw") ||
+    lower.startsWith("zh-hk")
+  ) {
+    return "zh-Hant";
+  }
+  if (lower.startsWith("zh")) {
+    return "zh-Hans";
+  }
+  return nav.split("-")[0] || "en";
+}
+
+/** Flattened `component.carlinko.entity…` keys from frontend/get_translations. */
+let translationResources: Record<string, string> = {};
+
+async function fetchCarlinkoEntityTranslations(
+  conn: Connection,
+  language: string,
+): Promise<void> {
+  try {
+    const result = (await conn.sendMessagePromise({
+      type: "frontend/get_translations",
+      language,
+      category: "entity",
+      integration: "carlinko",
+    })) as { resources?: Record<string, string> };
+    translationResources = {
+      ...translationResources,
+      ...(result.resources || {}),
+    };
+  } catch (err) {
+    console.warn("playground: failed to load carlinko entity translations", err);
+  }
+}
+
 function buildHass(conn: Connection, states: HassEntities): HomeAssistant {
   const entities: HomeAssistant["entities"] = {};
   for (const entityId of Object.keys(states)) {
     entities[entityId] = { entity_id: entityId };
   }
 
+  const language = playgroundLanguage();
+
   return {
     states: states as HomeAssistant["states"],
     entities: mergeRegistry(entities, entityRegistry),
     hassUrl: haUrl,
+    language,
+    localize: (key: string) => translationResources[key] ?? key,
+    loadBackendTranslation: async (category: string, integration?: string) => {
+      if (category !== "entity" || integration !== "carlinko") {
+        return;
+      }
+      await fetchCarlinkoEntityTranslations(conn, language);
+    },
     callService: async (domain, service, serviceData = {}) => {
       await conn.sendMessagePromise({
         type: "call_service",

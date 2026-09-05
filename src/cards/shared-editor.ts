@@ -1,5 +1,6 @@
-import { LitElement, html, nothing } from "lit";
+import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
+import { ensureCarlinkoTranslations, t } from "../core/i18n";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
 
 export type HaFormSchemaItem = {
@@ -10,26 +11,8 @@ export type HaFormSchemaItem = {
 
 export type HaFormSchema = HaFormSchemaItem[];
 
-const DEVICE_AND_TITLE: HaFormSchema = [
-  {
-    name: "device_id",
-    label: "Vehicle device",
-    selector: {
-      device: {
-        filter: { integration: "carlinko" },
-      },
-    },
-  },
-  {
-    name: "title",
-    label: "Title",
-    selector: { text: {} },
-  },
-];
-
 export const IMAGE_ENTITY_SCHEMA: HaFormSchemaItem = {
   name: "image_entity",
-  label: "Image override (optional)",
   selector: {
     entity: {
       domain: "image",
@@ -40,7 +23,6 @@ export const IMAGE_ENTITY_SCHEMA: HaFormSchemaItem = {
 
 export const TOP_IMAGE_ENTITY_SCHEMA: HaFormSchemaItem = {
   name: "image_entity",
-  label: "Top image override (optional)",
   selector: {
     entity: {
       domain: "image",
@@ -66,8 +48,46 @@ export abstract class CarlinkoDeviceEditor<
     return [];
   }
 
+  protected updated(changed: PropertyValues): void {
+    if (changed.has("hass") && this.hass) {
+      void ensureCarlinkoTranslations(this.hass).then((loaded) => {
+        if (loaded) {
+          this.requestUpdate();
+        }
+      });
+    }
+  }
+
   private _schema(): HaFormSchema {
-    return [...DEVICE_AND_TITLE, ...this.extraSchema()];
+    return [
+      {
+        name: "device_id",
+        label: t(this.hass, "editor.device"),
+        selector: {
+          device: {
+            filter: { integration: "carlinko" },
+          },
+        },
+      },
+      {
+        name: "title",
+        label: t(this.hass, "editor.title"),
+        selector: { text: {} },
+      },
+      ...this.extraSchema().map((item) => {
+        if (item.name !== "image_entity" || item.label) {
+          return item;
+        }
+        const isTop = item === TOP_IMAGE_ENTITY_SCHEMA;
+        return {
+          ...item,
+          label: t(
+            this.hass,
+            isTop ? "editor.top_image_override" : "editor.image_override",
+          ),
+        };
+      }),
+    ];
   }
 
   private _valueChanged(ev: CustomEvent): void {

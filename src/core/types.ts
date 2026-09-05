@@ -27,6 +27,14 @@ export interface HomeAssistant {
   ) => Promise<unknown> | unknown;
   localize?: (key: string, ...args: unknown[]) => string;
   language?: string;
+  /**
+   * Load custom-integration backend translations into `localize`
+   * (e.g. `loadBackendTranslation("entity", "carlinko")`).
+   */
+  loadBackendTranslation?: (
+    category: string,
+    integration?: string,
+  ) => Promise<unknown>;
   /** Absolute HA origin for playground / proxy image URLs (no trailing slash). */
   hassUrl?: string;
   config?: { external_url?: string; internal_url?: string };

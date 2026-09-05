@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- i18n stubs: English card catalog plus ha-carlinko entity name/state labels via `hass.localize` (no device prefix)
 - Phase 1 Overview card (`custom:carlinko-overview`) with device_id binding, vitals, and quick controls
 - Shared core: slot map, entity resolve by device unique_id, hass helpers
 - Lovelace device-selector editor and HA-connected Vite playground

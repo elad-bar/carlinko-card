@@ -1,4 +1,5 @@
 import { customElement } from "lit/decorators.js";
+import { t } from "../core/i18n";
 import { CarlinkoCabin, type CabinConfig } from "./cabin";
 
 /** @deprecated Prefer `custom:carlinko-cabin`. Alias for existing dashboards. */
@@ -13,7 +14,7 @@ export class CarlinkoWindows extends CarlinkoCabin {
   static override getStubConfig(): CabinConfig {
     return {
       device_id: "",
-      title: "Windows",
+      title: t(undefined, "stub.windows"),
     };
   }
 }

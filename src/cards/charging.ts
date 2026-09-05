@@ -1,6 +1,11 @@
-import { LitElement, html, nothing } from "lit";
+import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { runBusy } from "../core/busy";
+import {
+  ensureCarlinkoTranslations,
+  entityName,
+  t,
+} from "../core/i18n";
 import { resolveAllSlots } from "../core/resolve";
 import { CHARGING_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
@@ -59,8 +64,18 @@ export class CarlinkoCharging extends LitElement {
   static getStubConfig(): ChargingConfig {
     return {
       device_id: "",
-      title: "Charging",
+      title: t(undefined, "stub.charging"),
     };
+  }
+
+  protected updated(changed: PropertyValues): void {
+    if (changed.has("hass") && this.hass) {
+      void ensureCarlinkoTranslations(this.hass).then((loaded) => {
+        if (loaded) {
+          this.requestUpdate();
+        }
+      });
+    }
   }
 
   private _slots(): Record<string, string | undefined> {
@@ -109,15 +124,19 @@ export class CarlinkoCharging extends LitElement {
 
   protected render() {
     if (!this._config) {
-      return html`<ha-card><div class="pad">Not configured</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(this.hass, "chrome.not_configured")}</div></ha-card
+      >`;
     }
     if (!this._config.device_id?.trim()) {
       return html`<ha-card
-        ><div class="pad">Select a CarLinko vehicle device</div></ha-card
+        ><div class="pad">${t(this.hass, "chrome.select_device")}</div></ha-card
       >`;
     }
     if (!this.hass) {
-      return html`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(undefined, "chrome.waiting_hass")}</div></ha-card
+      >`;
     }
 
     const s = this._slots();
@@ -139,10 +158,14 @@ export class CarlinkoCharging extends LitElement {
     const showHero =
       hasBattery || hasCharging || hasPower || hasRemaining;
 
-    const pluggedValue = charging ? "Charging" : "Not charging";
+    const pluggedValue = charging
+      ? entityName(this.hass, "binary_sensor", "charging")
+      : t(this.hass, "status.not_charging");
     const pluggedClass = charging ? "ok" : "muted";
     const powerText = formatState(this.hass, s.charge_power);
     const timeText = formatMinutesRemaining(this.hass, s.charge_remaining);
+    const batteryLabel = entityName(this.hass, "sensor", "battery");
+    const socLabel = t(this.hass, "status.soc");
 
     return html`
       <ha-card>
@@ -156,6 +179,7 @@ export class CarlinkoCharging extends LitElement {
                   ${hasBattery
                     ? renderSocRing({
                         percent: batteryPct,
+                        socLabel,
                         onClick: () => fireMoreInfo(this, s.battery!),
                       })
                     : nothing}
@@ -164,22 +188,36 @@ export class CarlinkoCharging extends LitElement {
                         ${renderChargeBattery({
                           percent: batteryPct,
                           charging,
+                          batteryLabel,
+                          chargingLabel: entityName(
+                            this.hass,
+                            "binary_sensor",
+                            "charging",
+                          ),
                         })}`
                     : nothing}
                   <div class="charge-hero-meta">
                     ${hasCharging
                       ? this._metaRow(
-                          "Plugged",
+                          t(this.hass, "status.plugged"),
                           pluggedValue,
                           s.charging,
                           pluggedClass,
                         )
                       : nothing}
                     ${hasPower
-                      ? this._metaRow("Power", powerText, s.charge_power)
+                      ? this._metaRow(
+                          t(this.hass, "status.power"),
+                          powerText,
+                          s.charge_power,
+                        )
                       : nothing}
                     ${hasRemaining
-                      ? this._metaRow("Time", timeText, s.charge_remaining)
+                      ? this._metaRow(
+                          t(this.hass, "status.time"),
+                          timeText,
+                          s.charge_remaining,
+                        )
                       : nothing}
                   </div>
                 </div>
@@ -191,10 +229,15 @@ export class CarlinkoCharging extends LitElement {
                   ${renderMetricRow(
                     this,
                     this.hass,
-                    "Charge state",
+                    entityName(this.hass, "sensor", "charge_state"),
                     s.charge_state,
                   )}
-                  ${renderMetricRow(this, this.hass, "Mode", s.charge_mode)}
+                  ${renderMetricRow(
+                    this,
+                    this.hass,
+                    t(this.hass, "status.mode"),
+                    s.charge_mode,
+                  )}
                 </div>
               `
             : nothing}
@@ -203,7 +246,7 @@ export class CarlinkoCharging extends LitElement {
           ? html`
               <div class="actions">
                 ${renderActionButton({
-                  label: "Stop charging",
+                  label: entityName(this.hass, "button", "charge_stop"),
                   icon: ICON_STOP,
                   showLabel: true,
                   disabled: this._busy,

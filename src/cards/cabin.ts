@@ -1,6 +1,18 @@
-import { LitElement, css, html, nothing, type TemplateResult } from "lit";
+import {
+  LitElement,
+  css,
+  html,
+  nothing,
+  type PropertyValues,
+  type TemplateResult,
+} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { runBusy } from "../core/busy";
+import {
+  ensureCarlinkoTranslations,
+  entityName,
+  t,
+} from "../core/i18n";
 import { resolveAllSlots } from "../core/resolve";
 import { CABIN_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
@@ -264,8 +276,18 @@ export class CarlinkoCabin extends LitElement {
   static getStubConfig(): CabinConfig {
     return {
       device_id: "",
-      title: "Cabin",
+      title: t(undefined, "stub.cabin"),
     };
+  }
+
+  protected updated(changed: PropertyValues): void {
+    if (changed.has("hass") && this.hass) {
+      void ensureCarlinkoTranslations(this.hass).then((loaded) => {
+        if (loaded) {
+          this.requestUpdate();
+        }
+      });
+    }
   }
 
   private _slots(): Record<string, string | undefined> {
@@ -373,7 +395,8 @@ export class CarlinkoCabin extends LitElement {
     const state = getStateValue(this.hass, entityId);
     const domain = domainOf(entityId);
     const role = kind === "H" ? "heat" : "vent";
-    const roleLabel = kind === "H" ? "Heat" : "Vent";
+    const roleLabel =
+      kind === "H" ? t(this.hass, "status.heat") : t(this.hass, "status.vent");
     const stateLabel = shortSeatLabel(state);
     const onClick =
       domain === "select"
@@ -520,7 +543,9 @@ export class CarlinkoCabin extends LitElement {
       ${this._entityExists(engineId)
         ? html`<div slot="engine" class="map-actions">
             ${renderActionButton({
-              label: engineOn ? "Turn engine off" : "Turn engine on",
+              label: engineOn
+                ? t(this.hass, "action.engine_off")
+                : t(this.hass, "action.engine_on"),
               icon: ICON_ENGINE,
               disabled: this._busy,
               variant: engineOn ? "ok" : "",
@@ -536,7 +561,9 @@ export class CarlinkoCabin extends LitElement {
       ${this._entityExists(lockId)
         ? html`<div slot="lock" class="map-actions">
             ${renderActionButton({
-              label: locked ? "Unlock doors" : "Lock doors",
+              label: locked
+                ? t(this.hass, "action.unlock_doors")
+                : t(this.hass, "action.lock_doors"),
               icon: locked ? ICON_LOCK : ICON_UNLOCK,
               disabled: this._busy,
               variant: locked ? "" : "danger",
@@ -552,7 +579,9 @@ export class CarlinkoCabin extends LitElement {
       ${this._entityExists(defogId)
         ? html`<div slot="defog" class="map-actions">
             ${renderActionButton({
-              label: defogOn ? "Turn defog off" : "Turn defog on",
+              label: defogOn
+                ? t(this.hass, "action.defog_off")
+                : t(this.hass, "action.defog_on"),
               icon: ICON_DEFOG,
               disabled: this._busy || defogReadOnly,
               variant: defogOn ? "ok" : "",
@@ -564,7 +593,7 @@ export class CarlinkoCabin extends LitElement {
       ${showCharge
         ? html`<div slot="charge" class="map-actions">
             ${renderActionButton({
-              label: "Stop charge",
+              label: entityName(this.hass, "button", "charge_stop"),
               icon: ICON_CHARGE,
               disabled: this._busy,
               variant: "danger",
@@ -576,7 +605,9 @@ export class CarlinkoCabin extends LitElement {
       ${this._entityExists(trunkId)
         ? html`<div slot="trunk" class="map-actions">
             ${renderActionButton({
-              label: trunkOpen ? "Close trunk" : "Open trunk",
+              label: trunkOpen
+                ? t(this.hass, "action.close_trunk")
+                : t(this.hass, "action.open_trunk"),
               icon: ICON_TRUNK,
               disabled: this._busy,
               variant: trunkOpen ? "ok" : "",
@@ -608,14 +639,14 @@ export class CarlinkoCabin extends LitElement {
         ${hasCover
           ? windowsOpen
             ? renderActionButton({
-                label: "Close windows",
+                label: t(this.hass, "action.close_windows"),
                 icon: ICON_WINDOW_CLOSE,
                 disabled: this._busy,
                 onClick: () =>
                   this._run(() => closeCover(this.hass!, coverId!)),
               })
             : renderActionButton({
-                label: "Open windows",
+                label: t(this.hass, "action.open_windows"),
                 icon: ICON_WINDOW_OPEN,
                 disabled: this._busy,
                 onClick: () =>
@@ -624,7 +655,7 @@ export class CarlinkoCabin extends LitElement {
           : nothing}
         ${hasVent
           ? renderActionButton({
-              label: "Vent windows",
+              label: t(this.hass, "action.vent_windows"),
               icon: ICON_WINDOW_VENT,
               disabled: this._busy,
               onClick: () =>
@@ -651,14 +682,14 @@ export class CarlinkoCabin extends LitElement {
         ${hasCover
           ? sunroofOpen
             ? renderActionButton({
-                label: "Close sunroof",
+                label: t(this.hass, "action.close_sunroof"),
                 icon: ICON_SUNROOF_CLOSE,
                 disabled: this._busy,
                 onClick: () =>
                   this._run(() => closeCover(this.hass!, coverId!)),
               })
             : renderActionButton({
-                label: "Open sunroof",
+                label: t(this.hass, "action.open_sunroof"),
                 icon: ICON_SUNROOF_OPEN,
                 disabled: this._busy,
                 onClick: () =>
@@ -667,7 +698,7 @@ export class CarlinkoCabin extends LitElement {
           : nothing}
         ${hasTilt
           ? renderActionButton({
-              label: "Tilt sunroof",
+              label: t(this.hass, "action.tilt_sunroof"),
               icon: ICON_SUNROOF_TILT,
               disabled: this._busy,
               onClick: () =>
@@ -680,15 +711,19 @@ export class CarlinkoCabin extends LitElement {
 
   protected render() {
     if (!this._config) {
-      return html`<ha-card><div class="pad">Not configured</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(this.hass, "chrome.not_configured")}</div></ha-card
+      >`;
     }
     if (!this._config.device_id?.trim()) {
       return html`<ha-card
-        ><div class="pad">Select a CarLinko vehicle device</div></ha-card
+        ><div class="pad">${t(this.hass, "chrome.select_device")}</div></ha-card
       >`;
     }
     if (!this.hass) {
-      return html`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(undefined, "chrome.waiting_hass")}</div></ha-card
+      >`;
     }
 
     const s = this._slots();
@@ -731,25 +766,29 @@ export class CarlinkoCabin extends LitElement {
                     ${climateEntity
                       ? html`
                           ${renderActionButton({
-                            label: climateOn ? "Climate off" : "Climate on",
+                            label: climateOn
+                              ? t(this.hass, "climate.off")
+                              : t(this.hass, "climate.on"),
                             icon: ICON_POWER,
                             disabled: this._busy,
                             variant: climateOn ? "ok" : "",
                             onClick: () => this._toggleClimate(),
                           })}
                           ${renderActionButton({
-                            label: "Increase temperature",
+                            label: t(this.hass, "climate.increase_temp"),
                             icon: ICON_PLUS,
                             disabled: this._busy || target === undefined,
                             onClick: () => this._nudgeTemp(1),
                           })}
-                          <span class="setpoint-value" title="Setpoint"
+                          <span
+                            class="setpoint-value"
+                            title=${t(this.hass, "climate.setpoint")}
                             >${target !== undefined
                               ? `${target}${unit}`
                               : "—"}</span
                           >
                           ${renderActionButton({
-                            label: "Decrease temperature",
+                            label: t(this.hass, "climate.decrease_temp"),
                             icon: ICON_MINUS,
                             disabled: this._busy || target === undefined,
                             onClick: () => this._nudgeTemp(-1),
@@ -760,7 +799,7 @@ export class CarlinkoCabin extends LitElement {
                   <div class="controls-right">
                     ${s.quick_cool && this.hass.states[s.quick_cool]
                       ? renderActionButton({
-                          label: "Quick cool",
+                          label: entityName(this.hass, "button", "quick_cool"),
                           icon: ICON_SNOWFLAKE,
                           disabled: this._busy,
                           onClick: () =>
@@ -771,7 +810,7 @@ export class CarlinkoCabin extends LitElement {
                       : nothing}
                     ${s.quick_heat && this.hass.states[s.quick_heat]
                       ? renderActionButton({
-                          label: "Quick heat",
+                          label: entityName(this.hass, "button", "quick_heat"),
                           icon: ICON_FIRE,
                           disabled: this._busy,
                           onClick: () =>
@@ -787,7 +826,9 @@ export class CarlinkoCabin extends LitElement {
           ${climateEntity && current !== undefined
             ? html`
                 <div class="current-row">
-                  <span class="metric-label">Current</span>
+                  <span class="metric-label"
+                    >${t(this.hass, "climate.current")}</span
+                  >
                   <span class="metric-value">${current}${unit}</span>
                 </div>
               `

@@ -18,7 +18,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CORE-02 | Core | Entity resolver (`device_id` + unique_id) | done | `src/core/resolve.ts` |
 | CORE-03 | Core | Hass helpers (state, services, more-info) | done | `src/core/hass.ts` |
 | CORE-04 | Core | Shared UI primitives | done | `src/core/ui` + `busy.ts` |
-| CORE-05 | Core | i18n stubs (en first) | todo | Expand locales later |
+| CORE-05 | Core | i18n stubs (en first) | done | Card en catalog + hass.localize entity labels; more card locales later |
 | CARD-01 | Cards | Overview card | done | `custom:carlinko-overview` |
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
 | CARD-03 | Cards | Climate card | done | Merged into Cabin; `carlinko-climate` alias remains |
@@ -72,6 +72,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
 | 2026-09-05 | Tyre OK hotspot on Overview; removed Cabin tyre chips; Windows picker dropped; playground Overview\|Cabin then Charging. |
 | 2026-09-05 | Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview to Cabin map anchors. |
+| 2026-09-05 | CORE-05: card i18n stubs (en) + reuse ha-carlinko entity name/state via `hass.localize` (no device prefix). |
 | 2026-09-05 | UX-03 theme tokens (HA CSS vars) + UX-02 container-query density for Overview/Cabin overlays. |
 
 ## How to update

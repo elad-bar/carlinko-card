@@ -3,9 +3,13 @@ import { html, nothing, type TemplateResult } from "lit";
 export function renderChargeBattery(opts: {
   percent: number | undefined;
   charging?: boolean;
+  batteryLabel?: string;
+  chargingLabel?: string;
 }): TemplateResult | typeof nothing {
   const { percent } = opts;
   const charging = opts.charging ?? false;
+  const batteryLabel = opts.batteryLabel ?? "Battery";
+  const chargingLabel = opts.chargingLabel ?? "charging";
   const clamped =
     percent === undefined || Number.isNaN(percent)
       ? undefined
@@ -17,8 +21,8 @@ export function renderChargeBattery(opts: {
       class="charge-batt"
       role="img"
       aria-label=${clamped !== undefined
-        ? `Battery ${Math.round(clamped)}%${charging ? ", charging" : ""}`
-        : "Battery"}
+        ? `${batteryLabel} ${Math.round(clamped)}%${charging ? `, ${chargingLabel}` : ""}`
+        : batteryLabel}
     >
       <div class="charge-batt-body">
         ${clamped !== undefined

@@ -15,6 +15,11 @@ Project invariants for CarLinko Cards (Lovelace / HACS Dashboard). Change this f
 
 Keep platforms thin: cards call `resolve` + `hass` helpers; do not duplicate entity-id guessing in UI code.
 
+## UI copy (i18n)
+
+- Card chrome and action phrasing: `src/core/i18n` (`t(...)`). English stubs only for now.
+- Entity labels and enum states: `entityName` / `entityState` via `hass.localize` (`component.carlinko.entity…`) — short names without the device/plate. Never use `friendly_name` for UI labels.
+
 ## Entity binding
 
 - Cards bind to a Home Assistant **`device_id`** (CarLinko vehicle device).

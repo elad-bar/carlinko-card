@@ -1,5 +1,12 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import {
+  ensureCarlinkoTranslations,
+  entityName,
+  entityState,
+  hvLabel,
+  t,
+} from "../core/i18n";
 import { resolveAllSlots } from "../core/resolve";
 import { OVERVIEW_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
@@ -25,20 +32,24 @@ import {
 void CarlinkoVehicleStage;
 
 /** ha-carlinko HV enum: off | lv | ready | unknown */
-function hvHotspot(state: string | undefined): {
+function hvHotspot(
+  hass: HomeAssistant | undefined,
+  state: string | undefined,
+): {
   label: string;
   tone: HotspotTone;
 } {
   const raw = (state || "unknown").toLowerCase();
+  const label = hvLabel(hass, raw);
   switch (raw) {
     case "ready":
-      return { label: "HV ready", tone: "ok" };
+      return { label, tone: "ok" };
     case "lv":
-      return { label: "HV LV", tone: "info" };
+      return { label, tone: "info" };
     case "off":
-      return { label: "HV off", tone: "muted" };
+      return { label, tone: "muted" };
     default:
-      return { label: "HV unknown", tone: "warn" };
+      return { label, tone: "warn" };
   }
 }
 
@@ -68,8 +79,18 @@ export class CarlinkoOverview extends LitElement {
   static getStubConfig(): OverviewConfig {
     return {
       device_id: "",
-      title: "CarLinko",
+      title: t(undefined, "stub.overview"),
     };
+  }
+
+  protected updated(changed: PropertyValues): void {
+    if (changed.has("hass") && this.hass) {
+      void ensureCarlinkoTranslations(this.hass).then((loaded) => {
+        if (loaded) {
+          this.requestUpdate();
+        }
+      });
+    }
   }
 
   private _slots(): Record<string, string | undefined> {
@@ -81,15 +102,19 @@ export class CarlinkoOverview extends LitElement {
 
   protected render() {
     if (!this._config) {
-      return html`<ha-card><div class="pad">Not configured</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(this.hass, "chrome.not_configured")}</div></ha-card
+      >`;
     }
     if (!this._config.device_id?.trim()) {
       return html`<ha-card
-        ><div class="pad">Select a CarLinko vehicle device</div></ha-card
+        ><div class="pad">${t(this.hass, "chrome.select_device")}</div></ha-card
       >`;
     }
     if (!this.hass) {
-      return html`<ha-card><div class="pad">Waiting for Home Assistant…</div></ha-card>`;
+      return html`<ha-card
+        ><div class="pad">${t(undefined, "chrome.waiting_hass")}</div></ha-card
+      >`;
     }
 
     const s = this._slots();
@@ -120,7 +145,7 @@ export class CarlinkoOverview extends LitElement {
         ? formatState(this.hass, s.fuel_range)
         : undefined;
     const hvState = getStateValue(this.hass, s.hv_state);
-    const hv = s.hv_state ? hvHotspot(hvState) : undefined;
+    const hv = s.hv_state ? hvHotspot(this.hass, hvState) : undefined;
     const consumptionText =
       s.consumption && this.hass.states[s.consumption]
         ? formatState(this.hass, s.consumption)
@@ -139,10 +164,10 @@ export class CarlinkoOverview extends LitElement {
         : undefined;
     const tyreLabel =
       tyreTone === "danger"
-        ? "Tyre problem"
+        ? entityName(this.hass, "binary_sensor", "tyres_ok")
         : tyreTone === "warn"
-          ? "Check tyres"
-          : "Tyres OK";
+          ? entityState(this.hass, "sensor", "tyre_status", "check_tyres")
+          : t(this.hass, "status.tyres_ok");
     const tyreMoreInfo = s.tyres_ok ?? s.tyre_status;
 
     return html`
@@ -161,7 +186,13 @@ export class CarlinkoOverview extends LitElement {
                           class="odo"
                           @click=${() => fireMoreInfo(this, s.odometer!)}
                         >
-                          <span class="odo-label">Odometer</span>
+                          <span class="odo-label"
+                            >${entityName(
+                              this.hass,
+                              "sensor",
+                              "odometer",
+                            )}</span
+                          >
                           <span class="odo-value">${odometerText}</span>
                         </button>`
                       : nothing}
@@ -171,7 +202,13 @@ export class CarlinkoOverview extends LitElement {
                           class="range-total"
                           @click=${() => fireMoreInfo(this, s.total_range!)}
                         >
-                          <span class="range-label">Total range</span>
+                          <span class="range-label"
+                            >${entityName(
+                              this.hass,
+                              "sensor",
+                              "total_range",
+                            )}</span
+                          >
                           <span class="range-value">${totalRangeText}</span>
                         </button>`
                       : nothing}
@@ -181,7 +218,9 @@ export class CarlinkoOverview extends LitElement {
                           class="speed"
                           @click=${() => fireMoreInfo(this, s.speed!)}
                         >
-                          <span class="speed-label">Speed</span>
+                          <span class="speed-label"
+                            >${entityName(this.hass, "sensor", "speed")}</span
+                          >
                           <span class="speed-value">${speedText}</span>
                         </button>`
                       : nothing}
@@ -191,7 +230,9 @@ export class CarlinkoOverview extends LitElement {
                 ? html`<div slot="online">
                     ${renderHotspotButton({
                       icon: "signal",
-                      label: online ? "Online" : "Offline",
+                      label: online
+                        ? entityName(this.hass, "binary_sensor", "online")
+                        : t(this.hass, "status.offline"),
                       tone: online ? "ok" : "muted",
                       onClick: () => fireMoreInfo(this, s.online!),
                     })}
@@ -224,7 +265,9 @@ export class CarlinkoOverview extends LitElement {
               ${renderHorizontalLevel({
                 percent: batteryPct,
                 primary:
-                  batteryPct !== undefined || evRangeText ? "SOC" : undefined,
+                  batteryPct !== undefined || evRangeText
+                    ? t(this.hass, "status.soc")
+                    : undefined,
                 secondary: evRangeText,
                 meta: consumptionText,
                 tone: "ok",
@@ -232,7 +275,9 @@ export class CarlinkoOverview extends LitElement {
               ${renderHorizontalLevel({
                 percent: fuelPct,
                 primary:
-                  fuelPct !== undefined || fuelRangeText ? "Fuel" : undefined,
+                  fuelPct !== undefined || fuelRangeText
+                    ? entityName(this.hass, "sensor", "fuel")
+                    : undefined,
                 secondary: fuelRangeText,
                 meta: fuelConsumptionText,
                 tone: "info",

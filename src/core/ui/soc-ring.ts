@@ -3,9 +3,11 @@ import { styleMap } from "lit/directives/style-map.js";
 
 export function renderSocRing(opts: {
   percent: number | undefined;
+  socLabel?: string;
   onClick?: () => void;
 }): TemplateResult | typeof nothing {
   const { percent, onClick } = opts;
+  const socLabel = opts.socLabel ?? "SoC";
   if (percent === undefined && !onClick) {
     return nothing;
   }
@@ -15,7 +17,8 @@ export function renderSocRing(opts: {
       ? undefined
       : Math.max(0, Math.min(100, percent));
   const pct = clamped === undefined ? 0 : Math.round(clamped);
-  const label = clamped !== undefined ? `${pct}% SoC` : "SoC";
+  const label =
+    clamped !== undefined ? `${pct}% ${socLabel}` : socLabel;
 
   const meterStyle =
     clamped !== undefined
@@ -32,7 +35,7 @@ export function renderSocRing(opts: {
       ${clamped !== undefined
         ? html`<span class="soc-ring-pct">${pct}%</span>`
         : html`<span class="soc-ring-pct muted">—</span>`}
-      <span class="soc-ring-label">SoC</span>
+      <span class="soc-ring-label">${socLabel}</span>
     </div>
   `;
 

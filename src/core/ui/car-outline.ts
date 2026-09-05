@@ -128,11 +128,11 @@ export class CarlinkoCarOutline extends LitElement {
     }
     .seat-rl {
       left: 18%;
-      top: 54%;
+      top: 65%;
     }
     .seat-rr {
       right: 18%;
-      top: 54%;
+      top: 65%;
     }
     /* TPMS: front near mirrors/wheels; rear aligned with rear wheels */
     .wheel-fl {
@@ -158,7 +158,7 @@ export class CarlinkoCarOutline extends LitElement {
     }
     .sunroof {
       left: 50%;
-      top: 66%;
+      top: 54%;
       transform: translateX(-50%);
     }
     /* Body / access: trunk rear, charge rear-left, lock mid-side, defog windshield, engine hood */
