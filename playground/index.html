@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CarLinko Cards Playground</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: #eef2f5;
+        color: #1a1a1a;
+      }
+      header {
+        padding: 16px 20px;
+        background: #0d9488;
+        color: #fff;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+      header p {
+        margin: 4px 0 0;
+        opacity: 0.9;
+        font-size: 0.85rem;
+      }
+      main {
+        max-width: 920px;
+        margin: 20px auto;
+        padding: 0 16px 40px;
+        display: grid;
+        gap: 16px;
+      }
+      .panel {
+        background: #fff;
+        border-radius: 12px;
+        padding: 14px 16px;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+      }
+      label {
+        display: block;
+        font-size: 0.8rem;
+        color: #556;
+        margin-bottom: 4px;
+      }
+      input,
+      select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border: 1px solid #d0d7de;
+        border-radius: 8px;
+        font: inherit;
+        background: #fff;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 640px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+      button.primary {
+        margin-top: 12px;
+        background: #0d9488;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+      button.primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 0.85rem;
+        margin-top: 8px;
+      }
+      .status.err {
+        color: #b91c1c;
+      }
+      .status.ok {
+        color: #0f766e;
+      }
+      #card-host {
+        min-height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>CarLinko Cards Playground</h1>
+      <p>Connects to your real Home Assistant (ha-carlinko entities).</p>
+    </header>
+    <main>
+      <div class="panel">
+        <div class="row">
+          <div>
+            <label for="device">Vehicle device</label>
+            <select id="device" disabled>
+              <option value="">Connect to load devices…</option>
+            </select>
+          </div>
+          <div>
+            <label for="title">title</label>
+            <input id="title" placeholder="My Car" value="CarLinko Overview" />
+          </div>
+        </div>
+        <button class="primary" id="apply" type="button">Apply config</button>
+        <div class="status" id="status">Not connected</div>
+      </div>
+      <div class="panel" id="card-host"></div>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

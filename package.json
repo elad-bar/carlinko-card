@@ -1,0 +1,41 @@
+{
+  "name": "carlinko-card",
+  "version": "0.1.0",
+  "description": "Home Assistant Lovelace cards for CarLinko vehicles (ha-carlinko)",
+  "type": "module",
+  "main": "dist/carlinko-card.js",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "playground": "vite --config playground/vite.config.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src playground --max-warnings=0",
+    "format": "prettier --write \"src/**/*.{ts,js}\" \"playground/**/*.{ts,html}\" \"*.md\" \"docs/**/*.md\" \"scripts/**/*.mjs\"",
+    "test:changelog": "node scripts/verify-changelog-version.mjs",
+    "extract:changelog": "node scripts/extract-changelog-section.mjs"
+  },
+  "keywords": [
+    "home-assistant",
+    "lovelace",
+    "carlinko",
+    "custom-card"
+  ],
+  "author": "Elad Bar",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elad-bar/carlinko-card.git"
+  },
+  "dependencies": {
+    "home-assistant-js-websocket": "^9.5.0",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.26.0",
+    "vite": "^6.0.11"
+  }
+}

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Env / secrets (never commit tokens)
+.env
+.env.*
+!.env.example
+!**/.env.example
+playground/.env
+playground/.env.local
+*.pem
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+
+# Playground build cache only (main dist/ is committed for HACS)
+playground/dist/

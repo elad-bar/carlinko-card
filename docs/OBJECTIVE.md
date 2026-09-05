@@ -1,0 +1,127 @@
+# CarLinko Cards — Objective
+
+Home Assistant **dashboard cards** for vehicles managed by the [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) integration.
+
+This repository does **not** replace the integration. CarLinko entities and remote commands stay in `ha-carlinko`. This project ships Lovelace custom cards so users can build vehicle dashboards on top of that data.
+
+Concept reference (same split of concerns):
+
+- Integration: [jkaberg/hass-byd-vehicle](https://github.com/jkaberg/hass-byd-vehicle)
+- Cards: [moshiko2312/BYD-CARD](https://github.com/moshiko2312/BYD-CARD)
+
+## Goals
+
+1. Provide a **small set of purpose-built cards** (not many tiny widgets) that map cleanly onto CarLinko entities.
+2. Resolve entities by stable integration **keys** (from `entity_specs`), with optional YAML overrides — not by translated friendly names.
+3. Hide UI for capability-gated features the car does not expose (PHEV, direct TPMS, remote controls).
+4. Ship as a HACS **Dashboard** resource that works in real Home Assistant.
+5. Support local UI development against a **live** Home Assistant instance that already runs `ha-carlinko`.
+
+## Non-goals (initial)
+
+- Duplicating CarLinko cloud auth or WebSocket logic in the card package.
+- Emulating a full Home Assistant frontend.
+- Many micro-cards for every single sensor.
+- Perfect visual polish in v1 (layout and UX will be refined later).
+
+## Card set (v1)
+
+Five cards. Users compose them on a Lovelace dashboard.
+
+| Card | Purpose |
+| --- | --- |
+| **Overview** | Hero car image, ranges / mileage / power vitals, high-value toggles |
+| **Charging** | Charge status, mode, remaining time, power, stop charging |
+| **Climate** | App-like climate control, quick cool/heat, seat heat/vent map |
+| **TPMS** | Top-down per-wheel pressure and temperature |
+| **Windows** | Windows open/close/vent, sunroof open/close/tilt |
+
+Optional later (not in the initial set): location/map, find-car, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Climate.
+
+### Overview
+
+**Display**
+
+- Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
+- EV range (km) and battery (%).
+- Fuel range (km) and fuel (%) when PHEV; hide for BEV.
+- Optional blended/total range for PHEV.
+- `hv_state`, odometer, consumption (and fuel consumption on PHEV).
+- Speed when the vehicle is moving; hide when parked.
+
+**Controls (quick actions)**
+
+- Engine on/off
+- Defog on/off
+- Stop / release charging
+- Lock / unlock doors
+- Open / close trunk (liftgate)
+
+### Charging
+
+- Charging active, charge state, charge mode, remaining time, charge power
+- Stop charging action
+- `charge_stop` may also appear on Overview as a shortcut; Charging remains the detail card
+
+### Climate
+
+CarLinko mobile-app style layout:
+
+- Setpoint with up/down, current cabin temperature (if available from the climate entity), climate on/off
+- Quick cool / quick heat buttons
+- Top-down car view with seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
+
+### TPMS
+
+- Top-down car with pressure and temperature next to each wheel (click → HA more-info)
+- Overall tyre status
+- If the vehicle only has indirect TPMS, show status and hide the per-wheel grid
+
+### Windows
+
+- Windows: open / close / vent (whole-car cover + vent button — not per-pane entities)
+- Sunroof: open / close / tilt
+
+## Entity mapping principles
+
+Source of truth for available entities: [`entity_specs.py`](https://github.com/elad-bar/ha-carlinko/blob/main/custom_components/carlinko/models/entity_specs.py) in ha-carlinko (`key` + platform + `when` gates).
+
+Resolution order for each UI slot:
+
+1. Prefer entities on the configured **device_id** whose unique_id matches `carlinko_{vehicle_id}_{key}`
+2. Allow per-slot YAML overrides (`entities: { battery: sensor.xxx }`)
+3. Hide UI when the entity is missing or unavailable for this vehicle
+
+Detailed slot → key matrix: [ENTITY_MAP.md](./ENTITY_MAP.md).
+
+## Development approach
+
+Two tracks:
+
+1. **Fidelity** — watch-build and deploy the card bundle into real HA `www/` (or HACS path); validate against live CarLinko entities and remote commands.
+2. **Speed** — local Vite (or similar) playground that connects to the user’s real Home Assistant via WebSocket / long-lived access token and injects a thin `hass`-compatible object into the cards.
+
+Do not point cards at CarLinko cloud APIs directly. Do not require a fake CarLinko backend for card development.
+
+## Visual reference
+
+Initial layout mockup (working target, not final UI):
+
+![CarLinko cards mockup](./carlinko-cards-mockup.png)
+
+Details of look-and-feel (density, icons, theme, mobile layout) will be refined later.
+
+## Suggested implementation order
+
+1. Freeze entity slot map per card
+2. Scaffold the Lovelace card package + HACS dashboard metadata
+3. Mapper + Overview against real HA
+4. Local HA-connected playground
+5. Charging, Climate, TPMS, Windows
+6. Polish and editor UX
+
+## Related links
+
+- Integration: https://github.com/elad-bar/ha-carlinko/
+- Inspiration (integration): https://github.com/jkaberg/hass-byd-vehicle
+- Inspiration (cards): https://github.com/moshiko2312/BYD-CARD
