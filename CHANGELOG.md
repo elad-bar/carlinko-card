@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Console banner now prints the real `package.json` version (was stuck at `0.1.0`, which hid whether the `hass.hassUrl` freeze fix was deployed)
 - Image URL helper fails soft (warn + relative path) instead of throwing during Overview/Cabin render
+- Typecheck: restore Vite `ImportMeta.env` types for the playground (`vite/client` reference)
 
 ## [0.1.2] - 2026-09-05
 
