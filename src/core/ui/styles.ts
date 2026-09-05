@@ -111,7 +111,8 @@ export const actionStyles = css`
     display: block;
   }
   .action:hover:not(:disabled) {
-    border-color: var(--ck-accent);
+    background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
+    border-color: currentColor;
   }
   .action:disabled {
     opacity: 0.5;
@@ -125,29 +126,13 @@ export const actionStyles = css`
     border-color: var(--ck-danger);
     color: var(--ck-danger);
   }
-  .action.ok:hover:not(:disabled) {
-    border-color: var(--ck-ok);
-  }
-  .action.danger:hover:not(:disabled) {
-    border-color: var(--ck-danger);
-  }
   .action.cool {
     border-color: var(--ck-seat-vent);
-  }
-  .action.cool.active {
     color: var(--ck-seat-vent);
   }
   .action.heat {
     border-color: var(--ck-seat-heat);
-  }
-  .action.heat.active {
     color: var(--ck-seat-heat);
-  }
-  .action.cool:hover:not(:disabled) {
-    border-color: var(--ck-seat-vent);
-  }
-  .action.heat:hover:not(:disabled) {
-    border-color: var(--ck-seat-heat);
   }
 `;
 
@@ -176,6 +161,7 @@ export const hotspotStyles = css`
   }
   .hotspot:hover:not(:disabled) {
     border-color: currentColor;
+    background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
   }
   .hotspot:disabled {
     opacity: 0.5;

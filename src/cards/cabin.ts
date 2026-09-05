@@ -808,7 +808,6 @@ export class CarlinkoCabin extends LitElement {
                             icon: ICON_PLUS,
                             disabled: this._busy || target === undefined,
                             variant: "heat",
-                            active: true,
                             onClick: () => this._nudgeTemp(1),
                           })}
                           <span
@@ -823,7 +822,6 @@ export class CarlinkoCabin extends LitElement {
                             icon: ICON_MINUS,
                             disabled: this._busy || target === undefined,
                             variant: "cool",
-                            active: true,
                             onClick: () => this._nudgeTemp(-1),
                           })}
                         `
@@ -836,7 +834,6 @@ export class CarlinkoCabin extends LitElement {
                           icon: ICON_SNOWFLAKE,
                           disabled: this._busy,
                           variant: "cool",
-                          active: isOn(this.hass, s.quick_cool),
                           onClick: () =>
                             this._run(() =>
                               pressButton(this.hass!, s.quick_cool!),
@@ -849,7 +846,6 @@ export class CarlinkoCabin extends LitElement {
                           icon: ICON_FIRE,
                           disabled: this._busy,
                           variant: "heat",
-                          active: isOn(this.hass, s.quick_heat),
                           onClick: () =>
                             this._run(() =>
                               pressButton(this.hass!, s.quick_heat!),
@@ -994,25 +990,11 @@ export class CarlinkoCabin extends LitElement {
       .wheel-zone.tone-danger .wheel-pressure {
         color: var(--ck-tyre-danger);
       }
-      .seat-btn.heat:hover:not(:disabled) {
-        border-color: var(--ck-seat-heat);
-        color: var(--ck-seat-heat);
-      }
-      .seat-btn.vent:hover:not(:disabled) {
-        border-color: var(--ck-seat-vent);
-        color: var(--ck-seat-vent);
-      }
-      .wheel-zone.tone-ok .wheel-pressure:hover,
-      .wheel-zone.tone-ok .wheel-temp:hover {
-        border-color: var(--ck-tyre-ok);
-      }
-      .wheel-zone.tone-warn .wheel-pressure:hover,
-      .wheel-zone.tone-warn .wheel-temp:hover {
-        border-color: var(--ck-tyre-warn);
-      }
-      .wheel-zone.tone-danger .wheel-pressure:hover,
-      .wheel-zone.tone-danger .wheel-temp:hover {
-        border-color: var(--ck-tyre-danger);
+      .seat-btn:hover:not(:disabled),
+      .wheel-pressure:hover,
+      .wheel-temp:hover {
+        background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
+        border-color: currentColor;
       }
       .seat-btn:disabled {
         opacity: 0.5;
@@ -1035,6 +1017,10 @@ export class CarlinkoCabin extends LitElement {
         min-width: 2.35rem;
         background: color-mix(in srgb, var(--ck-bg) 88%, transparent);
         backdrop-filter: blur(2px);
+      }
+      .map-actions .action.icon:hover:not(:disabled) {
+        background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
+        border-color: currentColor;
       }
       .map-actions .action.icon svg {
         width: 1.35rem;

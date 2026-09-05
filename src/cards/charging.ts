@@ -250,6 +250,7 @@ export class CarlinkoCharging extends LitElement {
                   icon: ICON_STOP,
                   showLabel: true,
                   disabled: this._busy,
+                  variant: "danger",
                   onClick: () =>
                     this._run(() => pressButton(this.hass!, s.charge_stop!)),
                 })}

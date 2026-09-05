@@ -28,8 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cabin: lock button is green when locked and red when unlocked
 - Cabin: engine button is green when running and red when off
 - Cabin: windows, trunk, and sunroof open/close buttons are green when closed and red when open
-- Cabin: climate +/− use heat/cool colors; quick cool/heat keep a tinted border and tint the icon when on
+- Cabin: climate +/− and quick cool/heat use full heat/cool colors (border + icon)
+- Cabin: seat heat/vent always use heat/vent colors (like quick heat/cool) so they stay distinguishable
 - Cabin: defog button is red (border + icon) when on; neutral when off
+- Charging: Stop charging uses the same red danger style as Cabin charge-stop
+- Action / hotspot / seat / TPMS chips: hover wash uses each control’s own color (`currentColor`), not accent green; neutral map actions (e.g. sunroof tilt) also darken the border so hover is visible
+- Cabin map actions (engine, find, lock, windows, trunk, sunroof, …): hover wash was blocked by a stronger translucent background rule — now matches other action buttons
 - Charging: replace always-green battery glyph with an electricity indicator that is green only while charging (SoC ring unchanged)
 
 ## [0.1.4] - 2026-09-05
