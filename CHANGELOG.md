@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lovelace device-selector editor and HA-connected Vite playground
 - Entity map, objective, and backlog docs
 - Engineering pipeline ported from ha-carlinko: standards, Cursor skills, ESLint/Prettier, CI, changelog verify, HACS plugin + release workflow
+- Shared UI primitives (`src/core/ui`): metrics, actions, chips, progress bar, car outline shell
+- Charging card (`custom:carlinko-charging`) with device_id binding and stop-charge action
 
 ### Changed
 

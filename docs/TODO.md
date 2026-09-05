@@ -17,10 +17,10 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CORE-01 | Core | Entity slot map module | done | `src/core/slots.ts` |
 | CORE-02 | Core | Entity resolver (`device_id` + unique_id) | done | `src/core/resolve.ts` |
 | CORE-03 | Core | Hass helpers (state, services, more-info) | done | `src/core/hass.ts` |
-| CORE-04 | Core | Shared UI primitives | todo | metrics, actions, top-down car diagram |
+| CORE-04 | Core | Shared UI primitives | done | `src/core/ui` + `busy.ts` |
 | CORE-05 | Core | i18n stubs (en first) | todo | Expand locales later |
 | CARD-01 | Cards | Overview card | done | `custom:carlinko-overview` |
-| CARD-02 | Cards | Charging card | todo | State/mode/remaining/power/stop |
+| CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
 | CARD-03 | Cards | Climate card | todo | Setpoint, quick, seats |
 | CARD-04 | Cards | TPMS card | todo | Per-wheel + status; hide if indirect |
 | CARD-05 | Cards | Windows card | todo | Windows + sunroof |
@@ -46,7 +46,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 
 1. ~~Phase 1 foundation (DOC-03, PKG, CORE, CARD-01, DEV)~~ **done**
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
-3. CARD-02 → CARD-03 → CARD-04 → CARD-05 → CARD-06
+3. ~~CORE-04 + CARD-02 Charging~~ **done** → CARD-03 → CARD-04 → CARD-05 → CARD-06
 4. DOC-05 → PKG-03 → REL-01
 5. UX-* when visuals are reviewed
 
@@ -60,6 +60,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Live validation: playground connected to HA; Overview mounted with live vitals/controls. Hardened `.gitignore` for env secrets. |
 | 2026-09-05 | Backlog: added PIPE-01…PIPE-07 for ha-carlinko pipeline port (skills, standards, CI, changelog/release). |
 | 2026-09-05 | Pipeline port complete: standards, Cursor skills, ESLint/Prettier/pre-commit, CHANGELOG scripts, CI quality+HACS+release, CONTRIBUTING/SECURITY, committed `dist/` for HACS. |
+| 2026-09-05 | CORE-04 shared UI primitives + CARD-02 Charging card; playground mounts Overview and Charging. |
 
 ## How to update
 

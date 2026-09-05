@@ -37,16 +37,16 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ---
 
-## Charging (`carlinko-charging`) — stub
+## Charging (`carlinko-charging`)
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| charging | `charging` | binary_sensor | optional | |
+| charging | `charging` | binary_sensor | optional | Status chip |
 | charge_state | `charge_state` | sensor | optional | |
 | charge_mode | `charge_mode` | sensor | optional | |
 | charge_remaining | `charge_remaining` | sensor | optional | minutes |
 | charge_power | `charge_power` | sensor | optional | kW |
-| charge_stop | `charge_stop` | button | optional | |
+| charge_stop | `charge_stop` | button | optional | Stop charging action |
 
 ---
 

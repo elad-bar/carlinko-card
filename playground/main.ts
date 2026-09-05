@@ -8,9 +8,10 @@ import {
 } from "home-assistant-js-websocket";
 import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
+import type { CarlinkoCharging } from "../src/cards/charging";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
-/** Minimal ha-card so Overview renders outside Lovelace. */
+/** Minimal ha-card so cards render outside Lovelace. */
 if (!customElements.get("ha-card")) {
   class HaCard extends HTMLElement {
     static get observedAttributes() {
@@ -64,7 +65,8 @@ const host = document.getElementById("card-host")!;
 
 let connection: Connection | undefined;
 let hass: HomeAssistant | undefined;
-let card: CarlinkoOverview | undefined;
+let overviewCard: CarlinkoOverview | undefined;
+let chargingCard: CarlinkoCharging | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
 function setStatus(text: string, kind: "" | "ok" | "err" = "") {
@@ -151,17 +153,14 @@ function populateDevices(devices: DeviceRegistryEntry[]) {
     deviceSelect.appendChild(opt);
   }
 
-  if (
-    defaultDeviceId &&
-    carlinko.some((d) => d.id === defaultDeviceId)
-  ) {
+  if (defaultDeviceId && carlinko.some((d) => d.id === defaultDeviceId)) {
     deviceSelect.value = defaultDeviceId;
   }
 
   deviceSelect.disabled = carlinko.length === 0;
 }
 
-function mountCard() {
+function mountCards() {
   if (!hass) {
     return;
   }
@@ -171,17 +170,39 @@ function mountCard() {
     return;
   }
 
-  if (!card) {
-    card = document.createElement("carlinko-overview") as CarlinkoOverview;
-    host.replaceChildren(card);
+  const title = titleInput.value.trim() || undefined;
+
+  if (!overviewCard || !chargingCard) {
+    overviewCard = document.createElement("carlinko-overview") as CarlinkoOverview;
+    chargingCard = document.createElement("carlinko-charging") as CarlinkoCharging;
+    host.replaceChildren(overviewCard, chargingCard);
   }
 
-  card.hass = hass;
-  card.setConfig({
+  overviewCard.hass = hass;
+  overviewCard.setConfig({
     device_id: deviceId,
-    title: titleInput.value.trim() || undefined,
+    title: title || "CarLinko Overview",
   });
-  setStatus(`Card mounted for device ${deviceId}`, "ok");
+
+  chargingCard.hass = hass;
+  chargingCard.setConfig({
+    device_id: deviceId,
+    title: "Charging",
+  });
+
+  setStatus(`Cards mounted for device ${deviceId}`, "ok");
+}
+
+function syncHass() {
+  if (!hass) {
+    return;
+  }
+  if (overviewCard) {
+    overviewCard.hass = hass;
+  }
+  if (chargingCard) {
+    chargingCard.hass = hass;
+  }
 }
 
 async function connect() {
@@ -220,15 +241,13 @@ async function connect() {
         return;
       }
       hass = buildHass(connection, ents);
-      if (card) {
-        card.hass = hass;
-      }
+      syncHass();
     });
 
     setStatus(`Connected to ${haUrl}`, "ok");
     applyBtn.disabled = false;
     if (deviceSelect.value.trim()) {
-      mountCard();
+      mountCards();
     }
   } catch (err) {
     setStatus(
@@ -239,10 +258,10 @@ async function connect() {
   }
 }
 
-applyBtn.addEventListener("click", () => mountCard());
+applyBtn.addEventListener("click", () => mountCards());
 deviceSelect.addEventListener("change", () => {
   if (deviceSelect.value.trim()) {
-    mountCard();
+    mountCards();
   }
 });
 void connect();
