@@ -1,6 +1,6 @@
 import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
-import { ensureCarlinkoTranslations, t } from "../core/i18n";
+import { t } from "../core/i18n";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
 
 export type HaFormSchemaItem = {
@@ -39,6 +39,8 @@ export abstract class CarlinkoDeviceEditor<
 
   @state() protected _config?: T;
 
+  private _cachedSchema?: HaFormSchema;
+
   public setConfig(config: T): void {
     this._config = { ...config };
   }
@@ -48,17 +50,22 @@ export abstract class CarlinkoDeviceEditor<
     return [];
   }
 
-  protected updated(changed: PropertyValues): void {
-    if (changed.has("hass") && this.hass) {
-      void ensureCarlinkoTranslations(this.hass).then((loaded) => {
-        if (loaded) {
-          this.requestUpdate();
-        }
-      });
+  /**
+   * Skip hass-only updates after the first paint. Lovelace assigns a new hass
+   * on every state_changed; re-rendering ha-form re-runs expensive device /
+   * entity selector filters.
+   */
+  protected shouldUpdate(changed: PropertyValues): boolean {
+    if (changed.has("_config")) {
+      return true;
     }
+    if (changed.has("hass")) {
+      return changed.get("hass") === undefined;
+    }
+    return true;
   }
 
-  private _schema(): HaFormSchema {
+  private _buildSchema(): HaFormSchema {
     return [
       {
         name: "device_id",
@@ -90,6 +97,9 @@ export abstract class CarlinkoDeviceEditor<
     ];
   }
 
+  private _computeLabel = (schema: { name: string; label?: string }) =>
+    schema.label || schema.name;
+
   private _valueChanged(ev: CustomEvent): void {
     ev.stopPropagation();
     const value = ev.detail?.value as T | undefined;
@@ -111,13 +121,14 @@ export abstract class CarlinkoDeviceEditor<
       return nothing;
     }
 
+    this._cachedSchema ??= this._buildSchema();
+
     return html`
       <ha-form
         .hass=${this.hass}
         .data=${this._config}
-        .schema=${this._schema()}
-        .computeLabel=${(schema: { name: string; label?: string }) =>
-          schema.label || schema.name}
+        .schema=${this._cachedSchema}
+        .computeLabel=${this._computeLabel}
         @value-changed=${this._valueChanged}
       ></ha-form>
     `;
