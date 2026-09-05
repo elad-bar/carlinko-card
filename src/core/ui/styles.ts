@@ -4,15 +4,29 @@ import { css } from "lit";
 export const sharedHostStyles = css`
   :host {
     display: block;
-    --ck-accent: #0d9488;
-    --ck-ok: #16a34a;
-    --ck-warn: #d97706;
-    --ck-info: #2563eb;
+    container-type: inline-size;
+    container-name: ck-card;
+    --ck-accent: var(--primary-color, #0d9488);
+    --ck-ok: var(--success-color, #16a34a);
+    --ck-warn: var(--warning-color, #d97706);
+    --ck-info: var(--info-color, #2563eb);
+    --ck-danger: var(--error-color, #b91c1c);
     --ck-bg: var(--card-background-color, #fff);
     --ck-text: var(--primary-text-color, #1a1a1a);
     --ck-muted: var(--secondary-text-color, #667);
     --ck-border: var(--divider-color, #e2e8f0);
-    --ck-danger: #b91c1c;
+    --ck-track: var(--divider-color, #e2e8f0);
+    --ck-surface-muted: color-mix(
+      in srgb,
+      var(--ck-accent) 8%,
+      var(--ck-bg)
+    );
+    --ck-seat-heat: #d64545;
+    --ck-seat-vent: #3b82c4;
+    --ck-tyre-ok: var(--ck-ok);
+    --ck-tyre-warn: var(--ck-warn);
+    --ck-tyre-danger: var(--ck-danger);
+    --ck-on-accent: #fff;
   }
   ha-card {
     background: var(--ck-bg);
@@ -128,7 +142,7 @@ export const actionStyles = css`
 export const progressStyles = css`
   .bar-wrap {
     height: 6px;
-    background: var(--ck-border);
+    background: var(--ck-track);
     border-radius: 999px;
     overflow: hidden;
     margin: 2px 0 8px;
@@ -194,6 +208,18 @@ export const hotspotStyles = css`
     border-color: var(--ck-info);
     box-shadow: 0 0 12px color-mix(in srgb, var(--ck-info) 45%, transparent);
   }
+  @container ck-card (max-width: 360px) {
+    .hotspot {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+    }
+    .hotspot svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 
 export const horizontalLevelStyles = css`
@@ -227,7 +253,7 @@ export const horizontalLevelStyles = css`
     height: 8px;
     margin: 4px 0 2px;
     border-radius: 999px;
-    background: var(--ck-border);
+    background: var(--ck-track);
     overflow: hidden;
   }
   .hlevel-bar {
@@ -281,6 +307,11 @@ export const socRingStyles = css`
     position: absolute;
     inset: 0;
     border-radius: 50%;
+    background: conic-gradient(
+      from -90deg,
+      var(--ck-ok) 0% var(--ck-soc-pct, 0%),
+      var(--ck-track) var(--ck-soc-pct, 0%) 100%
+    );
     /* Donut hole — keep green arc visible as a thick ring */
     -webkit-mask: radial-gradient(
       farthest-side,
@@ -292,6 +323,9 @@ export const socRingStyles = css`
       transparent calc(100% - 12px),
       #000 calc(100% - 12px)
     );
+  }
+  .soc-ring-meter.empty {
+    background: conic-gradient(from -90deg, var(--ck-track) 0% 100%);
   }
   .soc-ring-center {
     position: relative;
@@ -307,17 +341,26 @@ export const socRingStyles = css`
     font-size: 1.45rem;
     font-weight: 700;
     line-height: 1.1;
-    color: #16a34a;
+    color: var(--ck-ok);
   }
   .soc-ring-pct.muted {
-    color: var(--ck-muted, #667);
+    color: var(--ck-muted);
   }
   .soc-ring-label {
     font-size: 0.7rem;
     font-weight: 600;
-    color: var(--ck-muted, #667);
+    color: var(--ck-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+  @container ck-card (max-width: 360px) {
+    .soc-ring {
+      width: 96px;
+      height: 96px;
+    }
+    .soc-ring-pct {
+      font-size: 1.25rem;
+    }
   }
 `;
 
@@ -327,7 +370,7 @@ export const chargeBatteryStyles = css`
     align-items: center;
     gap: 3px;
     flex-shrink: 0;
-    color: var(--ck-ok, #16a34a);
+    color: var(--ck-ok);
   }
   .charge-batt-body {
     position: relative;
@@ -343,7 +386,7 @@ export const chargeBatteryStyles = css`
     left: 0;
     top: 0;
     bottom: 0;
-    background: var(--ck-ok, #16a34a);
+    background: var(--ck-ok);
     opacity: 0.9;
     transition: width 0.25s ease;
   }
@@ -353,7 +396,7 @@ export const chargeBatteryStyles = css`
     margin: auto;
     width: 14px;
     height: 14px;
-    color: #fff;
+    color: var(--ck-on-accent);
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
     z-index: 1;
   }
@@ -375,7 +418,7 @@ export const chargingHeroStyles = css`
   .charge-hero-link {
     width: 16px;
     height: 2px;
-    background: var(--ck-border);
+    background: var(--ck-track);
     flex-shrink: 0;
   }
   .charge-hero-meta {

@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Charging SoC ring keeps green fill/% when not actively charging
 - Charging SoC ring draws a clear green progress arc (SVG stroke) matching the mockup
 - Charging SoC ring uses a CSS conic-gradient so the green fill always renders (SVG stroke was staying gray)
+- Theme tokens (`--ck-*`) map to Home Assistant theme CSS variables for dark/light themes; light-only hardcodes removed from SoC ring, outline, stage, and Overview hero text
+- Narrow Lovelace columns (~360px): container-query density for Overview hotspots/vitals and Cabin map chips
 
 ### Notes
 

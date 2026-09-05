@@ -19,15 +19,15 @@ export function renderSocRing(opts: {
 
   const meterStyle =
     clamped !== undefined
-      ? styleMap({
-          background: `conic-gradient(from -90deg, #16a34a 0% ${pct}%, #e2e8f0 ${pct}% 100%)`,
-        })
-      : styleMap({
-          background: "conic-gradient(from -90deg, #e2e8f0 0% 100%)",
-        });
+      ? styleMap({ "--ck-soc-pct": `${pct}%` })
+      : nothing;
 
   const ring = html`
-    <div class="soc-ring-meter" style=${meterStyle} aria-hidden="true"></div>
+    <div
+      class="soc-ring-meter ${clamped === undefined ? "empty" : ""}"
+      style=${meterStyle}
+      aria-hidden="true"
+    ></div>
     <div class="soc-ring-center">
       ${clamped !== undefined
         ? html`<span class="soc-ring-pct">${pct}%</span>`

@@ -39,8 +39,8 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | PIPE-06 | Pipeline | CONTRIBUTING, SECURITY, CODEOWNERS, PR template | done | |
 | PIPE-07 | Pipeline | Commit `dist/carlinko-card.js` for HACS | done | Main dist no longer gitignored |
 | UX-01 | Polish | Align layout with mockup refinements | done | Overview: hotspot hero + visual vitals |
-| UX-02 | Polish | Mobile / responsive layout | deferred | |
-| UX-03 | Polish | Theme tokens / dark HA themes | deferred | |
+| UX-02 | Polish | Mobile / responsive layout | done | Container queries ~360px; Overview/Cabin density |
+| UX-03 | Polish | Theme tokens / dark HA themes | done | `--ck-*` mapped to HA theme vars; no light-only hardcodes |
 | REL-01 | Release | First HACS-ready publish | todo | Pipeline ready; push to main when repo is remote |
 
 ## Suggested order
@@ -49,7 +49,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
 3. ~~CORE-04 + CARD-02…CARD-05~~ **done** → ~~CARD-06 editors~~ **done**
 4. ~~DOC-05 + PKG-03~~ **done** → REL-01
-5. UX-* polish as needed (`UX-01` Overview hotspots done)
+5. ~~UX-* polish~~ **done** (`UX-01`…`UX-03`)
 
 ## Progress log
 
@@ -72,6 +72,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
 | 2026-09-05 | Tyre OK hotspot on Overview; removed Cabin tyre chips; Windows picker dropped; playground Overview\|Cabin then Charging. |
 | 2026-09-05 | Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview to Cabin map anchors. |
+| 2026-09-05 | UX-03 theme tokens (HA CSS vars) + UX-02 container-query density for Overview/Cabin overlays. |
 
 ## How to update
 

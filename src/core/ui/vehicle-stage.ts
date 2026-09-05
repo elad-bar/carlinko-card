@@ -29,6 +29,8 @@ export class CarlinkoVehicleStage extends LitElement {
     :host {
       display: block;
       width: 100%;
+      container-type: inline-size;
+      container-name: ck-stage;
     }
     .wrap {
       position: relative;
@@ -36,7 +38,10 @@ export class CarlinkoVehicleStage extends LitElement {
       min-height: 120px;
       border-radius: var(--ha-card-border-radius, 12px);
       overflow: visible;
-      background: var(--ha-card-background, linear-gradient(145deg, #e8eef2, #f7fafc));
+      background: var(
+        --ha-card-background,
+        var(--ck-bg, var(--card-background-color, #fff))
+      );
     }
     .car-img {
       display: block;
@@ -50,7 +55,7 @@ export class CarlinkoVehicleStage extends LitElement {
       justify-content: center;
       width: 100%;
       min-height: 160px;
-      color: var(--ck-muted, #667);
+      color: var(--ck-muted, var(--secondary-text-color, #667));
       font-size: 0.9rem;
       padding: 24px;
     }
@@ -79,6 +84,17 @@ export class CarlinkoVehicleStage extends LitElement {
     .tyres {
       left: 95%;
       top: 88%;
+    }
+    @container ck-stage (max-width: 360px) {
+      .online {
+        left: 68%;
+      }
+      .hv {
+        left: 80%;
+      }
+      .tyres {
+        left: 92%;
+      }
     }
   `;
 }

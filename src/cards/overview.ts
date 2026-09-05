@@ -294,8 +294,11 @@ export class CarlinkoOverview extends LitElement {
         display: block;
         color: var(--ck-muted);
         font-size: 0.75rem;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
-          0 0 8px rgba(255, 255, 255, 0.55);
+        text-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.55),
+          0 0 8px rgba(0, 0, 0, 0.35),
+          0 1px 2px rgba(255, 255, 255, 0.75),
+          0 0 8px rgba(255, 255, 255, 0.45);
       }
       .odo-value,
       .range-value,
@@ -304,8 +307,31 @@ export class CarlinkoOverview extends LitElement {
         font-weight: 700;
         letter-spacing: 0.02em;
         line-height: 1.2;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85),
-          0 0 8px rgba(255, 255, 255, 0.55);
+        text-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.55),
+          0 0 8px rgba(0, 0, 0, 0.35),
+          0 1px 2px rgba(255, 255, 255, 0.75),
+          0 0 8px rgba(255, 255, 255, 0.45);
+      }
+      @container ck-card (max-width: 360px) {
+        .body {
+          gap: 12px;
+          padding: 12px;
+        }
+        .vitals {
+          gap: 8px;
+        }
+        .levels {
+          gap: 12px 16px;
+        }
+        .headline {
+          gap: 8px 12px;
+        }
+        .odo-value,
+        .range-value,
+        .speed-value {
+          font-size: 1.15rem;
+        }
       }
     `,
   ];

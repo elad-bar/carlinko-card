@@ -69,6 +69,8 @@ export class CarlinkoCarOutline extends LitElement {
       width: 100%;
       max-width: 280px;
       margin: 0 auto;
+      container-type: inline-size;
+      container-name: ck-outline;
     }
     .wrap {
       position: relative;
@@ -90,12 +92,23 @@ export class CarlinkoCarOutline extends LitElement {
       display: block;
     }
     .body {
-      fill: color-mix(in srgb, var(--ck-accent, #0d9488) 12%, #fff);
-      stroke: var(--ck-border, #e2e8f0);
+      fill: color-mix(
+        in srgb,
+        var(--ck-accent, var(--primary-color, #0d9488)) 12%,
+        var(--ck-bg, var(--card-background-color, #fff))
+      );
+      stroke: var(--ck-border, var(--divider-color, #e2e8f0));
       stroke-width: 2;
     }
     .glass {
-      fill: color-mix(in srgb, var(--ck-accent, #0d9488) 8%, #e8eef2);
+      fill: var(
+        --ck-surface-muted,
+        color-mix(
+          in srgb,
+          var(--ck-accent, var(--primary-color, #0d9488)) 8%,
+          var(--ck-bg, var(--card-background-color, #fff))
+        )
+      );
       stroke: none;
     }
     .region {

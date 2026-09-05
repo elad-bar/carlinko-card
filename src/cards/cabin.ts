@@ -867,8 +867,6 @@ export class CarlinkoCabin extends LitElement {
         backdrop-filter: blur(2px);
       }
       .seat-btn {
-        --ck-seat-heat: #d64545;
-        --ck-seat-vent: #3b82c4;
         display: inline-flex;
         align-items: center;
         gap: 4px;
@@ -896,11 +894,6 @@ export class CarlinkoCabin extends LitElement {
       }
       .wheel-temp {
         color: var(--ck-muted);
-      }
-      .wheel-zone {
-        --ck-tyre-ok: #3d9a5f;
-        --ck-tyre-warn: #d97706;
-        --ck-tyre-danger: #d64545;
       }
       .wheel-zone.tone-ok .wheel-pressure,
       .wheel-zone.tone-ok .wheel-temp {
@@ -967,6 +960,34 @@ export class CarlinkoCabin extends LitElement {
       carlinko-car-outline {
         margin-top: 12px;
         max-width: 320px;
+      }
+      @container ck-card (max-width: 360px) {
+        .seat-btn {
+          padding: 4px 6px;
+          font-size: 0.7rem;
+          gap: 2px;
+        }
+        .seat-btn svg {
+          width: 0.85rem;
+          height: 0.85rem;
+        }
+        .wheel-pressure,
+        .wheel-temp {
+          padding: 3px 5px;
+          font-size: 0.65rem;
+        }
+        .map-actions .action.icon {
+          width: 2.1rem;
+          height: 2.1rem;
+          min-width: 2.1rem;
+        }
+        .map-actions .action.icon svg {
+          width: 1.15rem;
+          height: 1.15rem;
+        }
+        carlinko-car-outline {
+          max-width: 100%;
+        }
       }
     `,
   ];
