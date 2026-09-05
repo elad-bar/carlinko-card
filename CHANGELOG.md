@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- CI dist freshness check compares the shipped JS only (source maps can differ across OS builds)
 - Cabin Stop charge map button is hidden when the charger is not connected (`charge_mode` is not `ac`/`dc`)
 - Charging card Stop charging is hidden when the charger is not connected (`charge_mode` is not `ac`/`dc`)
 
