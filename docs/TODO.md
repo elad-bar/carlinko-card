@@ -41,15 +41,17 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | UX-01 | Polish | Align layout with mockup refinements | done | Overview: hotspot hero + visual vitals |
 | UX-02 | Polish | Mobile / responsive layout | done | Container queries ~360px; Overview/Cabin density |
 | UX-03 | Polish | Theme tokens / dark HA themes | done | `--ck-*` mapped to HA theme vars; no light-only hardcodes |
-| REL-01 | Release | First HACS-ready publish | todo | Pipeline ready; push to main when repo is remote |
+| REL-01 | Release | First HACS-ready publish | done | Public `elad-bar/carlinko-card`; `v0.1.0` release; `dist/` + `hacs.json`; CI HACS job green |
+| REL-02 | Release | Submit to HACS default store | todo | Optional: PR to `hacs/default` `./plugin` after custom-repo install works |
 
 ## Suggested order
 
 1. ~~Phase 1 foundation (DOC-03, PKG, CORE, CARD-01, DEV)~~ **done**
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
 3. ~~CORE-04 + CARD-02…CARD-05~~ **done** → ~~CARD-06 editors~~ **done**
-4. ~~DOC-05 + PKG-03~~ **done** → REL-01
+4. ~~DOC-05 + PKG-03~~ **done** → ~~REL-01~~ **done**
 5. ~~UX-* polish~~ **done** (`UX-01`…`UX-03`)
+6. REL-02 (optional default-store inclusion)
 
 ## Progress log
 
@@ -74,6 +76,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview to Cabin map anchors. |
 | 2026-09-05 | CORE-05: card i18n stubs (en) + reuse ha-carlinko entity name/state via `hass.localize` (no device prefix). |
 | 2026-09-05 | UX-03 theme tokens (HA CSS vars) + UX-02 container-query density for Overview/Cabin overlays. |
+| 2026-09-05 | REL-01 done: repo public with description/topics, `v0.1.0` GitHub release, HACS CI green; install via custom Dashboard repo. REL-02 added for optional `hacs/default` PR. |
 
 ## How to update
 
