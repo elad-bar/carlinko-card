@@ -16,6 +16,7 @@ export const OVERVIEW_SLOTS: readonly SlotDef[] = [
   { slot: "moving", key: "moving", domain: "binary_sensor" },
   { slot: "online", key: "online", domain: "binary_sensor" },
   { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
+  { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
   { slot: "lock", key: "lock", domain: "lock" },
   { slot: "engine", key: "engine", domain: "switch" },
   {
@@ -76,6 +77,8 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
   { slot: "seat_vent_lr", key: "seat_vent_lr", domain: "select" },
   { slot: "seat_heat_rr", key: "seat_heat_rr", domain: "select" },
   { slot: "seat_vent_rr", key: "seat_vent_rr", domain: "select" },
+  { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
+  { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
   { slot: "tyre_fl", key: "tyre_fl", domain: "sensor" },
   { slot: "tyre_fl_temp", key: "tyre_fl_temp", domain: "sensor" },
   { slot: "tyre_fr", key: "tyre_fr", domain: "sensor" },

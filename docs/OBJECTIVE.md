@@ -43,7 +43,7 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`, `tyres_ok`); hide when the entity is missing.
+- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
 - EV range (km) and battery (%) as a vertical gauge.
 - Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).

@@ -40,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Overview tyre status hotspot (`tyres_ok`); Cabin no longer shows tyre status chips
 - Windows card removed from picker; `carlinko-windows` remains as a Cabin alias
 - Overview tyre hotspot respects `device_class: problem` (off = OK / green)
+- Cabin seat heat/vent controls: larger flame/fan icons with always-on role-colored borders (red heat / blue vent)
+- Tyre status: problem (`tyres_ok`) red > `tyre_status` `check_tyres` orange > green; Cabin wheel readouts and Overview hotspot share tone
 
 ### Notes
 

@@ -57,6 +57,23 @@ export function hasActiveProblem(
   return !on;
 }
 
+/** Tyre tone: problem (danger) > check_tyres (warn) > ok. */
+export type TyreTone = "ok" | "warn" | "danger";
+
+export function getTyreTone(
+  hass: HomeAssistant | undefined,
+  problemEntityId: string | undefined,
+  statusEntityId: string | undefined,
+): TyreTone {
+  if (hasActiveProblem(hass, problemEntityId)) {
+    return "danger";
+  }
+  if (getStateValue(hass, statusEntityId) === "check_tyres") {
+    return "warn";
+  }
+  return "ok";
+}
+
 export function formatState(
   hass: HomeAssistant | undefined,
   entityId: string | undefined,

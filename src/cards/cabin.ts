@@ -15,6 +15,7 @@ import {
   getClimateTempStep,
   getSelectOptions,
   getStateValue,
+  getTyreTone,
   imageEntityUrl,
   isClimateOn,
   isCoverOpen,
@@ -98,6 +99,15 @@ const ICON_FIRE = html`
     <path
       fill="currentColor"
       d="M17.66 11.2c.03 1.6-1.02 2.96-2.28 4.05C15.31 16.1 14 17.45 13.15 19c-.55.9-.98 1.93-.85 3h.85c.22-1.19.78-2.2 1.4-3.08.68-.96 1.43-1.86 2.07-2.85.89-1.38 1.53-2.9 1.34-4.52-.11-.94-.5-1.86-1.1-2.62.55.9.9 1.97.8 3.07ZM12 2S9 7 9 11c0 2.4 1.34 4.37 3 5.6 1.66-1.23 3-3.2 3-5.6 0-4-3-9-3-9Zm0 12.5c-.83-.9-1.5-2.1-1.5-3.5 0-1.8.9-4.1 1.5-5.7.6 1.6 1.5 3.9 1.5 5.7 0 1.4-.67 2.6-1.5 3.5Z"
+    />
+  </svg>
+`;
+
+const ICON_FAN = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M12 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm4.5-5.5c-1.4 0-2.6.8-3.2 2A3.5 3.5 0 0 1 16 11.5c0 .2 0 .4-.05.6 1.3.5 2.3 1.7 2.3 3.1 0 1.9-1.6 3.4-3.5 3.4-.7 0-1.35-.2-1.9-.55A3.5 3.5 0 0 1 12 20.5a3.5 3.5 0 0 1-.85-6.85A3.5 3.5 0 0 1 8.25 18c-1.9 0-3.5-1.5-3.5-3.4 0-1.4 1-2.6 2.3-3.1A3.5 3.5 0 0 1 7 11.5c0-1.6 1.1-3 2.7-3.4A3.48 3.48 0 0 1 6.5 5.5C4.6 5.5 3 7 3 8.9c0 1.4 1 2.6 2.3 3.1A3.5 3.5 0 0 1 8 8.5c.7 0 1.35.2 1.9.55A3.5 3.5 0 0 1 12 3.5c.9 0 1.75.35 2.4.95A3.48 3.48 0 0 1 16.5 5.5c1.9 0 3.5 1.5 3.5 3.4 0 1.4-1 2.6-2.3 3.1.05-.2.05-.4.05-.6A3.5 3.5 0 0 1 16.5 5.5Z"
     />
   </svg>
 `;
@@ -303,7 +313,9 @@ export class CarlinkoCabin extends LitElement {
     }
     const state = getStateValue(this.hass, entityId);
     const domain = domainOf(entityId);
-    const label = `${kind}:${shortSeatLabel(state)}`;
+    const role = kind === "H" ? "heat" : "vent";
+    const roleLabel = kind === "H" ? "Heat" : "Vent";
+    const stateLabel = shortSeatLabel(state);
     const onClick =
       domain === "select"
         ? () => this._cycleSelect(entityId)
@@ -311,12 +323,14 @@ export class CarlinkoCabin extends LitElement {
     return html`
       <button
         type="button"
-        class="seat-btn"
+        class="seat-btn ${role}"
         ?disabled=${this._busy}
-        title=${state ?? ""}
+        title=${`${roleLabel}: ${state ?? "—"}`}
+        aria-label=${`${roleLabel}: ${state ?? "—"}`}
         @click=${onClick}
       >
-        ${label}
+        ${kind === "H" ? ICON_FIRE : ICON_FAN}
+        <span class="seat-state">${stateLabel}</span>
       </button>
     `;
   }
@@ -372,8 +386,9 @@ export class CarlinkoCabin extends LitElement {
     if (!hasPressure && !hasTemp) {
       return nothing;
     }
+    const tone = getTyreTone(this.hass, slots.tyres_ok, slots.tyre_status);
     return html`
-      <div slot=${zone.slot} class="wheel-zone">
+      <div slot=${zone.slot} class="wheel-zone tone-${tone}">
         ${this._sensorBtn(pressureId, "wheel-pressure")}
         ${this._sensorBtn(tempId, "wheel-temp")}
       </div>
@@ -667,16 +682,82 @@ export class CarlinkoCabin extends LitElement {
         white-space: nowrap;
         backdrop-filter: blur(2px);
       }
+      .seat-btn {
+        --ck-seat-heat: #d64545;
+        --ck-seat-vent: #3b82c4;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 8px;
+        font-size: 0.8rem;
+      }
+      .seat-btn svg {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+      .seat-btn.heat {
+        border-color: var(--ck-seat-heat);
+        color: var(--ck-seat-heat);
+      }
+      .seat-btn.vent {
+        border-color: var(--ck-seat-vent);
+        color: var(--ck-seat-vent);
+      }
+      .seat-btn .seat-state {
+        color: var(--ck-text);
+      }
       .wheel-pressure {
         font-weight: 600;
       }
       .wheel-temp {
         color: var(--ck-muted);
       }
-      .seat-btn:hover:not(:disabled),
-      .wheel-pressure:hover,
-      .wheel-temp:hover {
-        border-color: var(--ck-accent);
+      .wheel-zone {
+        --ck-tyre-ok: #3d9a5f;
+        --ck-tyre-warn: #d97706;
+        --ck-tyre-danger: #d64545;
+      }
+      .wheel-zone.tone-ok .wheel-pressure,
+      .wheel-zone.tone-ok .wheel-temp {
+        border-color: var(--ck-tyre-ok);
+      }
+      .wheel-zone.tone-ok .wheel-pressure {
+        color: var(--ck-tyre-ok);
+      }
+      .wheel-zone.tone-warn .wheel-pressure,
+      .wheel-zone.tone-warn .wheel-temp {
+        border-color: var(--ck-tyre-warn);
+      }
+      .wheel-zone.tone-warn .wheel-pressure {
+        color: var(--ck-tyre-warn);
+      }
+      .wheel-zone.tone-danger .wheel-pressure,
+      .wheel-zone.tone-danger .wheel-temp {
+        border-color: var(--ck-tyre-danger);
+      }
+      .wheel-zone.tone-danger .wheel-pressure {
+        color: var(--ck-tyre-danger);
+      }
+      .seat-btn.heat:hover:not(:disabled) {
+        border-color: var(--ck-seat-heat);
+        color: var(--ck-seat-heat);
+      }
+      .seat-btn.vent:hover:not(:disabled) {
+        border-color: var(--ck-seat-vent);
+        color: var(--ck-seat-vent);
+      }
+      .wheel-zone.tone-ok .wheel-pressure:hover,
+      .wheel-zone.tone-ok .wheel-temp:hover {
+        border-color: var(--ck-tyre-ok);
+      }
+      .wheel-zone.tone-warn .wheel-pressure:hover,
+      .wheel-zone.tone-warn .wheel-temp:hover {
+        border-color: var(--ck-tyre-warn);
+      }
+      .wheel-zone.tone-danger .wheel-pressure:hover,
+      .wheel-zone.tone-danger .wheel-temp:hover {
+        border-color: var(--ck-tyre-danger);
       }
       .seat-btn:disabled {
         opacity: 0.5;

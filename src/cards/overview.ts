@@ -12,7 +12,7 @@ import {
   getStateValue,
   imageEntityUrl,
   isOn,
-  hasActiveProblem,
+  getTyreTone,
   lockLock,
   openCover,
   pressButton,
@@ -162,6 +162,17 @@ export class CarlinkoOverview extends LitElement {
     const showHeadline = Boolean(
       odometerText || totalRangeText || speedText,
     );
+    const tyreTone =
+      s.tyres_ok || s.tyre_status
+        ? getTyreTone(this.hass, s.tyres_ok, s.tyre_status)
+        : undefined;
+    const tyreLabel =
+      tyreTone === "danger"
+        ? "Tyre problem"
+        : tyreTone === "warn"
+          ? "Check tyres"
+          : "Tyres OK";
+    const tyreMoreInfo = s.tyres_ok ?? s.tyre_status;
 
     return html`
       <ha-card>
@@ -223,17 +234,13 @@ export class CarlinkoOverview extends LitElement {
                     })}
                   </div>`
                 : nothing}
-              ${s.tyres_ok
+              ${tyreTone && tyreMoreInfo
                 ? html`<div slot="tyres">
                     ${renderHotspotButton({
                       icon: "tyre",
-                      label: hasActiveProblem(this.hass, s.tyres_ok)
-                        ? "Tyre problem"
-                        : "Tyres OK",
-                      tone: hasActiveProblem(this.hass, s.tyres_ok)
-                        ? "danger"
-                        : "ok",
-                      onClick: () => fireMoreInfo(this, s.tyres_ok!),
+                      label: tyreLabel,
+                      tone: tyreTone,
+                      onClick: () => fireMoreInfo(this, tyreMoreInfo),
                     })}
                   </div>`
                 : nothing}

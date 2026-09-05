@@ -29,7 +29,8 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | speed | `speed` | sensor | optional | Headline; show only when engine is on |
 | moving | `moving` | binary_sensor | optional | Resolved but unused in Overview UI today |
 | online | `online` | binary_sensor | optional | Status hotspot |
-| tyres_ok | `tyres_ok` | binary_sensor | optional | Tyre status hotspot; `device_class: problem` → on=red, off=green |
+| tyres_ok | `tyres_ok` | binary_sensor | optional | Tyre problem binary; with `tyre_status`: problem → red, `check_tyres` → orange, else green |
+| tyre_status | `tyre_status` | sensor | optional | Enum: `normal` / `check_tyres`; weaker than `tyres_ok` problem |
 | lock | `lock` | lock | optional | Lock / unlock |
 | engine | `engine` | switch | optional | Capability-gated |
 | defog | `defrost_cmd` | switch | optional | Fallback key `defrost` (binary, read-only) |
@@ -69,6 +70,8 @@ Climate, TPMS, and windows/sunroof controls on one top-down map.
 | seat_vent_lr | `seat_vent_lr` | select | optional | |
 | seat_heat_rr | `seat_heat_rr` | select | optional | |
 | seat_vent_rr | `seat_vent_rr` | select | optional | |
+| tyres_ok | `tyres_ok` | binary_sensor | optional | Problem binary for wheel readout color (shared with Overview) |
+| tyre_status | `tyre_status` | sensor | optional | Enum `normal` / `check_tyres` for orange “check” tone |
 | tyre_fl | `tyre_fl` | sensor | optional | Direct TPMS pressure |
 | tyre_fl_temp | `tyre_fl_temp` | sensor | optional | |
 | tyre_fr | `tyre_fr` | sensor | optional | |
@@ -82,7 +85,7 @@ Climate, TPMS, and windows/sunroof controls on one top-down map.
 | sunroof | `sunroof` | cover | optional | Open or Close icon on sunroof (state-based) |
 | sunroof_tilt | `sunroof_tilt` | button | optional | Tilt icon on sunroof |
 
-**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS; windows icons on windshield; sunroof icons on glass roof. Overall `tyres_ok` lives on Overview as a status hotspot. Hide the map when neither seats, direct wheels, nor windows/sunroof exist.
+**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); windows icons on windshield; sunroof icons on glass roof. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, nor windows/sunroof exist.
 
 **INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 
