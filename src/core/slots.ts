@@ -41,7 +41,8 @@ export const CHARGING_SLOTS: readonly SlotDef[] = [
   { slot: "charge_stop", key: "charge_stop", domain: "button" },
 ] as const;
 
-export const CLIMATE_SLOTS: readonly SlotDef[] = [
+/** Cabin card: climate controls + seat map + TPMS on one top-down view. */
+export const CABIN_SLOTS: readonly SlotDef[] = [
   { slot: "image", key: "vehicle_top", domain: "image" },
   { slot: "climate", key: "climate", domain: "climate" },
   { slot: "quick_cool", key: "quick_cool", domain: "button" },
@@ -74,10 +75,6 @@ export const CLIMATE_SLOTS: readonly SlotDef[] = [
   { slot: "seat_vent_lr", key: "seat_vent_lr", domain: "select" },
   { slot: "seat_heat_rr", key: "seat_heat_rr", domain: "select" },
   { slot: "seat_vent_rr", key: "seat_vent_rr", domain: "select" },
-] as const;
-
-export const TPMS_SLOTS: readonly SlotDef[] = [
-  { slot: "image", key: "vehicle_top", domain: "image" },
   { slot: "tyre_fl", key: "tyre_fl", domain: "sensor" },
   { slot: "tyre_fl_temp", key: "tyre_fl_temp", domain: "sensor" },
   { slot: "tyre_fr", key: "tyre_fr", domain: "sensor" },
@@ -88,6 +85,10 @@ export const TPMS_SLOTS: readonly SlotDef[] = [
   { slot: "tyre_rr_temp", key: "tyre_rr_temp", domain: "sensor" },
   { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
   { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
+  { slot: "windows", key: "windows", domain: "cover" },
+  { slot: "windows_vent", key: "windows_vent", domain: "button" },
+  { slot: "sunroof", key: "sunroof", domain: "cover" },
+  { slot: "sunroof_tilt", key: "sunroof_tilt", domain: "button" },
 ] as const;
 
 export const WINDOWS_SLOTS: readonly SlotDef[] = [

@@ -21,10 +21,11 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CORE-05 | Core | i18n stubs (en first) | todo | Expand locales later |
 | CARD-01 | Cards | Overview card | done | `custom:carlinko-overview` |
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
-| CARD-03 | Cards | Climate card | done | `custom:carlinko-climate`; purify deferred |
-| CARD-04 | Cards | TPMS card | done | `custom:carlinko-tpms`; indirect hides wheel grid |
+| CARD-03 | Cards | Climate card | done | Merged into Cabin; `carlinko-climate` alias remains |
+| CARD-04 | Cards | TPMS card | done | Merged into Cabin; `carlinko-tpms` alias remains |
 | CARD-05 | Cards | Windows card | done | `custom:carlinko-windows` |
-| CARD-06 | Cards | Visual editors (basic) | done | Shared device editor; image override on Overview/Climate/TPMS |
+| CARD-06 | Cards | Visual editors (basic) | done | Shared device editor; image override on Overview/Cabin |
+| CARD-07 | Cards | Cabin card (Climate+TPMS) | done | `custom:carlinko-cabin`; always-on seat + wheel map |
 | DEV-01 | Dev | Vite playground + HA WebSocket auth | done | `npm run playground` |
 | DEV-02 | Dev | Thin `hass` shim for cards outside Lovelace | done | `playground/main.ts` |
 | DEV-03 | Dev | Validate Overview against live ha-carlinko | done | Playground connected; Overview shows live vitals/controls |
@@ -67,6 +68,8 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CARD-06: shared Lovelace device editor; Climate/TPMS top image override in UI. |
 | 2026-09-05 | DOC-05 + PKG-03: DEVELOPMENT.md; `deploy` / `deploy:watch` via `CARLINKO_WWW`. |
 | 2026-09-05 | UX-01: Overview hotspot controls on vehicle image + vertical EV/fuel gauges; text action row removed. |
+| 2026-09-05 | CARD-07: merged Climate+TPMS into `custom:carlinko-cabin`; old types kept as aliases; playground mounts Cabin. |
+| 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
 
 ## How to update
 

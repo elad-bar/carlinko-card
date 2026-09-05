@@ -50,7 +50,9 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ---
 
-## Climate (`carlinko-climate`)
+## Cabin (`carlinko-cabin`)
+
+Climate, TPMS, and windows/sunroof controls on one top-down map. Deprecated aliases `carlinko-climate` / `carlinko-tpms` resolve the same slots and UI.
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
@@ -66,17 +68,6 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | seat_vent_lr | `seat_vent_lr` | select | optional | |
 | seat_heat_rr | `seat_heat_rr` | select | optional | |
 | seat_vent_rr | `seat_vent_rr` | select | optional | |
-| purify | `purify` | switch | optional | Not in v1 climate card UI |
-
-**INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
-
----
-
-## TPMS (`carlinko-tpms`)
-
-| Slot | Key | Domain | Required | Notes |
-| --- | --- | --- | --- | --- |
-| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback; override via `image_entity` |
 | tyre_fl | `tyre_fl` | sensor | optional | Direct TPMS pressure |
 | tyre_fl_temp | `tyre_fl_temp` | sensor | optional | |
 | tyre_fr | `tyre_fr` | sensor | optional | |
@@ -87,12 +78,22 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | tyre_rr_temp | `tyre_rr_temp` | sensor | optional | |
 | tyre_status | `tyre_status` | sensor | optional | Overall status |
 | tyres_ok | `tyres_ok` | binary_sensor | optional | OK / problem chip |
+| windows | `windows` | cover | optional | Open / close icon buttons on windshield |
+| windows_vent | `windows_vent` | button | optional | Vent icon on windshield |
+| sunroof | `sunroof` | cover | optional | Open / close icon buttons on sunroof |
+| sunroof_tilt | `sunroof_tilt` | button | optional | Tilt icon on sunroof |
 
-**Direct vs indirect:** If any of `tyre_fl` / `tyre_fr` / `tyre_rl` / `tyre_rr` is present, show the wheel map. Otherwise show status / `tyres_ok` only (indirect TPMS).
+**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS; windows icons on windshield; sunroof icons on glass roof. Indirect TPMS shows status chips only (no wheel labels). Hide the map when neither seats, direct wheels, nor windows/sunroof exist.
+
+**INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
+
+**Purify:** `purify` switch is not in the Cabin UI (deferred).
 
 ---
 
 ## Windows (`carlinko-windows`)
+
+Also available as icon overlays on Cabin. This card remains a focused text-button layout.
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |

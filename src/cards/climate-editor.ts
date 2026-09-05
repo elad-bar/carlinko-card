@@ -1,17 +1,9 @@
 import { customElement } from "lit/decorators.js";
-import type { ClimateConfig } from "./climate";
-import {
-  CarlinkoDeviceEditor,
-  TOP_IMAGE_ENTITY_SCHEMA,
-  type HaFormSchema,
-} from "./shared-editor";
+import { CarlinkoCabinEditor } from "./cabin-editor";
 
+/** @deprecated Prefer `carlinko-cabin-editor`. */
 @customElement("carlinko-climate-editor")
-export class CarlinkoClimateEditor extends CarlinkoDeviceEditor<ClimateConfig> {
-  protected override extraSchema(): HaFormSchema {
-    return [TOP_IMAGE_ENTITY_SCHEMA];
-  }
-}
+export class CarlinkoClimateEditor extends CarlinkoCabinEditor {}
 
 declare global {
   interface HTMLElementTagNameMap {

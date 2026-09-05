@@ -20,19 +20,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Climate helpers: `setHvacMode`, `setTemperature`, `selectOption`, target/current temp attribute readers
 - TPMS card (`custom:carlinko-tpms`): status chips; per-wheel pressure/temp on `vehicle_top` map (status-only when indirect)
 - Windows card (`custom:carlinko-windows`): whole-car windows open/close/vent and sunroof open/close/tilt
+- Cabin card (`custom:carlinko-cabin`): climate + seat heat/vent + TPMS on one top-down map
+- Cabin map: windows/sunroof icon overlays; clearer seat vs TPMS anchor spacing
 
 ### Changed
 
 - Card config uses required `device_id` (CarLinko vehicle device) instead of entity_prefix
 - Climate seat map uses `vehicle_top` image when available (SVG outline fallback)
-- Shared Lovelace device editor (`CarlinkoDeviceEditor`); Climate/TPMS expose top image override
+- Shared Lovelace device editor (`CarlinkoDeviceEditor`); Overview/Cabin expose top image override
 - Local development guide (`docs/DEVELOPMENT.md`)
 - `npm run deploy` / `deploy:watch` copy bundle to `CARLINKO_WWW` for HA fidelity testing
 - Overview card: state-colored hotspots on the vehicle image for quick actions; vertical EV/fuel gauges and promoted odometer/total range (text action row removed)
 - Overview hotspot anchors on hood / door / windshield / hatch; odometer and total range side-by-side with HV; consumption beside SOC/fuel gauges
 - Overview speed in the headline (next to odometer/range), shown when engine is on instead of when moving
 - Climate card: icon toolbar — left AC / + / setpoint / −, right quick cool / quick heat
+- Climate and TPMS merged into Cabin; removed from card picker; `carlinko-climate` / `carlinko-tpms` remain as aliases
+- Cabin map anchors: front TPMS vs seat vents spaced apart; rear TPMS aligned with rear wheels
+- Cabin windows/sunroof covers show a single Open or Close icon from cover state
 
 ### Notes
 
-- INT-01: ha-carlinko climate has no `current_temperature` today; Climate card shows Current only if that attribute appears at runtime
+- INT-01: ha-carlinko climate has no `current_temperature` today; Cabin card shows Current only if that attribute appears at runtime

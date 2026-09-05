@@ -1,17 +1,9 @@
 import { customElement } from "lit/decorators.js";
-import type { TpmsConfig } from "./tpms";
-import {
-  CarlinkoDeviceEditor,
-  TOP_IMAGE_ENTITY_SCHEMA,
-  type HaFormSchema,
-} from "./shared-editor";
+import { CarlinkoCabinEditor } from "./cabin-editor";
 
+/** @deprecated Prefer `carlinko-cabin-editor`. */
 @customElement("carlinko-tpms-editor")
-export class CarlinkoTpmsEditor extends CarlinkoDeviceEditor<TpmsConfig> {
-  protected override extraSchema(): HaFormSchema {
-    return [TOP_IMAGE_ENTITY_SCHEMA];
-  }
-}
+export class CarlinkoTpmsEditor extends CarlinkoCabinEditor {}
 
 declare global {
   interface HTMLElementTagNameMap {

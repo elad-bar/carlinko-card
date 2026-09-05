@@ -26,17 +26,18 @@ Concept reference (same split of concerns):
 
 ## Card set (v1)
 
-Five cards. Users compose them on a Lovelace dashboard.
+Four cards. Users compose them on a Lovelace dashboard.
 
 | Card | Purpose |
 | --- | --- |
 | **Overview** | Hero car image with state-colored hotspots for quick actions, visual ranges / mileage / power vitals |
 | **Charging** | Charge status, mode, remaining time, power, stop charging |
-| **Climate** | App-like climate control, quick cool/heat, seat heat/vent map |
-| **TPMS** | Top-down per-wheel pressure and temperature |
+| **Cabin** | Climate, seat heat/vent, TPMS, and windows/sunroof on one top-down map |
 | **Windows** | Windows open/close/vent, sunroof open/close/tilt |
 
-Optional later (not in the initial set): location/map, find-car, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Climate.
+Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms` → Cabin UI.
+
+Optional later (not in the initial set): location/map, find-car, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Cabin.
 
 ### Overview
 
@@ -65,22 +66,20 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 - Stop charging action
 - `charge_stop` may also appear on Overview as a shortcut; Charging remains the detail card
 
-### Climate
+### Cabin
 
-CarLinko mobile-app style layout:
+CarLinko mobile-app style layout on one top-down map:
 
 - Setpoint with up/down, current cabin temperature (if available from the climate entity), climate on/off
 - Quick cool / quick heat buttons
-- Top-down car view with seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
-
-### TPMS
-
-- Top-down car with pressure and temperature next to each wheel (click → HA more-info)
-- Overall tyre status
-- If the vehicle only has indirect TPMS, show status and hide the per-wheel grid
+- Seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
+- Tyre pressure and temperature at each wheel (click → HA more-info); overall tyre status chips
+- If the vehicle only has indirect TPMS, show status chips and hide per-wheel labels
+- Windows open/close/vent and sunroof open/close/tilt as icon buttons on the map (windshield / sunroof)
 
 ### Windows
 
+- Same entities as Cabin overlays; standalone card with text action rows for focused use
 - Windows: open / close / vent (whole-car cover + vent button — not per-pane entities)
 - Sunroof: open / close / tilt
 
@@ -119,7 +118,7 @@ Details of look-and-feel (density, icons, theme, mobile layout) will be refined 
 2. Scaffold the Lovelace card package + HACS dashboard metadata
 3. Mapper + Overview against real HA
 4. Local HA-connected playground
-5. Charging, Climate, TPMS, Windows
+5. Charging, Cabin, Windows
 6. Polish and editor UX
 
 ## Related links

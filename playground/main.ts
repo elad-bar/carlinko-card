@@ -9,8 +9,7 @@ import {
 import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";
-import type { CarlinkoClimate } from "../src/cards/climate";
-import type { CarlinkoTpms } from "../src/cards/tpms";
+import type { CarlinkoCabin } from "../src/cards/cabin";
 import type { CarlinkoWindows } from "../src/cards/windows";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
@@ -70,8 +69,7 @@ let connection: Connection | undefined;
 let hass: HomeAssistant | undefined;
 let overviewCard: CarlinkoOverview | undefined;
 let chargingCard: CarlinkoCharging | undefined;
-let climateCard: CarlinkoClimate | undefined;
-let tpmsCard: CarlinkoTpms | undefined;
+let cabinCard: CarlinkoCabin | undefined;
 let windowsCard: CarlinkoWindows | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
@@ -178,29 +176,20 @@ function mountCards() {
 
   const title = titleInput.value.trim() || undefined;
 
-  if (
-    !overviewCard ||
-    !chargingCard ||
-    !climateCard ||
-    !tpmsCard ||
-    !windowsCard
-  ) {
-    overviewCard = document.createElement("carlinko-overview") as CarlinkoOverview;
-    chargingCard = document.createElement("carlinko-charging") as CarlinkoCharging;
-    climateCard = document.createElement("carlinko-climate") as CarlinkoClimate;
-    tpmsCard = document.createElement("carlinko-tpms") as CarlinkoTpms;
+  if (!overviewCard || !chargingCard || !cabinCard || !windowsCard) {
+    overviewCard = document.createElement(
+      "carlinko-overview",
+    ) as CarlinkoOverview;
+    chargingCard = document.createElement(
+      "carlinko-charging",
+    ) as CarlinkoCharging;
+    cabinCard = document.createElement("carlinko-cabin") as CarlinkoCabin;
     windowsCard = document.createElement(
       "carlinko-windows",
     ) as CarlinkoWindows;
   }
 
-  host.replaceChildren(
-    overviewCard,
-    tpmsCard,
-    chargingCard,
-    climateCard,
-    windowsCard,
-  );
+  host.replaceChildren(overviewCard, chargingCard, cabinCard, windowsCard);
 
   overviewCard.hass = hass;
   overviewCard.setConfig({
@@ -214,16 +203,10 @@ function mountCards() {
     title: "Charging",
   });
 
-  climateCard.hass = hass;
-  climateCard.setConfig({
+  cabinCard.hass = hass;
+  cabinCard.setConfig({
     device_id: deviceId,
-    title: "Climate",
-  });
-
-  tpmsCard.hass = hass;
-  tpmsCard.setConfig({
-    device_id: deviceId,
-    title: "TPMS",
+    title: "Cabin",
   });
 
   windowsCard.hass = hass;
@@ -245,11 +228,8 @@ function syncHass() {
   if (chargingCard) {
     chargingCard.hass = hass;
   }
-  if (climateCard) {
-    climateCard.hass = hass;
-  }
-  if (tpmsCard) {
-    tpmsCard.hass = hass;
+  if (cabinCard) {
+    cabinCard.hass = hass;
   }
   if (windowsCard) {
     windowsCard.hass = hass;

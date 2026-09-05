@@ -13,7 +13,7 @@ Cards never call CarLinko cloud APIs. They only use HA entities and services.
 
 ## Playground (fast iteration)
 
-The Vite playground connects over WebSocket and mounts all five cards with a thin
+The Vite playground connects over WebSocket and mounts all four cards with a thin
 `hass` shim (no Lovelace required).
 
 1. `npm ci`
@@ -22,7 +22,7 @@ The Vite playground connects over WebSocket and mounts all five cards with a thi
 4. `npm run playground`
 5. Pick a CarLinko vehicle device → Apply
 
-Layout: Overview | TPMS, then Charging | Climate, then Windows.
+Layout: Overview | Charging, then Cabin | Windows.
 
 **Secrets:** never commit `.env` / tokens. Redact them from logs and screenshots.
 

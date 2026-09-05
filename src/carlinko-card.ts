@@ -2,6 +2,8 @@ import { CarlinkoOverview } from "./cards/overview";
 import { CarlinkoOverviewEditor } from "./cards/overview-editor";
 import { CarlinkoCharging } from "./cards/charging";
 import { CarlinkoChargingEditor } from "./cards/charging-editor";
+import { CarlinkoCabin } from "./cards/cabin";
+import { CarlinkoCabinEditor } from "./cards/cabin-editor";
 import { CarlinkoClimate } from "./cards/climate";
 import { CarlinkoClimateEditor } from "./cards/climate-editor";
 import { CarlinkoTpms } from "./cards/tpms";
@@ -15,6 +17,8 @@ void CarlinkoOverview;
 void CarlinkoOverviewEditor;
 void CarlinkoCharging;
 void CarlinkoChargingEditor;
+void CarlinkoCabin;
+void CarlinkoCabinEditor;
 void CarlinkoClimate;
 void CarlinkoClimateEditor;
 void CarlinkoTpms;
@@ -41,17 +45,10 @@ window.customCards.push(
     preview: true,
   },
   {
-    type: "carlinko-climate",
-    name: "CarLinko Climate",
+    type: "carlinko-cabin",
+    name: "CarLinko Cabin",
     description:
-      "Cabin climate setpoint, on/off, quick cool/heat, and seat heat/vent.",
-    preview: true,
-  },
-  {
-    type: "carlinko-tpms",
-    name: "CarLinko TPMS",
-    description:
-      "Tyre pressure and temperature per wheel, or overall status for indirect TPMS.",
+      "Climate, seats, TPMS, and windows/sunroof controls on a top-down vehicle map.",
     preview: true,
   },
   {

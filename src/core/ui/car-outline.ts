@@ -52,6 +52,8 @@ export class CarlinkoCarOutline extends LitElement {
         <div class="region wheel-fr"><slot name="wheel-fr"></slot></div>
         <div class="region wheel-rl"><slot name="wheel-rl"></slot></div>
         <div class="region wheel-rr"><slot name="wheel-rr"></slot></div>
+        <div class="region windows"><slot name="windows"></slot></div>
+        <div class="region sunroof"><slot name="sunroof"></slot></div>
       </div>
     `;
   }
@@ -97,37 +99,49 @@ export class CarlinkoCarOutline extends LitElement {
       min-height: 4px;
       pointer-events: auto;
     }
+    /* Cabin seats: inset, clear of wheel TPMS */
     .seat-fl {
-      left: 10%;
-      top: 30%;
+      left: 18%;
+      top: 40%;
     }
     .seat-fr {
-      right: 10%;
-      top: 30%;
+      right: 18%;
+      top: 40%;
     }
     .seat-rl {
-      left: 10%;
-      top: 52%;
+      left: 18%;
+      top: 54%;
     }
     .seat-rr {
-      right: 10%;
-      top: 52%;
+      right: 18%;
+      top: 54%;
     }
+    /* TPMS: front near mirrors/wheels; rear aligned with rear wheels */
     .wheel-fl {
       left: 0;
-      top: 22%;
+      top: 18%;
     }
     .wheel-fr {
       right: 0;
-      top: 22%;
+      top: 18%;
     }
     .wheel-rl {
       left: 0;
-      top: 68%;
+      top: 78%;
     }
     .wheel-rr {
       right: 0;
-      top: 68%;
+      top: 78%;
+    }
+    .windows {
+      left: 50%;
+      top: 29%;
+      transform: translateX(-50%);
+    }
+    .sunroof {
+      left: 50%;
+      top: 58%;
+      transform: translateX(-50%);
     }
   `;
 }

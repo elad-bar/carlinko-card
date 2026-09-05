@@ -153,6 +153,15 @@ export async function closeCover(
   await callEntityService(hass, "cover", "close_cover", entityId);
 }
 
+/** True when a cover is open or in the process of opening. */
+export function isCoverOpen(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): boolean {
+  const state = getStateValue(hass, entityId);
+  return state === "open" || state === "opening";
+}
+
 export async function pressButton(
   hass: HomeAssistant,
   entityId: string,
