@@ -6,7 +6,7 @@ import {
   entityName,
   t,
 } from "../core/i18n";
-import { resolveAllSlots } from "../core/resolve";
+import { SlotMapCache, relevantEntityChanged } from "../core/card-update";
 import { CHARGING_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
 import {
@@ -46,10 +46,13 @@ export class CarlinkoCharging extends LitElement {
   @state() private _config?: ChargingConfig;
   @state() private _busy = false;
 
+  private readonly _slotCache = new SlotMapCache();
+
   public setConfig(config: ChargingConfig): void {
     if (!config || typeof config.device_id !== "string") {
       throw new Error("device_id is required");
     }
+    this._slotCache.invalidate();
     this._config = { ...config };
   }
 
@@ -68,6 +71,28 @@ export class CarlinkoCharging extends LitElement {
     };
   }
 
+  protected shouldUpdate(changed: PropertyValues): boolean {
+    if (changed.has("_config") || changed.has("_busy")) {
+      return true;
+    }
+    if (changed.has("hass")) {
+      const oldHass = changed.get("hass") as HomeAssistant | undefined;
+      if (!oldHass || !this.hass) {
+        return true;
+      }
+      if (oldHass.entities !== this.hass.entities) {
+        this._slotCache.invalidate();
+        return true;
+      }
+      const slots = this._slotCache.peek();
+      if (!slots) {
+        return true;
+      }
+      return relevantEntityChanged(oldHass, this.hass, Object.values(slots));
+    }
+    return true;
+  }
+
   protected updated(changed: PropertyValues): void {
     if (changed.has("hass") && this.hass) {
       void ensureCarlinkoTranslations(this.hass).then((loaded) => {
@@ -82,7 +107,7 @@ export class CarlinkoCharging extends LitElement {
     if (!this._config) {
       return {};
     }
-    return resolveAllSlots(this.hass, this._config, CHARGING_SLOTS);
+    return this._slotCache.get(this.hass, this._config, CHARGING_SLOTS);
   }
 
   private _run(action: () => Promise<void>): void {

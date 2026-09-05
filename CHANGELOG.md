@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Lovelace card editors: stop re-rendering ha-form on every hass state tick (cached schema, stable labels) so the filtered device/entity selectors stay responsive
+- Cards: skip re-renders when unrelated entities update; cache slot→entity_id resolution so busy HA instances do not re-scan the registry every state_changed
 
 ## [0.1.5] - 2026-09-05
 
