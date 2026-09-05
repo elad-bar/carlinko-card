@@ -30,8 +30,8 @@ Three cards. Users compose them on a Lovelace dashboard.
 
 | Card | Purpose |
 | --- | --- |
-| **Overview** | Hero car image with state-colored hotspots for quick actions, visual ranges / mileage / power vitals |
-| **Cabin** | Climate, seat heat/vent, TPMS, and windows/sunroof on one top-down map |
+| **Overview** | Hero car image with status hotspots, visual ranges / mileage / power vitals |
+| **Cabin** | Climate, seats, TPMS, windows/sunroof, and body/access controls on one top-down map |
 | **Charging** | Charge status, mode, remaining time, power, stop charging |
 
 Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms`, `custom:carlinko-windows` → Cabin UI.
@@ -43,27 +43,24 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
+- State-colored hotspots on the hero for status (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
 - EV range (km) and battery (%) as a vertical gauge.
 - Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).
 - Consumption (and fuel consumption on PHEV) beside the matching gauge.
 - Speed in the headline with odometer/range when the engine is on; hide when engine is off or missing.
 
-**Controls (quick actions on the vehicle image)**
+**Controls (status on the vehicle image)**
 
-- Engine on/off
-- Defog on/off
-- Stop / release charging
-- Lock / unlock doors
-- Open / close trunk (liftgate)
 - Online / HV / tyre status hotspots open more-info (not remote commands)
+
+Body/access actions (engine, lock, trunk, defog, charge stop) live on the Cabin map.
 
 ### Charging
 
 - Charging active, charge state, charge mode, remaining time, charge power
 - Stop charging action
-- `charge_stop` may also appear on Overview as a shortcut; Charging remains the detail card
+- `charge_stop` may also appear on Cabin as a shortcut; Charging remains the detail card
 
 ### Cabin
 
@@ -74,6 +71,7 @@ CarLinko mobile-app style layout on one top-down map:
 - Seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
 - Tyre pressure and temperature at each wheel (click → HA more-info)
 - Windows open/close/vent and sunroof open/close/tilt as icon buttons on the map (windshield / sunroof)
+- Lock / unlock, engine on/off, trunk open/close, defog, and charge-stop buttons on body anchors (door side / hood / rear / windshield / charge port)
 
 ## Entity mapping principles
 

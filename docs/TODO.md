@@ -71,6 +71,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CARD-07: merged Climate+TPMS into `custom:carlinko-cabin`; old types kept as aliases; playground mounts Cabin. |
 | 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
 | 2026-09-05 | Tyre OK hotspot on Overview; removed Cabin tyre chips; Windows picker dropped; playground Overview\|Cabin then Charging. |
+| 2026-09-05 | Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview to Cabin map anchors. |
 
 ## How to update
 

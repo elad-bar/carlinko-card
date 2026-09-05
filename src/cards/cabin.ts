@@ -19,13 +19,17 @@ import {
   imageEntityUrl,
   isClimateOn,
   isCoverOpen,
+  isOn,
+  lockLock,
   openCover,
   pressButton,
   selectOption,
   setHvacMode,
   setTemperature,
+  toggleSwitch,
   turnOff,
   turnOn,
+  unlockLock,
 } from "../core/hass";
 import {
   actionStyles,
@@ -162,6 +166,60 @@ const ICON_SUNROOF_TILT = html`
     <path
       fill="currentColor"
       d="M3 8h18v2H3V8Zm2 4 14 2v6H5v-8Zm2 3.3V18h10v-2.3l-10-1.4Z"
+    />
+  </svg>
+`;
+
+const ICON_LOCK = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm3 8H9V7a3 3 0 1 1 6 0v3Z"
+    />
+  </svg>
+`;
+
+const ICON_UNLOCK = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M12 2a5 5 0 0 0-5 5h2a3 3 0 0 1 6 0v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Z"
+    />
+  </svg>
+`;
+
+const ICON_DEFOG = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M4 18h16v2H4v-2Zm2.5-3.5 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4Zm9 0 1.4-1.4 2.1 2.1 1.4-1.4-2.1-2.1 2.1-2.1-1.4-1.4-2.1 2.1-2.1-2.1-1.4 1.4 2.1 2.1-2.1 2.1 1.4 1.4ZM4 4h16v2H4V4Z"
+    />
+  </svg>
+`;
+
+const ICON_CHARGE = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M11 2h2v5h3l-4 7h3l-5 8v-7H7l4-8V2Z"
+    />
+  </svg>
+`;
+
+const ICON_TRUNK = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M5 14h14l-1.5-5H6.5L5 14Zm-1 2v3h2v-1h12v1h2v-3H4Zm3.5-8h9l.8 2.5H6.7L8.5 8Z"
+    />
+  </svg>
+`;
+
+const ICON_ENGINE = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M7 9V7h4v2h1.5l1-2H17v2h1a2 2 0 0 1 2 2v1h1v2h-1v1a2 2 0 0 1-2 2h-1.5l-1 2H11v-2H8.5L7 17H5v-2H3v-2h2v-1a2 2 0 0 1 2-2h0Zm2 2H7v4h2v-4Zm4 0h-2v4h2v-4Zm4 0h-2v4h2v-4Z"
     />
   </svg>
 `;
@@ -410,6 +468,113 @@ export class CarlinkoCabin extends LitElement {
     );
   }
 
+  private _hasBodyControls(
+    slots: Record<string, string | undefined>,
+  ): boolean {
+    return (
+      this._entityExists(slots.lock) ||
+      this._entityExists(slots.engine) ||
+      this._entityExists(slots.defog) ||
+      this._entityExists(slots.charge_stop) ||
+      this._entityExists(slots.trunk)
+    );
+  }
+
+  private _bodyActions(
+    slots: Record<string, string | undefined>,
+  ): TemplateResult | typeof nothing {
+    const lockId = slots.lock;
+    const engineId = slots.engine;
+    const defogId = slots.defog;
+    const chargeId = slots.charge_stop;
+    const trunkId = slots.trunk;
+    if (!lockId && !engineId && !defogId && !chargeId && !trunkId) {
+      return nothing;
+    }
+
+    const lockState = getStateValue(this.hass, lockId);
+    const locked = lockState === "locked";
+    const engineOn = isOn(this.hass, engineId);
+    const defogOn = isOn(this.hass, defogId);
+    const defogReadOnly = Boolean(defogId?.startsWith("binary_sensor."));
+    const trunkOpen = getStateValue(this.hass, trunkId) === "open";
+
+    return html`
+      ${this._entityExists(engineId)
+        ? html`<div slot="engine" class="map-actions">
+            ${renderActionButton({
+              label: engineOn ? "Turn engine off" : "Turn engine on",
+              icon: ICON_ENGINE,
+              disabled: this._busy,
+              variant: engineOn ? "ok" : "",
+              onClick: () =>
+                this._run(() =>
+                  engineOn
+                    ? turnOff(this.hass!, engineId!)
+                    : turnOn(this.hass!, engineId!),
+                ),
+            })}
+          </div>`
+        : nothing}
+      ${this._entityExists(lockId)
+        ? html`<div slot="lock" class="map-actions">
+            ${renderActionButton({
+              label: locked ? "Unlock doors" : "Lock doors",
+              icon: locked ? ICON_LOCK : ICON_UNLOCK,
+              disabled: this._busy,
+              variant: locked ? "" : "danger",
+              onClick: () =>
+                this._run(() =>
+                  locked
+                    ? unlockLock(this.hass!, lockId!)
+                    : lockLock(this.hass!, lockId!),
+                ),
+            })}
+          </div>`
+        : nothing}
+      ${this._entityExists(defogId)
+        ? html`<div slot="defog" class="map-actions">
+            ${renderActionButton({
+              label: defogOn ? "Turn defog off" : "Turn defog on",
+              icon: ICON_DEFOG,
+              disabled: this._busy || defogReadOnly,
+              variant: defogOn ? "ok" : "",
+              onClick: () =>
+                this._run(() => toggleSwitch(this.hass!, defogId!)),
+            })}
+          </div>`
+        : nothing}
+      ${this._entityExists(chargeId)
+        ? html`<div slot="charge" class="map-actions">
+            ${renderActionButton({
+              label: "Stop charge",
+              icon: ICON_CHARGE,
+              disabled: this._busy,
+              variant: "danger",
+              onClick: () =>
+                this._run(() => pressButton(this.hass!, chargeId!)),
+            })}
+          </div>`
+        : nothing}
+      ${this._entityExists(trunkId)
+        ? html`<div slot="trunk" class="map-actions">
+            ${renderActionButton({
+              label: trunkOpen ? "Close trunk" : "Open trunk",
+              icon: ICON_TRUNK,
+              disabled: this._busy,
+              variant: trunkOpen ? "ok" : "",
+              onClick: () =>
+                this._run(() =>
+                  trunkOpen
+                    ? closeCover(this.hass!, trunkId!)
+                    : openCover(this.hass!, trunkId!),
+                ),
+            })}
+          </div>`
+        : nothing}
+    `;
+  }
+
   private _windowsCluster(
     slots: Record<string, string | undefined>,
   ): TemplateResult | typeof nothing {
@@ -526,8 +691,9 @@ export class CarlinkoCabin extends LitElement {
     const hasSeats = this._hasSeats(s);
     const directTpms = this._hasDirectTpms(s);
     const hasWindows = this._hasWindowsControls(s);
+    const hasBody = this._hasBodyControls(s);
     const topImg = imageEntityUrl(this.hass, s.image);
-    const showMap = hasSeats || directTpms || hasWindows;
+    const showMap = hasSeats || directTpms || hasWindows || hasBody;
 
     const hasClimateControls = Boolean(
       climateEntity ||
@@ -612,7 +778,8 @@ export class CarlinkoCabin extends LitElement {
           ${showMap
             ? html`
                 <carlinko-car-outline .src=${topImg}>
-                  ${this._windowsCluster(s)} ${this._sunroofCluster(s)}
+                  ${this._bodyActions(s)} ${this._windowsCluster(s)}
+                  ${this._sunroofCluster(s)}
                   ${SEAT_ZONES.map((z) => this._seatZone(z, s))}
                   ${directTpms
                     ? WHEEL_ZONES.map((z) => this._wheelZone(z, s))
@@ -770,15 +937,15 @@ export class CarlinkoCabin extends LitElement {
         gap: 4px;
       }
       .map-actions .action.icon {
-        width: 2rem;
-        height: 2rem;
-        min-width: 2rem;
+        width: 2.35rem;
+        height: 2.35rem;
+        min-width: 2.35rem;
         background: color-mix(in srgb, var(--ck-bg) 88%, transparent);
         backdrop-filter: blur(2px);
       }
       .map-actions .action.icon svg {
-        width: 1.05rem;
-        height: 1.05rem;
+        width: 1.35rem;
+        height: 1.35rem;
       }
       carlinko-car-outline {
         margin-top: 12px;

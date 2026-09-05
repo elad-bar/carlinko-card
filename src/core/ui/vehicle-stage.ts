@@ -17,14 +17,9 @@ export class CarlinkoVehicleStage extends LitElement {
         ${hasImg
           ? html`<img class="car-img" src=${this.src!} alt="Vehicle" />`
           : html`<div class="placeholder"><slot name="placeholder">No image</slot></div>`}
-        <div class="region engine"><slot name="engine"></slot></div>
-        <div class="region lock"><slot name="lock"></slot></div>
         <div class="region online"><slot name="online"></slot></div>
         <div class="region hv"><slot name="hv"></slot></div>
         <div class="region tyres"><slot name="tyres"></slot></div>
-        <div class="region defog"><slot name="defog"></slot></div>
-        <div class="region charge"><slot name="charge"></slot></div>
-        <div class="region trunk"><slot name="trunk"></slot></div>
       </div>
     `;
   }
@@ -76,26 +71,6 @@ export class CarlinkoVehicleStage extends LitElement {
     .tyres {
       left: 27%;
       top: 11%;
-    }
-    .engine {
-      left: 34%;
-      top: 47%;
-    }
-    .defog {
-      left: 45%;
-      top: 32%;
-    }
-    .lock {
-      left: 69%;
-      top: 52%;
-    }
-    .charge {
-      left: 84%;
-      top: 41%;
-    }
-    .trunk {
-      left: 80%;
-      top: 18%;
     }
   `;
 }

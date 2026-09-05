@@ -1,11 +1,9 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { runBusy } from "../core/busy";
 import { resolveAllSlots } from "../core/resolve";
 import { OVERVIEW_SLOTS } from "../core/slots";
 import type { CardConfigBase, HomeAssistant } from "../core/types";
 import {
-  closeCover,
   fireMoreInfo,
   formatState,
   getNumericState,
@@ -13,13 +11,6 @@ import {
   imageEntityUrl,
   isOn,
   getTyreTone,
-  lockLock,
-  openCover,
-  pressButton,
-  toggleSwitch,
-  turnOff,
-  turnOn,
-  unlockLock,
 } from "../core/hass";
 import {
   CarlinkoVehicleStage,
@@ -58,7 +49,6 @@ export class CarlinkoOverview extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
 
   @state() private _config?: OverviewConfig;
-  @state() private _busy = false;
 
   public setConfig(config: OverviewConfig): void {
     if (!config || typeof config.device_id !== "string") {
@@ -89,20 +79,6 @@ export class CarlinkoOverview extends LitElement {
     return resolveAllSlots(this.hass, this._config, OVERVIEW_SLOTS);
   }
 
-  private _run(action: () => Promise<void>): void {
-    if (!this.hass) {
-      return;
-    }
-    void runBusy(
-      () => this._busy,
-      (v) => {
-        this._busy = v;
-      },
-      action,
-      (err) => console.error("carlinko-overview action failed", err),
-    );
-  }
-
   protected render() {
     if (!this._config) {
       return html`<ha-card><div class="pad">Not configured</div></ha-card>`;
@@ -118,15 +94,10 @@ export class CarlinkoOverview extends LitElement {
 
     const s = this._slots();
     const img = imageEntityUrl(this.hass, s.image);
-    const lockState = getStateValue(this.hass, s.lock);
-    const locked = lockState === "locked";
     const engineOn = isOn(this.hass, s.engine);
-    const defogOn = isOn(this.hass, s.defog);
-    const trunkOpen = getStateValue(this.hass, s.trunk) === "open";
     const online = isOn(this.hass, s.online);
     const batteryPct = getNumericState(this.hass, s.battery);
     const fuelPct = getNumericState(this.hass, s.fuel);
-    const defogReadOnly = Boolean(s.defog?.startsWith("binary_sensor."));
 
     const odometerText =
       s.odometer && this.hass.states[s.odometer]
@@ -182,38 +153,6 @@ export class CarlinkoOverview extends LitElement {
         <div class="body">
           <div class="hero">
             <carlinko-vehicle-stage .src=${img}>
-              ${s.engine
-                ? html`<div slot="engine">
-                    ${renderHotspotButton({
-                      icon: "engine",
-                      label: engineOn ? "Turn engine off" : "Turn engine on",
-                      tone: engineOn ? "ok" : "muted",
-                      disabled: this._busy,
-                      onClick: () =>
-                        this._run(() =>
-                          engineOn
-                            ? turnOff(this.hass!, s.engine!)
-                            : turnOn(this.hass!, s.engine!),
-                        ),
-                    })}
-                  </div>`
-                : nothing}
-              ${s.lock
-                ? html`<div slot="lock">
-                    ${renderHotspotButton({
-                      icon: locked ? "lock" : "unlock",
-                      label: locked ? "Unlock doors" : "Lock doors",
-                      tone: locked ? "muted" : "danger",
-                      disabled: this._busy,
-                      onClick: () =>
-                        this._run(() =>
-                          locked
-                            ? unlockLock(this.hass!, s.lock!)
-                            : lockLock(this.hass!, s.lock!),
-                        ),
-                    })}
-                  </div>`
-                : nothing}
               ${s.online
                 ? html`<div slot="online">
                     ${renderHotspotButton({
@@ -241,48 +180,6 @@ export class CarlinkoOverview extends LitElement {
                       label: tyreLabel,
                       tone: tyreTone,
                       onClick: () => fireMoreInfo(this, tyreMoreInfo),
-                    })}
-                  </div>`
-                : nothing}
-              ${s.defog
-                ? html`<div slot="defog">
-                    ${renderHotspotButton({
-                      icon: "defog",
-                      label: defogOn ? "Turn defog off" : "Turn defog on",
-                      tone: defogOn ? "warn" : "muted",
-                      disabled: this._busy || defogReadOnly,
-                      onClick: () =>
-                        this._run(() => toggleSwitch(this.hass!, s.defog!)),
-                    })}
-                  </div>`
-                : nothing}
-              ${s.charge_stop
-                ? html`<div slot="charge">
-                    ${renderHotspotButton({
-                      icon: "charge",
-                      label: "Stop charge",
-                      tone: "info",
-                      disabled: this._busy,
-                      onClick: () =>
-                        this._run(() =>
-                          pressButton(this.hass!, s.charge_stop!),
-                        ),
-                    })}
-                  </div>`
-                : nothing}
-              ${s.trunk
-                ? html`<div slot="trunk">
-                    ${renderHotspotButton({
-                      icon: "trunk",
-                      label: trunkOpen ? "Close trunk" : "Open trunk",
-                      tone: trunkOpen ? "warn" : "muted",
-                      disabled: this._busy,
-                      onClick: () =>
-                        this._run(() =>
-                          trunkOpen
-                            ? closeCover(this.hass!, s.trunk!)
-                            : openCover(this.hass!, s.trunk!),
-                        ),
                     })}
                   </div>`
                 : nothing}

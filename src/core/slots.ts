@@ -17,16 +17,7 @@ export const OVERVIEW_SLOTS: readonly SlotDef[] = [
   { slot: "online", key: "online", domain: "binary_sensor" },
   { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
   { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
-  { slot: "lock", key: "lock", domain: "lock" },
   { slot: "engine", key: "engine", domain: "switch" },
-  {
-    slot: "defog",
-    key: "defrost_cmd",
-    domain: "switch",
-    fallbackKeys: ["defrost"],
-  },
-  { slot: "charge_stop", key: "charge_stop", domain: "button" },
-  { slot: "trunk", key: "liftgate", domain: "cover" },
 ] as const;
 
 export const OVERVIEW_SLOT_BY_NAME: ReadonlyMap<string, SlotDef> = new Map(
@@ -91,4 +82,14 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
   { slot: "windows_vent", key: "windows_vent", domain: "button" },
   { slot: "sunroof", key: "sunroof", domain: "cover" },
   { slot: "sunroof_tilt", key: "sunroof_tilt", domain: "button" },
+  { slot: "lock", key: "lock", domain: "lock" },
+  { slot: "engine", key: "engine", domain: "switch" },
+  {
+    slot: "defog",
+    key: "defrost_cmd",
+    domain: "switch",
+    fallbackKeys: ["defrost"],
+  },
+  { slot: "charge_stop", key: "charge_stop", domain: "button" },
+  { slot: "trunk", key: "liftgate", domain: "cover" },
 ] as const;

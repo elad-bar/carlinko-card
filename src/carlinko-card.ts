@@ -34,7 +34,7 @@ window.customCards.push(
     type: "carlinko-overview",
     name: "CarLinko Overview",
     description:
-      "Vehicle overview: hotspot controls on the car image, visual ranges/vitals for ha-carlinko.",
+      "Vehicle overview: status hotspots on the car image, visual ranges/vitals for ha-carlinko.",
     preview: true,
   },
   {
@@ -48,7 +48,7 @@ window.customCards.push(
     type: "carlinko-cabin",
     name: "CarLinko Cabin",
     description:
-      "Climate, seats, TPMS, and windows/sunroof controls on a top-down vehicle map.",
+      "Climate, seats, TPMS, windows/sunroof, and body/access controls on a top-down vehicle map.",
     preview: true,
   },
 );

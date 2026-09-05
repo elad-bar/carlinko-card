@@ -31,11 +31,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | online | `online` | binary_sensor | optional | Status hotspot |
 | tyres_ok | `tyres_ok` | binary_sensor | optional | Tyre problem binary; with `tyre_status`: problem → red, `check_tyres` → orange, else green |
 | tyre_status | `tyre_status` | sensor | optional | Enum: `normal` / `check_tyres`; weaker than `tyres_ok` problem |
-| lock | `lock` | lock | optional | Lock / unlock |
-| engine | `engine` | switch | optional | Capability-gated |
-| defog | `defrost_cmd` | switch | optional | Fallback key `defrost` (binary, read-only) |
-| charge_stop | `charge_stop` | button | optional | Stop / release charging |
-| trunk | `liftgate` | cover | optional | Open / close |
+| engine | `engine` | switch | optional | Resolved for speed headline gating only; control is on Cabin |
 
 ---
 
@@ -54,7 +50,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ## Cabin (`carlinko-cabin`)
 
-Climate, TPMS, and windows/sunroof controls on one top-down map.
+Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
@@ -84,8 +80,13 @@ Climate, TPMS, and windows/sunroof controls on one top-down map.
 | windows_vent | `windows_vent` | button | optional | Vent icon on windshield |
 | sunroof | `sunroof` | cover | optional | Open or Close icon on sunroof (state-based) |
 | sunroof_tilt | `sunroof_tilt` | button | optional | Tilt icon on sunroof |
+| lock | `lock` | lock | optional | Lock / unlock map button (door side) |
+| engine | `engine` | switch | optional | Engine on/off map button (hood) |
+| defog | `defrost_cmd` | switch | optional | Fallback key `defrost` (binary, read-only); windshield map button |
+| charge_stop | `charge_stop` | button | optional | Stop / release charging map button (rear-left); Charging card remains detail |
+| trunk | `liftgate` | cover | optional | Open / close map button (rear) |
 
-**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); windows icons on windshield; sunroof icons on glass roof. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, nor windows/sunroof exist.
+**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); windows icons below lock height; sunroof icons on glass roof; engine / lock / defog / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, windows/sunroof, nor body controls exist.
 
 **INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 

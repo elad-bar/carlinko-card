@@ -54,6 +54,11 @@ export class CarlinkoCarOutline extends LitElement {
         <div class="region wheel-rr"><slot name="wheel-rr"></slot></div>
         <div class="region windows"><slot name="windows"></slot></div>
         <div class="region sunroof"><slot name="sunroof"></slot></div>
+        <div class="region trunk"><slot name="trunk"></slot></div>
+        <div class="region charge"><slot name="charge"></slot></div>
+        <div class="region lock"><slot name="lock"></slot></div>
+        <div class="region defog"><slot name="defog"></slot></div>
+        <div class="region engine"><slot name="engine"></slot></div>
       </div>
     `;
   }
@@ -134,14 +139,40 @@ export class CarlinkoCarOutline extends LitElement {
       top: 78%;
     }
     .windows {
-      left: 50%;
-      top: 29%;
+      left: 1%;
+      top: 54%;
       transform: translateX(-50%);
     }
     .sunroof {
       left: 50%;
-      top: 58%;
+      top: 66%;
       transform: translateX(-50%);
+    }
+    /* Body / access: trunk rear, charge rear-left, lock mid-side, defog windshield, engine hood */
+    .trunk {
+      left: 50%;
+      top: 93%;
+      transform: translate(-50%, -50%);
+    }
+    .charge {
+      left: 14%;
+      top: 94%;
+      transform: translate(-50%, -50%);
+    }
+    .lock {
+      left: 4%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+    }
+    .defog {
+      left: 50%;
+      top: 29%;
+      transform: translate(-50%, -50%);
+    }
+    .engine {
+      left: 50%;
+      top: 12%;
+      transform: translate(-50%, -50%);
     }
   `;
 }
