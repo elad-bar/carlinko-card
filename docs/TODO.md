@@ -23,8 +23,8 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
 | CARD-03 | Cards | Climate card | done | `custom:carlinko-climate`; purify deferred |
 | CARD-04 | Cards | TPMS card | done | `custom:carlinko-tpms`; indirect hides wheel grid |
-| CARD-05 | Cards | Windows card | todo | Windows + sunroof |
-| CARD-06 | Cards | Visual editors (basic) | todo | device_id picker exists for Overview; expand later |
+| CARD-05 | Cards | Windows card | done | `custom:carlinko-windows` |
+| CARD-06 | Cards | Visual editors (basic) | done | Shared device editor; image override on Overview/Climate/TPMS |
 | DEV-01 | Dev | Vite playground + HA WebSocket auth | done | `npm run playground` |
 | DEV-02 | Dev | Thin `hass` shim for cards outside Lovelace | done | `playground/main.ts` |
 | DEV-03 | Dev | Validate Overview against live ha-carlinko | done | Playground connected; Overview shows live vitals/controls |
@@ -46,7 +46,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 
 1. ~~Phase 1 foundation (DOC-03, PKG, CORE, CARD-01, DEV)~~ **done**
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
-3. ~~CORE-04 + CARD-02 Charging~~ **done** → ~~CARD-03 Climate~~ **done** → ~~CARD-04 TPMS~~ **done** → CARD-05 → CARD-06
+3. ~~CORE-04 + CARD-02…CARD-05~~ **done** → ~~CARD-06 editors~~ **done**
 4. DOC-05 → PKG-03 → REL-01
 5. UX-* when visuals are reviewed
 
@@ -63,6 +63,8 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CORE-04 shared UI primitives + CARD-02 Charging card; playground mounts Overview and Charging. |
 | 2026-09-05 | CARD-03 Climate + INT-01: no current_temperature in ha-carlinko; Current row gated on attribute; playground mounts Climate. |
 | 2026-09-05 | CARD-04 TPMS: per-wheel pressure/temp on vehicle_top; indirect status-only; playground mounts TPMS. |
+| 2026-09-05 | CARD-05 Windows: open/close/vent + sunroof open/close/tilt; playground pairs TPMS|Windows. |
+| 2026-09-05 | CARD-06: shared Lovelace device editor; Climate/TPMS top image override in UI. |
 
 ## How to update
 

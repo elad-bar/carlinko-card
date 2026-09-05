@@ -54,7 +54,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback |
+| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback; override via `image_entity` |
 | climate | `climate` | climate | optional | Setpoint +/−, on/off (HVAC cool/off) |
 | quick_cool | `quick_cool` | button | optional | |
 | quick_heat | `quick_heat` | button | optional | |
@@ -76,7 +76,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback |
+| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback; override via `image_entity` |
 | tyre_fl | `tyre_fl` | sensor | optional | Direct TPMS pressure |
 | tyre_fl_temp | `tyre_fl_temp` | sensor | optional | |
 | tyre_fr | `tyre_fr` | sensor | optional | |
@@ -92,7 +92,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ---
 
-## Windows (`carlinko-windows`) — stub
+## Windows (`carlinko-windows`)
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
@@ -100,3 +100,5 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | windows_vent | `windows_vent` | button | optional | Vent |
 | sunroof | `sunroof` | cover | optional | Open / close |
 | sunroof_tilt | `sunroof_tilt` | button | optional | Tilt |
+
+Whole-car covers only (not per-pane). Hide each section when its entities are missing.

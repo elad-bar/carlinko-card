@@ -11,6 +11,7 @@ import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";
 import type { CarlinkoClimate } from "../src/cards/climate";
 import type { CarlinkoTpms } from "../src/cards/tpms";
+import type { CarlinkoWindows } from "../src/cards/windows";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
 /** Minimal ha-card so cards render outside Lovelace. */
@@ -71,6 +72,7 @@ let overviewCard: CarlinkoOverview | undefined;
 let chargingCard: CarlinkoCharging | undefined;
 let climateCard: CarlinkoClimate | undefined;
 let tpmsCard: CarlinkoTpms | undefined;
+let windowsCard: CarlinkoWindows | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
 function setStatus(text: string, kind: "" | "ok" | "err" = "") {
@@ -176,12 +178,27 @@ function mountCards() {
 
   const title = titleInput.value.trim() || undefined;
 
-  if (!overviewCard || !chargingCard || !climateCard || !tpmsCard) {
+  if (
+    !overviewCard ||
+    !chargingCard ||
+    !climateCard ||
+    !tpmsCard ||
+    !windowsCard
+  ) {
     overviewCard = document.createElement("carlinko-overview") as CarlinkoOverview;
     chargingCard = document.createElement("carlinko-charging") as CarlinkoCharging;
     climateCard = document.createElement("carlinko-climate") as CarlinkoClimate;
     tpmsCard = document.createElement("carlinko-tpms") as CarlinkoTpms;
-    host.replaceChildren(overviewCard, chargingCard, climateCard, tpmsCard);
+    windowsCard = document.createElement(
+      "carlinko-windows",
+    ) as CarlinkoWindows;
+    host.replaceChildren(
+      overviewCard,
+      chargingCard,
+      climateCard,
+      tpmsCard,
+      windowsCard,
+    );
   }
 
   overviewCard.hass = hass;
@@ -208,6 +225,12 @@ function mountCards() {
     title: "TPMS",
   });
 
+  windowsCard.hass = hass;
+  windowsCard.setConfig({
+    device_id: deviceId,
+    title: "Windows",
+  });
+
   setStatus(`Cards mounted for device ${deviceId}`, "ok");
 }
 
@@ -226,6 +249,9 @@ function syncHass() {
   }
   if (tpmsCard) {
     tpmsCard.hass = hass;
+  }
+  if (windowsCard) {
+    windowsCard.hass = hass;
   }
 }
 

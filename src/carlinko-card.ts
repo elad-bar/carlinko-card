@@ -6,6 +6,8 @@ import { CarlinkoClimate } from "./cards/climate";
 import { CarlinkoClimateEditor } from "./cards/climate-editor";
 import { CarlinkoTpms } from "./cards/tpms";
 import { CarlinkoTpmsEditor } from "./cards/tpms-editor";
+import { CarlinkoWindows } from "./cards/windows";
+import { CarlinkoWindowsEditor } from "./cards/windows-editor";
 import { CarlinkoCarOutline } from "./core/ui/car-outline";
 
 void CarlinkoOverview;
@@ -16,6 +18,8 @@ void CarlinkoClimate;
 void CarlinkoClimateEditor;
 void CarlinkoTpms;
 void CarlinkoTpmsEditor;
+void CarlinkoWindows;
+void CarlinkoWindowsEditor;
 void CarlinkoCarOutline;
 
 window.customCards = window.customCards || [];
@@ -46,6 +50,13 @@ window.customCards.push(
     name: "CarLinko TPMS",
     description:
       "Tyre pressure and temperature per wheel, or overall status for indirect TPMS.",
+    preview: true,
+  },
+  {
+    type: "carlinko-windows",
+    name: "CarLinko Windows",
+    description:
+      "Whole-car windows open/close/vent and sunroof open/close/tilt.",
     preview: true,
   },
 );
