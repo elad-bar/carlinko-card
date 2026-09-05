@@ -10,7 +10,6 @@ import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";
 import type { CarlinkoCabin } from "../src/cards/cabin";
-import type { CarlinkoWindows } from "../src/cards/windows";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
 /** Minimal ha-card so cards render outside Lovelace. */
@@ -70,7 +69,6 @@ let hass: HomeAssistant | undefined;
 let overviewCard: CarlinkoOverview | undefined;
 let chargingCard: CarlinkoCharging | undefined;
 let cabinCard: CarlinkoCabin | undefined;
-let windowsCard: CarlinkoWindows | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
 function setStatus(text: string, kind: "" | "ok" | "err" = "") {
@@ -176,7 +174,7 @@ function mountCards() {
 
   const title = titleInput.value.trim() || undefined;
 
-  if (!overviewCard || !chargingCard || !cabinCard || !windowsCard) {
+  if (!overviewCard || !chargingCard || !cabinCard) {
     overviewCard = document.createElement(
       "carlinko-overview",
     ) as CarlinkoOverview;
@@ -184,23 +182,14 @@ function mountCards() {
       "carlinko-charging",
     ) as CarlinkoCharging;
     cabinCard = document.createElement("carlinko-cabin") as CarlinkoCabin;
-    windowsCard = document.createElement(
-      "carlinko-windows",
-    ) as CarlinkoWindows;
   }
 
-  host.replaceChildren(overviewCard, chargingCard, cabinCard, windowsCard);
+  host.replaceChildren(overviewCard, cabinCard, chargingCard);
 
   overviewCard.hass = hass;
   overviewCard.setConfig({
     device_id: deviceId,
     title: title || "CarLinko Overview",
-  });
-
-  chargingCard.hass = hass;
-  chargingCard.setConfig({
-    device_id: deviceId,
-    title: "Charging",
   });
 
   cabinCard.hass = hass;
@@ -209,10 +198,10 @@ function mountCards() {
     title: "Cabin",
   });
 
-  windowsCard.hass = hass;
-  windowsCard.setConfig({
+  chargingCard.hass = hass;
+  chargingCard.setConfig({
     device_id: deviceId,
-    title: "Windows",
+    title: "Charging",
   });
 
   setStatus(`Cards mounted for device ${deviceId}`, "ok");
@@ -225,14 +214,11 @@ function syncHass() {
   if (overviewCard) {
     overviewCard.hass = hass;
   }
-  if (chargingCard) {
-    chargingCard.hass = hass;
-  }
   if (cabinCard) {
     cabinCard.hass = hass;
   }
-  if (windowsCard) {
-    windowsCard.hass = hass;
+  if (chargingCard) {
+    chargingCard.hass = hass;
   }
 }
 

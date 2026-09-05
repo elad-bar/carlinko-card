@@ -18,7 +18,6 @@ import {
   imageEntityUrl,
   isClimateOn,
   isCoverOpen,
-  isOn,
   openCover,
   pressButton,
   selectOption,
@@ -29,10 +28,8 @@ import {
 } from "../core/hass";
 import {
   actionStyles,
-  chipStyles,
   metricStyles,
   renderActionButton,
-  renderStatusChip,
   sharedHostStyles,
 } from "../core/ui";
 
@@ -517,15 +514,6 @@ export class CarlinkoCabin extends LitElement {
     const topImg = imageEntityUrl(this.hass, s.image);
     const showMap = hasSeats || directTpms || hasWindows;
 
-    const tyresOkId = s.tyres_ok;
-    const tyresOkEntity =
-      tyresOkId && this.hass.states[tyresOkId] ? tyresOkId : undefined;
-    const statusId =
-      s.tyre_status && this.hass.states[s.tyre_status]
-        ? s.tyre_status
-        : undefined;
-    const showTpmsChips = Boolean(tyresOkEntity || statusId);
-
     const hasClimateControls = Boolean(
       climateEntity ||
         (s.quick_cool && this.hass.states[s.quick_cool]) ||
@@ -606,31 +594,6 @@ export class CarlinkoCabin extends LitElement {
                 </div>
               `
             : nothing}
-          ${showTpmsChips
-            ? html`
-                <div class="chips">
-                  ${tyresOkEntity
-                    ? renderStatusChip(
-                        isOn(this.hass, tyresOkEntity)
-                          ? "Tyres OK"
-                          : "Tyre problem",
-                        { ok: isOn(this.hass, tyresOkEntity) },
-                      )
-                    : nothing}
-                  ${statusId
-                    ? html`
-                        <button
-                          type="button"
-                          class="chip chip-btn"
-                          @click=${() => fireMoreInfo(this, statusId)}
-                        >
-                          ${formatState(this.hass, statusId)}
-                        </button>
-                      `
-                    : nothing}
-                </div>
-              `
-            : nothing}
           ${showMap
             ? html`
                 <carlinko-car-outline .src=${topImg}>
@@ -650,7 +613,6 @@ export class CarlinkoCabin extends LitElement {
   static styles = [
     sharedHostStyles,
     metricStyles,
-    chipStyles,
     actionStyles,
     css`
       .controls-row {
@@ -679,11 +641,6 @@ export class CarlinkoCabin extends LitElement {
         justify-content: space-between;
         gap: 8px;
         padding: 4px 0;
-      }
-      .chip-btn {
-        font: inherit;
-        cursor: pointer;
-        color: inherit;
       }
       .seat-zone,
       .wheel-zone {

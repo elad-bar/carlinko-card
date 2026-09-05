@@ -37,6 +37,26 @@ export function isOn(
   return state === "on" || state === "open" || state === "unlocked";
 }
 
+/**
+ * True when a binary sensor indicates an active problem.
+ * For `device_class: problem`, HA uses on=problem / off=clear.
+ * Otherwise treat on as healthy (e.g. a positively named `tyres_ok`).
+ */
+export function hasActiveProblem(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): boolean {
+  const entity = getState(hass, entityId);
+  if (!entity) {
+    return false;
+  }
+  const on = entity.state === "on";
+  if (entity.attributes.device_class === "problem") {
+    return on;
+  }
+  return !on;
+}
+
 export function formatState(
   hass: HomeAssistant | undefined,
   entityId: string | undefined,

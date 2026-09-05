@@ -37,6 +37,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Climate and TPMS merged into Cabin; removed from card picker; `carlinko-climate` / `carlinko-tpms` remain as aliases
 - Cabin map anchors: front TPMS vs seat vents spaced apart; rear TPMS aligned with rear wheels
 - Cabin windows/sunroof covers show a single Open or Close icon from cover state
+- Overview tyre status hotspot (`tyres_ok`); Cabin no longer shows tyre status chips
+- Windows card removed from picker; `carlinko-windows` remains as a Cabin alias
+- Overview tyre hotspot respects `device_class: problem` (off = OK / green)
 
 ### Notes
 

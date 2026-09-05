@@ -8,12 +8,11 @@ Lovelace custom cards for vehicles managed by [ha-carlinko](https://github.com/e
 
 | Type | Description |
 | --- | --- |
-| `custom:carlinko-overview` | Hero hotspots (lock / engine / defog / charge / trunk), visual ranges/vitals |
-| `custom:carlinko-charging` | Charge state, mode, remaining, power, stop charging |
+| `custom:carlinko-overview` | Hero hotspots (lock / engine / defog / charge / trunk / online / HV / tyres), visual ranges/vitals |
 | `custom:carlinko-cabin` | Climate, seats, TPMS, and windows/sunroof on a top-down map |
-| `custom:carlinko-windows` | Windows open/close/vent and sunroof open/close/tilt |
+| `custom:carlinko-charging` | Charge state, mode, remaining, power, stop charging |
 
-Four Lovelace cards (Overview, Charging, Cabin, Windows) — see [docs/OBJECTIVE.md](docs/OBJECTIVE.md). Legacy `custom:carlinko-climate` / `custom:carlinko-tpms` still load as Cabin aliases.
+Three Lovelace cards (Overview, Cabin, Charging) — see [docs/OBJECTIVE.md](docs/OBJECTIVE.md). Legacy `custom:carlinko-climate` / `custom:carlinko-tpms` / `custom:carlinko-windows` still load as Cabin aliases.
 
 ## Install (HACS)
 

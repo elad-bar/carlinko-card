@@ -23,7 +23,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
 | CARD-03 | Cards | Climate card | done | Merged into Cabin; `carlinko-climate` alias remains |
 | CARD-04 | Cards | TPMS card | done | Merged into Cabin; `carlinko-tpms` alias remains |
-| CARD-05 | Cards | Windows card | done | `custom:carlinko-windows` |
+| CARD-05 | Cards | Windows card | done | Merged into Cabin; `carlinko-windows` alias remains |
 | CARD-06 | Cards | Visual editors (basic) | done | Shared device editor; image override on Overview/Cabin |
 | CARD-07 | Cards | Cabin card (Climate+TPMS) | done | `custom:carlinko-cabin`; always-on seat + wheel map |
 | DEV-01 | Dev | Vite playground + HA WebSocket auth | done | `npm run playground` |
@@ -70,6 +70,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | UX-01: Overview hotspot controls on vehicle image + vertical EV/fuel gauges; text action row removed. |
 | 2026-09-05 | CARD-07: merged Climate+TPMS into `custom:carlinko-cabin`; old types kept as aliases; playground mounts Cabin. |
 | 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
+| 2026-09-05 | Tyre OK hotspot on Overview; removed Cabin tyre chips; Windows picker dropped; playground Overview\|Cabin then Charging. |
 
 ## How to update
 

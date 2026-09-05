@@ -15,6 +15,7 @@ export const OVERVIEW_SLOTS: readonly SlotDef[] = [
   { slot: "speed", key: "speed", domain: "sensor" },
   { slot: "moving", key: "moving", domain: "binary_sensor" },
   { slot: "online", key: "online", domain: "binary_sensor" },
+  { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
   { slot: "lock", key: "lock", domain: "lock" },
   { slot: "engine", key: "engine", domain: "switch" },
   {
@@ -83,15 +84,6 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
   { slot: "tyre_rl_temp", key: "tyre_rl_temp", domain: "sensor" },
   { slot: "tyre_rr", key: "tyre_rr", domain: "sensor" },
   { slot: "tyre_rr_temp", key: "tyre_rr_temp", domain: "sensor" },
-  { slot: "tyre_status", key: "tyre_status", domain: "sensor" },
-  { slot: "tyres_ok", key: "tyres_ok", domain: "binary_sensor" },
-  { slot: "windows", key: "windows", domain: "cover" },
-  { slot: "windows_vent", key: "windows_vent", domain: "button" },
-  { slot: "sunroof", key: "sunroof", domain: "cover" },
-  { slot: "sunroof_tilt", key: "sunroof_tilt", domain: "button" },
-] as const;
-
-export const WINDOWS_SLOTS: readonly SlotDef[] = [
   { slot: "windows", key: "windows", domain: "cover" },
   { slot: "windows_vent", key: "windows_vent", domain: "button" },
   { slot: "sunroof", key: "sunroof", domain: "cover" },

@@ -21,6 +21,7 @@ export class CarlinkoVehicleStage extends LitElement {
         <div class="region lock"><slot name="lock"></slot></div>
         <div class="region online"><slot name="online"></slot></div>
         <div class="region hv"><slot name="hv"></slot></div>
+        <div class="region tyres"><slot name="tyres"></slot></div>
         <div class="region defog"><slot name="defog"></slot></div>
         <div class="region charge"><slot name="charge"></slot></div>
         <div class="region trunk"><slot name="trunk"></slot></div>
@@ -63,13 +64,17 @@ export class CarlinkoVehicleStage extends LitElement {
       z-index: 1;
       pointer-events: auto;
     }
-    /* Anchors from annotated vehicle_front map (1–6) + HV status beside online */
+    /* Status row: online, HV, tyres */
     .online {
       left: 5%;
       top: 11%;
     }
     .hv {
       left: 16%;
+      top: 11%;
+    }
+    .tyres {
+      left: 27%;
       top: 11%;
     }
     .engine {

@@ -12,6 +12,7 @@ import {
   getStateValue,
   imageEntityUrl,
   isOn,
+  hasActiveProblem,
   lockLock,
   openCover,
   pressButton,
@@ -219,6 +220,20 @@ export class CarlinkoOverview extends LitElement {
                       label: hv.label,
                       tone: hv.tone,
                       onClick: () => fireMoreInfo(this, s.hv_state!),
+                    })}
+                  </div>`
+                : nothing}
+              ${s.tyres_ok
+                ? html`<div slot="tyres">
+                    ${renderHotspotButton({
+                      icon: "tyre",
+                      label: hasActiveProblem(this.hass, s.tyres_ok)
+                        ? "Tyre problem"
+                        : "Tyres OK",
+                      tone: hasActiveProblem(this.hass, s.tyres_ok)
+                        ? "danger"
+                        : "ok",
+                      onClick: () => fireMoreInfo(this, s.tyres_ok!),
                     })}
                   </div>`
                 : nothing}

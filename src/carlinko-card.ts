@@ -51,13 +51,6 @@ window.customCards.push(
       "Climate, seats, TPMS, and windows/sunroof controls on a top-down vehicle map.",
     preview: true,
   },
-  {
-    type: "carlinko-windows",
-    name: "CarLinko Windows",
-    description:
-      "Whole-car windows open/close/vent and sunroof open/close/tilt.",
-    preview: true,
-  },
 );
 
 console.info(

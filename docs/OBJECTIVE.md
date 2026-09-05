@@ -26,16 +26,15 @@ Concept reference (same split of concerns):
 
 ## Card set (v1)
 
-Four cards. Users compose them on a Lovelace dashboard.
+Three cards. Users compose them on a Lovelace dashboard.
 
 | Card | Purpose |
 | --- | --- |
 | **Overview** | Hero car image with state-colored hotspots for quick actions, visual ranges / mileage / power vitals |
-| **Charging** | Charge status, mode, remaining time, power, stop charging |
 | **Cabin** | Climate, seat heat/vent, TPMS, and windows/sunroof on one top-down map |
-| **Windows** | Windows open/close/vent, sunroof open/close/tilt |
+| **Charging** | Charge status, mode, remaining time, power, stop charging |
 
-Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms` → Cabin UI.
+Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms`, `custom:carlinko-windows` → Cabin UI.
 
 Optional later (not in the initial set): location/map, find-car, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Cabin.
 
@@ -44,7 +43,7 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`); hide when the entity is missing.
+- State-colored hotspots on the hero for high-value controls and status (`online`, `hv_state`, `tyres_ok`); hide when the entity is missing.
 - EV range (km) and battery (%) as a vertical gauge.
 - Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).
@@ -58,7 +57,7 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 - Stop / release charging
 - Lock / unlock doors
 - Open / close trunk (liftgate)
-- Online / HV status hotspots open more-info (not remote commands)
+- Online / HV / tyre status hotspots open more-info (not remote commands)
 
 ### Charging
 
@@ -73,15 +72,8 @@ CarLinko mobile-app style layout on one top-down map:
 - Setpoint with up/down, current cabin temperature (if available from the climate entity), climate on/off
 - Quick cool / quick heat buttons
 - Seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
-- Tyre pressure and temperature at each wheel (click → HA more-info); overall tyre status chips
-- If the vehicle only has indirect TPMS, show status chips and hide per-wheel labels
+- Tyre pressure and temperature at each wheel (click → HA more-info)
 - Windows open/close/vent and sunroof open/close/tilt as icon buttons on the map (windshield / sunroof)
-
-### Windows
-
-- Same entities as Cabin overlays; standalone card with text action rows for focused use
-- Windows: open / close / vent (whole-car cover + vent button — not per-pane entities)
-- Sunroof: open / close / tilt
 
 ## Entity mapping principles
 
@@ -118,7 +110,7 @@ Details of look-and-feel (density, icons, theme, mobile layout) will be refined 
 2. Scaffold the Lovelace card package + HACS dashboard metadata
 3. Mapper + Overview against real HA
 4. Local HA-connected playground
-5. Charging, Cabin, Windows
+5. Charging, Cabin
 6. Polish and editor UX
 
 ## Related links
