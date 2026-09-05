@@ -301,21 +301,44 @@ export class CarlinkoCabin extends LitElement {
     `;
   }
 
-  private _sensorBtn(
-    entityId: string | undefined,
-    className: string,
+  private _wheelChip(
+    pressureId: string | undefined,
+    tempId: string | undefined,
+    tone: string,
   ): TemplateResult | typeof nothing {
-    if (!this.hass || !entityId || !this.hass.states[entityId]) {
+    if (!this.hass) {
       return nothing;
     }
-    const label = formatState(this.hass, entityId);
+    const hasPressure = Boolean(
+      pressureId && this.hass.states[pressureId],
+    );
+    const hasTemp = Boolean(tempId && this.hass.states[tempId]);
+    if (!hasPressure && !hasTemp) {
+      return nothing;
+    }
+    const pressureLabel = hasPressure
+      ? formatState(this.hass, pressureId!)
+      : undefined;
+    const tempLabel = hasTemp ? formatState(this.hass, tempId!) : undefined;
+    const moreInfoId = hasPressure ? pressureId! : tempId!;
+    const a11y = [pressureLabel, tempLabel].filter(Boolean).join(", ");
     return html`
       <button
         type="button"
-        class=${className}
-        @click=${() => fireMoreInfo(this, entityId)}
+        class="wheel-chip tone-${tone}"
+        title=${a11y}
+        aria-label=${a11y}
+        @click=${() => fireMoreInfo(this, moreInfoId)}
       >
-        ${label}
+        ${renderMdiIcon("mdi:tire")}
+        <span class="wheel-chip-text">
+          ${pressureLabel
+            ? html`<span class="wheel-pressure">${pressureLabel}</span>`
+            : nothing}
+          ${tempLabel
+            ? html`<span class="wheel-temp">${tempLabel}</span>`
+            : nothing}
+        </span>
       </button>
     `;
   }
@@ -335,9 +358,8 @@ export class CarlinkoCabin extends LitElement {
     }
     const tone = getTyreTone(this.hass, slots.tyres_ok, slots.tyre_status);
     return html`
-      <div slot=${zone.slot} class="wheel-zone tone-${tone}">
-        ${this._sensorBtn(pressureId, "wheel-pressure")}
-        ${this._sensorBtn(tempId, "wheel-temp")}
+      <div slot=${zone.slot} class="wheel-zone">
+        ${this._wheelChip(pressureId, tempId, tone)}
       </div>
     `;
   }
@@ -780,12 +802,10 @@ export class CarlinkoCabin extends LitElement {
         gap: 4px;
       }
       .wheel-zone {
-        gap: 2px;
         align-items: flex-start;
       }
       .seat-btn,
-      .wheel-pressure,
-      .wheel-temp {
+      .wheel-chip {
         border: 1px solid var(--ck-border);
         background: color-mix(in srgb, var(--ck-bg) 88%, transparent);
         color: var(--ck-text);
@@ -825,36 +845,51 @@ export class CarlinkoCabin extends LitElement {
         white-space: nowrap;
         line-height: 1.1;
       }
+      .wheel-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 7px;
+      }
+      .wheel-chip ha-icon {
+        --mdc-icon-size: 0.95rem;
+        width: 0.95rem;
+        height: 0.95rem;
+        flex-shrink: 0;
+      }
+      .wheel-chip-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        line-height: 1.15;
+      }
       .wheel-pressure {
         font-weight: 600;
       }
       .wheel-temp {
         color: var(--ck-muted);
+        font-size: 0.65rem;
       }
-      .wheel-zone.tone-ok .wheel-pressure,
-      .wheel-zone.tone-ok .wheel-temp {
+      .wheel-chip.tone-ok {
         border-color: var(--ck-tyre-ok);
-      }
-      .wheel-zone.tone-ok .wheel-pressure {
         color: var(--ck-tyre-ok);
       }
-      .wheel-zone.tone-warn .wheel-pressure,
-      .wheel-zone.tone-warn .wheel-temp {
+      .wheel-chip.tone-warn {
         border-color: var(--ck-tyre-warn);
-      }
-      .wheel-zone.tone-warn .wheel-pressure {
         color: var(--ck-tyre-warn);
       }
-      .wheel-zone.tone-danger .wheel-pressure,
-      .wheel-zone.tone-danger .wheel-temp {
+      .wheel-chip.tone-danger {
         border-color: var(--ck-tyre-danger);
-      }
-      .wheel-zone.tone-danger .wheel-pressure {
         color: var(--ck-tyre-danger);
       }
+      .wheel-chip.tone-ok .wheel-temp,
+      .wheel-chip.tone-warn .wheel-temp,
+      .wheel-chip.tone-danger .wheel-temp {
+        color: var(--ck-muted);
+      }
       .seat-btn:hover:not(:disabled),
-      .wheel-pressure:hover,
-      .wheel-temp:hover {
+      .wheel-chip:hover {
         background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
         border-color: currentColor;
       }
@@ -904,10 +939,18 @@ export class CarlinkoCabin extends LitElement {
           width: 0.85rem;
           height: 0.85rem;
         }
-        .wheel-pressure,
-        .wheel-temp {
+        .wheel-chip {
           padding: 3px 5px;
           font-size: 0.65rem;
+          gap: 4px;
+        }
+        .wheel-chip ha-icon {
+          --mdc-icon-size: 0.85rem;
+          width: 0.85rem;
+          height: 0.85rem;
+        }
+        .wheel-temp {
+          font-size: 0.6rem;
         }
         .map-actions .action.icon {
           width: 2.1rem;
