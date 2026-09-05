@@ -50,11 +50,12 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 
 ---
 
-## Climate (`carlinko-climate`) — stub
+## Climate (`carlinko-climate`)
 
 | Slot | Key | Domain | Required | Notes |
 | --- | --- | --- | --- | --- |
-| climate | `climate` | climate | optional | Setpoint, current, on/off |
+| image | `vehicle_top` | image | optional | Top-down map background; SVG outline fallback |
+| climate | `climate` | climate | optional | Setpoint +/−, on/off (HVAC cool/off) |
 | quick_cool | `quick_cool` | button | optional | |
 | quick_heat | `quick_heat` | button | optional | |
 | seat_heat_l | `seat_heat_l` | select | optional | Fallback binary `seat_heat_left` |
@@ -65,7 +66,9 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | seat_vent_lr | `seat_vent_lr` | select | optional | |
 | seat_heat_rr | `seat_heat_rr` | select | optional | |
 | seat_vent_rr | `seat_vent_rr` | select | optional | |
-| purify | `purify` | switch | optional | Later / optional row |
+| purify | `purify` | switch | optional | Not in v1 climate card UI |
+
+**INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 
 ---
 

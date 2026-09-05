@@ -42,6 +42,7 @@ export const CHARGING_SLOTS: readonly SlotDef[] = [
 ] as const;
 
 export const CLIMATE_SLOTS: readonly SlotDef[] = [
+  { slot: "image", key: "vehicle_top", domain: "image" },
   { slot: "climate", key: "climate", domain: "climate" },
   { slot: "quick_cool", key: "quick_cool", domain: "button" },
   { slot: "quick_heat", key: "quick_heat", domain: "button" },

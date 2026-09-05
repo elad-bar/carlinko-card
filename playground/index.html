@@ -94,10 +94,20 @@
       #card-host {
         min-height: 200px;
         display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 16px;
         padding: 0;
         background: transparent;
         box-shadow: none;
+        align-items: start;
+      }
+      #card-host > :first-child {
+        grid-column: 1 / -1;
+      }
+      @media (max-width: 640px) {
+        #card-host {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>

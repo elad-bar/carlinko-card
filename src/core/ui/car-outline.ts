@@ -1,27 +1,49 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 
 /**
- * Minimal top-down car outline with named regions for future Climate/TPMS.
- * Structure only — no controls yet.
+ * Top-down car map with named seat/wheel slots.
+ * Prefer a vehicle image (`src`); fall back to a simple SVG outline.
  */
 @customElement("carlinko-car-outline")
 export class CarlinkoCarOutline extends LitElement {
+  /** Optional top-down vehicle image URL (e.g. vehicle_top entity). */
+  @property({ type: String }) public src?: string;
+
   protected render() {
+    const hasImg = Boolean(this.src);
     return html`
-      <div class="wrap">
-        <svg viewBox="0 0 120 200" class="outline" aria-hidden="true">
-          <rect
-            x="25"
-            y="20"
-            width="70"
-            height="160"
-            rx="18"
-            class="body"
-          />
-          <rect x="35" y="35" width="50" height="28" rx="4" class="glass" />
-          <rect x="35" y="140" width="50" height="22" rx="4" class="glass" />
-        </svg>
+      <div class="wrap ${hasImg ? "has-img" : ""}">
+        ${hasImg
+          ? html`<img class="car-img" src=${this.src!} alt="Vehicle top" />`
+          : html`
+              <svg viewBox="0 0 120 200" class="outline" aria-hidden="true">
+                <rect
+                  x="25"
+                  y="20"
+                  width="70"
+                  height="160"
+                  rx="18"
+                  class="body"
+                />
+                <rect
+                  x="35"
+                  y="35"
+                  width="50"
+                  height="28"
+                  rx="4"
+                  class="glass"
+                />
+                <rect
+                  x="35"
+                  y="140"
+                  width="50"
+                  height="22"
+                  rx="4"
+                  class="glass"
+                />
+              </svg>
+            `}
         <div class="region seat-fl"><slot name="seat-fl"></slot></div>
         <div class="region seat-fr"><slot name="seat-fr"></slot></div>
         <div class="region seat-rl"><slot name="seat-rl"></slot></div>
@@ -38,13 +60,22 @@ export class CarlinkoCarOutline extends LitElement {
     :host {
       display: block;
       width: 100%;
-      max-width: 220px;
+      max-width: 280px;
       margin: 0 auto;
     }
     .wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 120 / 200;
+    }
+    .wrap.has-img {
+      aspect-ratio: auto;
+    }
+    .car-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
     }
     .outline {
       width: 100%;
@@ -67,20 +98,20 @@ export class CarlinkoCarOutline extends LitElement {
       pointer-events: auto;
     }
     .seat-fl {
-      left: 8%;
-      top: 28%;
+      left: 10%;
+      top: 30%;
     }
     .seat-fr {
-      right: 8%;
-      top: 28%;
+      right: 10%;
+      top: 30%;
     }
     .seat-rl {
-      left: 8%;
-      top: 55%;
+      left: 10%;
+      top: 52%;
     }
     .seat-rr {
-      right: 8%;
-      top: 55%;
+      right: 10%;
+      top: 52%;
     }
     .wheel-fl {
       left: 0;

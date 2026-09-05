@@ -21,14 +21,14 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | CORE-05 | Core | i18n stubs (en first) | todo | Expand locales later |
 | CARD-01 | Cards | Overview card | done | `custom:carlinko-overview` |
 | CARD-02 | Cards | Charging card | done | `custom:carlinko-charging` |
-| CARD-03 | Cards | Climate card | todo | Setpoint, quick, seats |
+| CARD-03 | Cards | Climate card | done | `custom:carlinko-climate`; purify deferred |
 | CARD-04 | Cards | TPMS card | todo | Per-wheel + status; hide if indirect |
 | CARD-05 | Cards | Windows card | todo | Windows + sunroof |
 | CARD-06 | Cards | Visual editors (basic) | todo | device_id picker exists for Overview; expand later |
 | DEV-01 | Dev | Vite playground + HA WebSocket auth | done | `npm run playground` |
 | DEV-02 | Dev | Thin `hass` shim for cards outside Lovelace | done | `playground/main.ts` |
 | DEV-03 | Dev | Validate Overview against live ha-carlinko | done | Playground connected; Overview shows live vitals/controls |
-| INT-01 | Integration | Confirm climate `current_temperature` | todo | May need ha-carlinko follow-up |
+| INT-01 | Integration | Confirm climate `current_temperature` | done | Absent in ha-carlinko; card hides Current unless attr present |
 | INT-02 | Integration | Document Overview image entity options | done | Defaults to `vehicle_front` |
 | PIPE-01 | Pipeline | `docs/standards/{coding,testing,ci}.md` | done | Card-adapted from ha-carlinko |
 | PIPE-02 | Pipeline | Cursor skills: add-feature, fix-bug, changelog-version | done | No translate skill yet |
@@ -46,7 +46,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 
 1. ~~Phase 1 foundation (DOC-03, PKG, CORE, CARD-01, DEV)~~ **done**
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
-3. ~~CORE-04 + CARD-02 Charging~~ **done** → CARD-03 → CARD-04 → CARD-05 → CARD-06
+3. ~~CORE-04 + CARD-02 Charging~~ **done** → ~~CARD-03 Climate~~ **done** → CARD-04 → CARD-05 → CARD-06
 4. DOC-05 → PKG-03 → REL-01
 5. UX-* when visuals are reviewed
 
@@ -61,6 +61,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Backlog: added PIPE-01…PIPE-07 for ha-carlinko pipeline port (skills, standards, CI, changelog/release). |
 | 2026-09-05 | Pipeline port complete: standards, Cursor skills, ESLint/Prettier/pre-commit, CHANGELOG scripts, CI quality+HACS+release, CONTRIBUTING/SECURITY, committed `dist/` for HACS. |
 | 2026-09-05 | CORE-04 shared UI primitives + CARD-02 Charging card; playground mounts Overview and Charging. |
+| 2026-09-05 | CARD-03 Climate + INT-01: no current_temperature in ha-carlinko; Current row gated on attribute; playground mounts Climate. |
 
 ## How to update
 

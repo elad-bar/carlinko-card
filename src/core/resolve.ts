@@ -14,7 +14,8 @@ function domainsForKey(slotDomain: EntityDomain, key: string): EntityDomain[] {
     key.endsWith("_left") ||
     key.endsWith("_right")
   ) {
-    return [slotDomain, "binary_sensor"];
+    // Seat heat/vent fallbacks may be binary_sensor or switch.
+    return [slotDomain, "switch", "binary_sensor"];
   }
   return [slotDomain];
 }

@@ -160,6 +160,116 @@ export async function pressButton(
   await callEntityService(hass, "button", "press", entityId);
 }
 
+export function getAttrNumber(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+  attr: string,
+): number | undefined {
+  const entity = getState(hass, entityId);
+  if (!entity) {
+    return undefined;
+  }
+  const raw = entity.attributes[attr];
+  if (raw === undefined || raw === null) {
+    return undefined;
+  }
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+export function getClimateTargetTemp(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): number | undefined {
+  return getAttrNumber(hass, entityId, "temperature");
+}
+
+export function getClimateCurrentTemp(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): number | undefined {
+  return getAttrNumber(hass, entityId, "current_temperature");
+}
+
+export function getClimateTempStep(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): number {
+  return getAttrNumber(hass, entityId, "target_temp_step") ?? 1;
+}
+
+export function getClimateMinTemp(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): number {
+  return getAttrNumber(hass, entityId, "min_temp") ?? 16;
+}
+
+export function getClimateMaxTemp(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): number {
+  return getAttrNumber(hass, entityId, "max_temp") ?? 30;
+}
+
+export function isClimateOn(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): boolean {
+  const state = getStateValue(hass, entityId);
+  return (
+    state === "cool" ||
+    state === "heat" ||
+    state === "heat_cool" ||
+    state === "auto" ||
+    state === "fan_only" ||
+    state === "dry" ||
+    state === "on"
+  );
+}
+
+export async function setHvacMode(
+  hass: HomeAssistant,
+  entityId: string,
+  hvacMode: string,
+): Promise<void> {
+  await callEntityService(hass, "climate", "set_hvac_mode", entityId, {
+    hvac_mode: hvacMode,
+  });
+}
+
+export async function setTemperature(
+  hass: HomeAssistant,
+  entityId: string,
+  temperature: number,
+): Promise<void> {
+  await callEntityService(hass, "climate", "set_temperature", entityId, {
+    temperature,
+  });
+}
+
+export async function selectOption(
+  hass: HomeAssistant,
+  entityId: string,
+  option: string,
+): Promise<void> {
+  await callEntityService(hass, "select", "select_option", entityId, {
+    option,
+  });
+}
+
+export function getSelectOptions(
+  hass: HomeAssistant | undefined,
+  entityId: string | undefined,
+): string[] {
+  const entity = getState(hass, entityId);
+  const opts = entity?.attributes.options;
+  if (!Array.isArray(opts)) {
+    return [];
+  }
+  return opts.map(String);
+}
+
 export function fireMoreInfo(node: HTMLElement, entityId: string): void {
   node.dispatchEvent(
     new CustomEvent("hass-more-info", {

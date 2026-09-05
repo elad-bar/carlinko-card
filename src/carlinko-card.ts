@@ -2,12 +2,16 @@ import { CarlinkoOverview } from "./cards/overview";
 import { CarlinkoOverviewEditor } from "./cards/overview-editor";
 import { CarlinkoCharging } from "./cards/charging";
 import { CarlinkoChargingEditor } from "./cards/charging-editor";
+import { CarlinkoClimate } from "./cards/climate";
+import { CarlinkoClimateEditor } from "./cards/climate-editor";
 import { CarlinkoCarOutline } from "./core/ui/car-outline";
 
 void CarlinkoOverview;
 void CarlinkoOverviewEditor;
 void CarlinkoCharging;
 void CarlinkoChargingEditor;
+void CarlinkoClimate;
+void CarlinkoClimateEditor;
 void CarlinkoCarOutline;
 
 window.customCards = window.customCards || [];
@@ -24,6 +28,13 @@ window.customCards.push(
     name: "CarLinko Charging",
     description:
       "Charging status, mode, remaining time, power, and stop charging.",
+    preview: true,
+  },
+  {
+    type: "carlinko-climate",
+    name: "CarLinko Climate",
+    description:
+      "Cabin climate setpoint, on/off, quick cool/heat, and seat heat/vent.",
     preview: true,
   },
 );

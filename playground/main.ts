@@ -9,6 +9,7 @@ import {
 import "../src/carlinko-card";
 import type { CarlinkoOverview } from "../src/cards/overview";
 import type { CarlinkoCharging } from "../src/cards/charging";
+import type { CarlinkoClimate } from "../src/cards/climate";
 import type { HassEntityRegistryEntry, HomeAssistant } from "../src/core/types";
 
 /** Minimal ha-card so cards render outside Lovelace. */
@@ -67,6 +68,7 @@ let connection: Connection | undefined;
 let hass: HomeAssistant | undefined;
 let overviewCard: CarlinkoOverview | undefined;
 let chargingCard: CarlinkoCharging | undefined;
+let climateCard: CarlinkoClimate | undefined;
 let entityRegistry: EntityRegistryRow[] = [];
 
 function setStatus(text: string, kind: "" | "ok" | "err" = "") {
@@ -172,10 +174,11 @@ function mountCards() {
 
   const title = titleInput.value.trim() || undefined;
 
-  if (!overviewCard || !chargingCard) {
+  if (!overviewCard || !chargingCard || !climateCard) {
     overviewCard = document.createElement("carlinko-overview") as CarlinkoOverview;
     chargingCard = document.createElement("carlinko-charging") as CarlinkoCharging;
-    host.replaceChildren(overviewCard, chargingCard);
+    climateCard = document.createElement("carlinko-climate") as CarlinkoClimate;
+    host.replaceChildren(overviewCard, chargingCard, climateCard);
   }
 
   overviewCard.hass = hass;
@@ -190,6 +193,12 @@ function mountCards() {
     title: "Charging",
   });
 
+  climateCard.hass = hass;
+  climateCard.setConfig({
+    device_id: deviceId,
+    title: "Climate",
+  });
+
   setStatus(`Cards mounted for device ${deviceId}`, "ok");
 }
 
@@ -202,6 +211,9 @@ function syncHass() {
   }
   if (chargingCard) {
     chargingCard.hass = hass;
+  }
+  if (climateCard) {
+    climateCard.hass = hass;
   }
 }
 
