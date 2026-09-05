@@ -22,10 +22,8 @@ import {
 } from "../core/hass";
 import {
   CarlinkoVehicleStage,
-  chipStyles,
   hotspotStyles,
   renderHotspotButton,
-  renderStatusChip,
   renderVerticalGauge,
   sharedHostStyles,
   verticalGaugeStyles,
@@ -118,7 +116,6 @@ export class CarlinkoOverview extends LitElement {
     }
 
     const s = this._slots();
-    const moving = isOn(this.hass, s.moving);
     const img = imageEntityUrl(this.hass, s.image);
     const lockState = getStateValue(this.hass, s.lock);
     const locked = lockState === "locked";
@@ -137,6 +134,10 @@ export class CarlinkoOverview extends LitElement {
     const totalRangeText =
       s.total_range && this.hass.states[s.total_range]
         ? formatState(this.hass, s.total_range)
+        : undefined;
+    const speedText =
+      engineOn && s.engine && s.speed && this.hass.states[s.speed]
+        ? formatState(this.hass, s.speed)
         : undefined;
     const evRangeText =
       s.range && this.hass.states[s.range]
@@ -157,7 +158,9 @@ export class CarlinkoOverview extends LitElement {
         ? formatState(this.hass, s.fuel_consumption)
         : undefined;
 
-    const showHeadline = Boolean(odometerText || totalRangeText);
+    const showHeadline = Boolean(
+      odometerText || totalRangeText || speedText,
+    );
 
     return html`
       <ha-card>
@@ -287,6 +290,16 @@ export class CarlinkoOverview extends LitElement {
                           <span class="range-value">${totalRangeText}</span>
                         </button>`
                       : nothing}
+                    ${speedText
+                      ? html`<button
+                          type="button"
+                          class="speed"
+                          @click=${() => fireMoreInfo(this, s.speed!)}
+                        >
+                          <span class="speed-label">Speed</span>
+                          <span class="speed-value">${speedText}</span>
+                        </button>`
+                      : nothing}
                   </div>
                 `
               : nothing}
@@ -308,11 +321,6 @@ export class CarlinkoOverview extends LitElement {
                 tone: "info",
               })}
             </div>
-            ${moving && s.speed && this.hass.states[s.speed]
-              ? html`<div class="chips">
-                  ${renderStatusChip(formatState(this.hass, s.speed))}
-                </div>`
-              : nothing}
           </div>
         </div>
       </ha-card>
@@ -321,7 +329,6 @@ export class CarlinkoOverview extends LitElement {
 
   static styles = [
     sharedHostStyles,
-    chipStyles,
     hotspotStyles,
     verticalGaugeStyles,
     css`
@@ -348,7 +355,8 @@ export class CarlinkoOverview extends LitElement {
         gap: 12px 20px;
       }
       .odo,
-      .range-total {
+      .range-total,
+      .speed {
         border: none;
         background: transparent;
         color: inherit;
@@ -359,20 +367,19 @@ export class CarlinkoOverview extends LitElement {
         min-width: 0;
       }
       .odo-label,
-      .range-label {
+      .range-label,
+      .speed-label {
         display: block;
         color: var(--ck-muted);
         font-size: 0.75rem;
       }
       .odo-value,
-      .range-value {
+      .range-value,
+      .speed-value {
         font-size: 1.35rem;
         font-weight: 700;
         letter-spacing: 0.02em;
         line-height: 1.2;
-      }
-      .headline .chip {
-        align-self: center;
       }
       .gauges {
         display: flex;

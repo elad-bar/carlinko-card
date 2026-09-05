@@ -48,7 +48,7 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 - Fuel range (km) and fuel (%) as a vertical gauge when PHEV; hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).
 - Consumption (and fuel consumption on PHEV) beside the matching gauge.
-- Speed when the vehicle is moving; hide when parked.
+- Speed in the headline with odometer/range when the engine is on; hide when engine is off or missing.
 
 **Controls (quick actions on the vehicle image)**
 

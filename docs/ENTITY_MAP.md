@@ -26,8 +26,8 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 | odometer | `odometer` | sensor | optional | |
 | consumption | `consumption` | sensor | optional | kWh/100km |
 | fuel_consumption | `fuel_consumption` | sensor | optional | PHEV L/100km |
-| speed | `speed` | sensor | optional | Show only when moving |
-| moving | `moving` | binary_sensor | optional | Gates speed display |
+| speed | `speed` | sensor | optional | Headline; show only when engine is on |
+| moving | `moving` | binary_sensor | optional | Resolved but unused in Overview UI today |
 | online | `online` | binary_sensor | optional | Status chip |
 | lock | `lock` | lock | optional | Lock / unlock |
 | engine | `engine` | switch | optional | Capability-gated |
