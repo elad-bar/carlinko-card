@@ -237,6 +237,15 @@ const ICON_ENGINE = html`
   </svg>
 `;
 
+const ICON_FIND = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M9.5 3a6.5 6.5 0 0 1 5.2 10.4l4.45 4.45-1.4 1.4-4.45-4.45A6.5 6.5 0 1 1 9.5 3Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z"
+    />
+  </svg>
+`;
+
 function domainOf(entityId: string): string {
   return entityId.split(".", 1)[0];
 }
@@ -504,6 +513,7 @@ export class CarlinkoCabin extends LitElement {
     return (
       this._entityExists(slots.lock) ||
       this._entityExists(slots.engine) ||
+      this._entityExists(slots.find) ||
       this._entityExists(slots.defog) ||
       (this._entityExists(slots.charge_stop) &&
         this._chargerConnected(slots)) ||
@@ -516,15 +526,19 @@ export class CarlinkoCabin extends LitElement {
   ): TemplateResult | typeof nothing {
     const lockId = slots.lock;
     const engineId = slots.engine;
+    const findId = slots.find;
     const defogId = slots.defog;
     const chargeId = slots.charge_stop;
     const trunkId = slots.trunk;
     const chargerConnected = this._chargerConnected(slots);
     const showCharge =
       this._entityExists(chargeId) && chargerConnected;
+    const showEngine = this._entityExists(engineId);
+    const showFind = this._entityExists(findId);
     if (
       !lockId &&
-      !engineId &&
+      !showEngine &&
+      !showFind &&
       !defogId &&
       !showCharge &&
       !trunkId
@@ -540,22 +554,33 @@ export class CarlinkoCabin extends LitElement {
     const trunkOpen = getStateValue(this.hass, trunkId) === "open";
 
     return html`
-      ${this._entityExists(engineId)
+      ${showEngine || showFind
         ? html`<div slot="engine" class="map-actions">
-            ${renderActionButton({
-              label: engineOn
-                ? t(this.hass, "action.engine_off")
-                : t(this.hass, "action.engine_on"),
-              icon: ICON_ENGINE,
-              disabled: this._busy,
-              variant: engineOn ? "ok" : "",
-              onClick: () =>
-                this._run(() =>
-                  engineOn
-                    ? turnOff(this.hass!, engineId!)
-                    : turnOn(this.hass!, engineId!),
-                ),
-            })}
+            ${showEngine
+              ? renderActionButton({
+                  label: engineOn
+                    ? t(this.hass, "action.engine_off")
+                    : t(this.hass, "action.engine_on"),
+                  icon: ICON_ENGINE,
+                  disabled: this._busy,
+                  variant: engineOn ? "ok" : "danger",
+                  onClick: () =>
+                    this._run(() =>
+                      engineOn
+                        ? turnOff(this.hass!, engineId!)
+                        : turnOn(this.hass!, engineId!),
+                    ),
+                })
+              : nothing}
+            ${showFind
+              ? renderActionButton({
+                  label: entityName(this.hass, "button", "find"),
+                  icon: ICON_FIND,
+                  disabled: this._busy,
+                  onClick: () =>
+                    this._run(() => pressButton(this.hass!, findId!)),
+                })
+              : nothing}
           </div>`
         : nothing}
       ${this._entityExists(lockId)
@@ -566,7 +591,7 @@ export class CarlinkoCabin extends LitElement {
                 : t(this.hass, "action.lock_doors"),
               icon: locked ? ICON_LOCK : ICON_UNLOCK,
               disabled: this._busy,
-              variant: locked ? "" : "danger",
+              variant: locked ? "ok" : "danger",
               onClick: () =>
                 this._run(() =>
                   locked
@@ -584,7 +609,7 @@ export class CarlinkoCabin extends LitElement {
                 : t(this.hass, "action.defog_on"),
               icon: ICON_DEFOG,
               disabled: this._busy || defogReadOnly,
-              variant: defogOn ? "ok" : "",
+              variant: defogOn ? "danger" : "",
               onClick: () =>
                 this._run(() => toggleSwitch(this.hass!, defogId!)),
             })}
@@ -610,7 +635,7 @@ export class CarlinkoCabin extends LitElement {
                 : t(this.hass, "action.open_trunk"),
               icon: ICON_TRUNK,
               disabled: this._busy,
-              variant: trunkOpen ? "ok" : "",
+              variant: trunkOpen ? "danger" : "ok",
               onClick: () =>
                 this._run(() =>
                   trunkOpen
@@ -635,13 +660,14 @@ export class CarlinkoCabin extends LitElement {
     }
     const windowsOpen = hasCover && isCoverOpen(this.hass, coverId);
     return html`
-      <div slot="windows" class="map-actions">
+      <div slot="windows" class="map-actions map-actions-stack">
         ${hasCover
           ? windowsOpen
             ? renderActionButton({
                 label: t(this.hass, "action.close_windows"),
                 icon: ICON_WINDOW_CLOSE,
                 disabled: this._busy,
+                variant: "danger",
                 onClick: () =>
                   this._run(() => closeCover(this.hass!, coverId!)),
               })
@@ -649,6 +675,7 @@ export class CarlinkoCabin extends LitElement {
                 label: t(this.hass, "action.open_windows"),
                 icon: ICON_WINDOW_OPEN,
                 disabled: this._busy,
+                variant: "ok",
                 onClick: () =>
                   this._run(() => openCover(this.hass!, coverId!)),
               })
@@ -685,6 +712,7 @@ export class CarlinkoCabin extends LitElement {
                 label: t(this.hass, "action.close_sunroof"),
                 icon: ICON_SUNROOF_CLOSE,
                 disabled: this._busy,
+                variant: "danger",
                 onClick: () =>
                   this._run(() => closeCover(this.hass!, coverId!)),
               })
@@ -692,6 +720,7 @@ export class CarlinkoCabin extends LitElement {
                 label: t(this.hass, "action.open_sunroof"),
                 icon: ICON_SUNROOF_OPEN,
                 disabled: this._busy,
+                variant: "ok",
                 onClick: () =>
                   this._run(() => openCover(this.hass!, coverId!)),
               })
@@ -778,6 +807,8 @@ export class CarlinkoCabin extends LitElement {
                             label: t(this.hass, "climate.increase_temp"),
                             icon: ICON_PLUS,
                             disabled: this._busy || target === undefined,
+                            variant: "heat",
+                            active: true,
                             onClick: () => this._nudgeTemp(1),
                           })}
                           <span
@@ -791,6 +822,8 @@ export class CarlinkoCabin extends LitElement {
                             label: t(this.hass, "climate.decrease_temp"),
                             icon: ICON_MINUS,
                             disabled: this._busy || target === undefined,
+                            variant: "cool",
+                            active: true,
                             onClick: () => this._nudgeTemp(-1),
                           })}
                         `
@@ -802,6 +835,8 @@ export class CarlinkoCabin extends LitElement {
                           label: entityName(this.hass, "button", "quick_cool"),
                           icon: ICON_SNOWFLAKE,
                           disabled: this._busy,
+                          variant: "cool",
+                          active: isOn(this.hass, s.quick_cool),
                           onClick: () =>
                             this._run(() =>
                               pressButton(this.hass!, s.quick_cool!),
@@ -813,6 +848,8 @@ export class CarlinkoCabin extends LitElement {
                           label: entityName(this.hass, "button", "quick_heat"),
                           icon: ICON_FIRE,
                           disabled: this._busy,
+                          variant: "heat",
+                          active: isOn(this.hass, s.quick_heat),
                           onClick: () =>
                             this._run(() =>
                               pressButton(this.hass!, s.quick_heat!),
@@ -986,6 +1023,11 @@ export class CarlinkoCabin extends LitElement {
         flex-wrap: wrap;
         justify-content: center;
         gap: 4px;
+      }
+      .map-actions-stack {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
       }
       .map-actions .action.icon {
         width: 2.35rem;

@@ -151,17 +151,18 @@ export class CarlinkoCarOutline extends LitElement {
       right: 0;
       top: 78%;
     }
+    /* Stack under lock, same left edge — vertical window then vent */
     .windows {
-      left: 1%;
-      top: 54%;
-      transform: translateX(-50%);
+      left: 3%;
+      top: 60%;
+      transform: translate(-50%, -50%);
     }
     .sunroof {
       left: 50%;
       top: 54%;
       transform: translateX(-50%);
     }
-    /* Body / access: trunk rear, charge rear-left, lock mid-side, defog windshield, engine hood */
+    /* Body / access: trunk rear, charge rear-left, lock mid-side, defog windshield, engine/find hood */
     .trunk {
       left: 50%;
       top: 93%;
@@ -173,8 +174,8 @@ export class CarlinkoCarOutline extends LitElement {
       transform: translate(-50%, -50%);
     }
     .lock {
-      left: 4%;
-      top: 48%;
+      left: 3%;
+      top: 45%;
       transform: translate(-50%, -50%);
     }
     .defog {

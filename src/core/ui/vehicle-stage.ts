@@ -43,6 +43,10 @@ export class CarlinkoVehicleStage extends LitElement {
         var(--ck-bg, var(--card-background-color, #fff))
       );
     }
+    /* Leave room above the vehicle so odometer / range / speed do not sit on the roof */
+    .wrap.has-img {
+      padding-top: 4.5rem;
+    }
     .car-img {
       display: block;
       width: 100%;
@@ -65,32 +69,37 @@ export class CarlinkoVehicleStage extends LitElement {
       z-index: 1;
       pointer-events: auto;
     }
-    /* Mileage text: top-left (no centered transform) */
+    /* Mileage text: top-left in the padding band (no centered transform) */
     .headline {
       left: 3%;
-      top: 6%;
+      top: 0.35rem;
       transform: none;
       max-width: calc(100% - 6%);
     }
-    /* Status row: online, HV, tyres — bottom-right */
+    /* Spread status hotspots so they do not overlap on narrow cards */
     .online {
-      left: 73%;
-      top: 88%;
+      left: 94%;
+      top: 1.4rem;
+      transform: translate(-50%, 0);
     }
     .hv {
-      left: 84%;
+      left: 8%;
       top: 88%;
     }
     .tyres {
-      left: 95%;
+      left: 94%;
       top: 88%;
     }
     @container ck-stage (max-width: 360px) {
+      .wrap.has-img {
+        padding-top: 4rem;
+      }
       .online {
-        left: 68%;
+        left: 92%;
+        top: 1.15rem;
       }
       .hv {
-        left: 80%;
+        left: 10%;
       }
       .tyres {
         left: 92%;

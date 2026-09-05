@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-09-05
+
+### Added
+
+- Cabin: Find car (`find` / Search) button next to engine on/off on the hood
+
+### Fixed
+
+- Playground Vite config defines `__CARD_VERSION__` so the card entry module loads and HA connect can run (was stuck on "Not connected")
+- Overview: push the hero vehicle image below odometer / total range / speed so mileage text is not on the roof
+- Overview: spread status hotspots — online top-right, HV bottom-left, tyres bottom-right — so they no longer overlap on mobile
+- Cabin: stack window open/close above vent on the lock’s left edge (no longer cut off by the card edge)
+- Cabin: lock button is green when locked and red when unlocked
+- Cabin: engine button is green when running and red when off
+- Cabin: windows, trunk, and sunroof open/close buttons are green when closed and red when open
+- Cabin: climate +/− use heat/cool colors; quick cool/heat keep a tinted border and tint the icon when on
+- Cabin: defog button is red (border + icon) when on; neutral when off
+- Charging: replace always-green battery glyph with an electricity indicator that is green only while charging (SoC ring unchanged)
+
 ## [0.1.4] - 2026-09-05
 
 ### Fixed

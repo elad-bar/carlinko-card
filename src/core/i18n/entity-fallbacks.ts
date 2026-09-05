@@ -33,6 +33,7 @@ export const ENTITY_NAME_FALLBACKS: Readonly<
     sunroof_tilt: "Sunroof tilt",
     quick_cool: "Quick cool",
     quick_heat: "Quick heat",
+    find: "Find car",
   },
   switch: {
     engine: "Engine",

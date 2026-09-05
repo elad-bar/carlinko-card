@@ -85,6 +85,7 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
   { slot: "sunroof_tilt", key: "sunroof_tilt", domain: "button" },
   { slot: "lock", key: "lock", domain: "lock" },
   { slot: "engine", key: "engine", domain: "switch" },
+  { slot: "find", key: "find", domain: "button" },
   {
     slot: "defog",
     key: "defrost_cmd",

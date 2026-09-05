@@ -74,6 +74,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | Cabin map spacing (front TPMS vs seats, rear on wheels) + windows/sunroof icon overlays on Cabin. |
 | 2026-09-05 | Tyre OK hotspot on Overview; removed Cabin tyre chips; Windows picker dropped; playground Overview\|Cabin then Charging. |
 | 2026-09-05 | Body/access controls (engine, lock, trunk, defog, charge stop) moved from Overview to Cabin map anchors. |
+| 2026-09-05 | Cabin: Find car (`find` / Search) button next to engine on the hood. |
 | 2026-09-05 | CORE-05: card i18n stubs (en) + reuse ha-carlinko entity name/state via `hass.localize` (no device prefix). |
 | 2026-09-05 | UX-03 theme tokens (HA CSS vars) + UX-02 container-query density for Overview/Cabin overlays. |
 | 2026-09-05 | REL-01 done: repo public with description/topics, `v0.1.0` GitHub release, HACS CI green; install via custom Dashboard repo. REL-02 added for optional `hacs/default` PR. |

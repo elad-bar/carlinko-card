@@ -131,12 +131,36 @@ export const actionStyles = css`
     cursor: not-allowed;
   }
   .action.ok {
-    border-color: var(--ck-accent);
-    color: var(--ck-accent);
+    border-color: var(--ck-ok);
+    color: var(--ck-ok);
   }
   .action.danger {
     border-color: var(--ck-danger);
     color: var(--ck-danger);
+  }
+  .action.ok:hover:not(:disabled) {
+    border-color: var(--ck-ok);
+  }
+  .action.danger:hover:not(:disabled) {
+    border-color: var(--ck-danger);
+  }
+  .action.cool {
+    border-color: var(--ck-seat-vent);
+  }
+  .action.cool.active {
+    color: var(--ck-seat-vent);
+  }
+  .action.heat {
+    border-color: var(--ck-seat-heat);
+  }
+  .action.heat.active {
+    color: var(--ck-seat-heat);
+  }
+  .action.cool:hover:not(:disabled) {
+    border-color: var(--ck-seat-vent);
+  }
+  .action.heat:hover:not(:disabled) {
+    border-color: var(--ck-seat-heat);
   }
 `;
 export const progressStyles = css`
@@ -365,46 +389,29 @@ export const socRingStyles = css`
 `;
 
 export const chargeBatteryStyles = css`
-  .charge-batt {
+  .charge-power {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    justify-content: center;
     flex-shrink: 0;
-    color: var(--ck-ok);
-  }
-  .charge-batt-body {
-    position: relative;
-    width: 56px;
-    height: 28px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     border: 2.5px solid currentColor;
-    border-radius: 4px;
-    overflow: hidden;
-    background: color-mix(in srgb, var(--ck-bg) 90%, transparent);
+    color: var(--ck-muted);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
-  .charge-batt-fill {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: var(--ck-ok);
-    opacity: 0.9;
-    transition: width 0.25s ease;
+  .charge-power.is-charging {
+    color: var(--ck-ok);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--ck-ok) 40%, transparent);
   }
-  .charge-batt-bolt {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 14px;
-    height: 14px;
-    color: var(--ck-on-accent);
-    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.35));
-    z-index: 1;
-  }
-  .charge-batt-cap {
-    width: 4px;
-    height: 12px;
-    border-radius: 0 2px 2px 0;
-    background: currentColor;
+  .charge-power-bolt {
+    width: 22px;
+    height: 22px;
+    display: block;
   }
 `;
 

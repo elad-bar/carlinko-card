@@ -36,15 +36,15 @@ Three cards. Users compose them on a Lovelace dashboard.
 
 Deprecated aliases (still load): `custom:carlinko-climate`, `custom:carlinko-tpms`, `custom:carlinko-windows` → Cabin UI.
 
-Optional later (not in the initial set): location/map, find-car, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Cabin.
+Optional later (not in the initial set): location/map, service/firmware/notices, air purify, gear — unless they fit naturally into Overview or Cabin.
 
 ### Overview
 
 **Display**
 
 - Car image from an additional entity the user configures (e.g. `image.*` / `camera.*`) — not part of the core CarLinko catalog today.
-- Odometer, total range, and speed (when engine on) overlaid top-left on the hero image.
-- State-colored status hotspots bottom-right on the hero (`online`, `hv_state`, `tyres_ok` / `tyre_status`); hide when the entity is missing.
+- Odometer, total range, and speed (when engine on) in a band above the hero image (image sits lower so text is not on the roof).
+- State-colored status hotspots on the hero: `online` top-right, `hv_state` bottom-left, `tyres_ok` / `tyre_status` bottom-right; hide when the entity is missing.
 - EV range (km) and battery (%) as a horizontal level bar under the hero (SOC left).
 - Fuel range (km) and fuel (%) as a horizontal level bar when PHEV (fuel right); hide for BEV.
 - Optional blended/total range for PHEV (promoted with odometer).
@@ -54,11 +54,11 @@ Optional later (not in the initial set): location/map, find-car, service/firmwar
 
 - Online / HV / tyre status hotspots open more-info (not remote commands)
 
-Body/access actions (engine, lock, trunk, defog, charge stop) live on the Cabin map.
+Body/access actions (engine, find, lock, trunk, defog, charge stop) live on the Cabin map.
 
 ### Charging
 
-- SoC donut + battery fill (from `battery`), plugged/charging status, remaining time, charge power
+- SoC donut (from `battery`) plus electricity indicator that lights green only while charging; plugged/charging status, remaining time, charge power
 - Charge state and mode as secondary metrics
 - Stop charging action
 - `charge_stop` may also appear on Cabin as a shortcut; Charging remains the detail card
@@ -71,8 +71,8 @@ CarLinko mobile-app style layout on one top-down map:
 - Quick cool / quick heat buttons
 - Seat heat and vent controls per position (driver, passenger, rear L/R), capability-gated
 - Tyre pressure and temperature at each wheel (click → HA more-info)
-- Windows open/close/vent and sunroof open/close/tilt as icon buttons on the map (windshield / sunroof)
-- Lock / unlock, engine on/off, trunk open/close, defog, and charge-stop buttons on body anchors (door side / hood / rear / windshield / charge port)
+- Windows open/close/vent stacked under lock (same left edge); sunroof open/close/tilt on the glass roof
+- Lock / unlock (green when locked, red when unlocked), engine on/off, find car (Search), trunk open/close, defog, and charge-stop buttons on body anchors (door side / hood / rear / windshield / charge port)
 
 ## Entity mapping principles
 
