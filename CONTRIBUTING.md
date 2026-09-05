@@ -12,12 +12,16 @@ Thanks for looking. This repo ships **Lovelace cards** for vehicles managed by
 
 ## Local setup
 
+Short path:
+
 ```bash
 npm ci
 cp playground/.env.example playground/.env
 # set VITE_HA_URL and VITE_HA_TOKEN
 npm run playground
 ```
+
+Full guide (playground **and** deploy into HA `www/`): [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
 
 Install hooks once (optional but recommended):
 

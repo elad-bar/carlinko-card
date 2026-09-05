@@ -7,6 +7,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
+    "deploy": "node scripts/deploy-www.mjs",
+    "deploy:watch": "node scripts/deploy-www.mjs --watch",
     "playground": "vite --config playground/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src playground --max-warnings=0",

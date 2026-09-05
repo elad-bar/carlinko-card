@@ -51,7 +51,9 @@ npm run playground
 
 ## Development
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/standards/](docs/standards/). CI runs lint, typecheck, build, HACS plugin validation, and publishes GitHub releases from `CHANGELOG.md` on `main`.
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) (playground + deploy to HA `www/`),
+[CONTRIBUTING.md](CONTRIBUTING.md), and [docs/standards/](docs/standards/).
+CI runs lint, typecheck, build, HACS plugin validation, and publishes GitHub releases from `CHANGELOG.md` on `main`.
 
 Backlog: [docs/TODO.md](docs/TODO.md).
 

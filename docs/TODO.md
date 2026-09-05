@@ -10,10 +10,10 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | DOC-02 | Docs | This backlog (`TODO.md`) | done | Tracking document |
 | DOC-03 | Docs | Entity slot → CarLinko `key` matrix | done | See `ENTITY_MAP.md` |
 | DOC-04 | Docs | Install / HACS README | done | README HACS + manual install |
-| DOC-05 | Docs | Local development guide | todo | CONTRIBUTING covers basics; expand later |
+| DOC-05 | Docs | Local development guide | done | `docs/DEVELOPMENT.md` |
 | PKG-01 | Packaging | Scaffold TS/Lit card package (Vite/Rollup) | done | Vite + Lit 3 |
 | PKG-02 | Packaging | `hacs.json` (Dashboard type) + license | done | |
-| PKG-03 | Packaging | Watch/deploy script to HA `www/` | todo | Fidelity testing path |
+| PKG-03 | Packaging | Watch/deploy script to HA `www/` | done | `npm run deploy` / `deploy:watch` + `CARLINKO_WWW` |
 | CORE-01 | Core | Entity slot map module | done | `src/core/slots.ts` |
 | CORE-02 | Core | Entity resolver (`device_id` + unique_id) | done | `src/core/resolve.ts` |
 | CORE-03 | Core | Hass helpers (state, services, more-info) | done | `src/core/hass.ts` |
@@ -47,7 +47,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 1. ~~Phase 1 foundation (DOC-03, PKG, CORE, CARD-01, DEV)~~ **done**
 2. ~~Pipeline (PIPE-01…PIPE-07)~~ **done**
 3. ~~CORE-04 + CARD-02…CARD-05~~ **done** → ~~CARD-06 editors~~ **done**
-4. DOC-05 → PKG-03 → REL-01
+4. ~~DOC-05 + PKG-03~~ **done** → REL-01
 5. UX-* when visuals are reviewed
 
 ## Progress log
@@ -65,6 +65,7 @@ Living backlog for CarLinko Cards. Update status as work progresses.
 | 2026-09-05 | CARD-04 TPMS: per-wheel pressure/temp on vehicle_top; indirect status-only; playground mounts TPMS. |
 | 2026-09-05 | CARD-05 Windows: open/close/vent + sunroof open/close/tilt; playground pairs TPMS|Windows. |
 | 2026-09-05 | CARD-06: shared Lovelace device editor; Climate/TPMS top image override in UI. |
+| 2026-09-05 | DOC-05 + PKG-03: DEVELOPMENT.md; `deploy` / `deploy:watch` via `CARLINKO_WWW`. |
 
 ## How to update
 

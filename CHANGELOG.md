@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Card config uses required `device_id` (CarLinko vehicle device) instead of entity_prefix
 - Climate seat map uses `vehicle_top` image when available (SVG outline fallback)
 - Shared Lovelace device editor (`CarlinkoDeviceEditor`); Climate/TPMS expose top image override
+- Local development guide (`docs/DEVELOPMENT.md`)
+- `npm run deploy` / `deploy:watch` copy bundle to `CARLINKO_WWW` for HA fidelity testing
 
 ### Notes
 
