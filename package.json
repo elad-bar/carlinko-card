@@ -1,6 +1,6 @@
 {
   "name": "carlinko-card",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Home Assistant Lovelace cards for CarLinko vehicles (ha-carlinko)",
   "type": "module",
   "main": "dist/carlinko-card.js",

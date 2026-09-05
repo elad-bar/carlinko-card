@@ -9,11 +9,19 @@ export interface HassEntity {
 
 export interface HassEntityRegistryEntry {
   entity_id: string;
+  /** Full entity registry only (not on HA display registry). */
   unique_id?: string;
+  /**
+   * EntityRegistryDisplayEntry field — ha-carlinko sets this to EntitySpec.key.
+   * Primary match key on real Lovelace (unique_id is not exposed).
+   */
+  translation_key?: string;
   platform?: string;
   device_id?: string | null;
   disabled_by?: string | null;
   hidden_by?: string | null;
+  /** Display registry uses boolean hidden instead of hidden_by. */
+  hidden?: boolean;
 }
 
 export interface HomeAssistant {

@@ -5,7 +5,7 @@ Maps UI slots to [ha-carlinko](https://github.com/elad-bar/ha-carlinko/) `Entity
 **Resolution order** (see `src/core/resolve.ts`):
 
 1. `config.entities[slot]` override
-2. Entities on `config.device_id` whose `unique_id` matches `carlinko_{vehicle_id}_{key}`
+2. Entities on `config.device_id` matching `translation_key` / `unique_id` / object_id suffix to the EntitySpec key (`hass.entities` display registry has `translation_key`, not `unique_id`)
 3. Missing → hide slot
 
 `device_id` is the Home Assistant device id for the CarLinko vehicle device (one device holds all entities for that car).

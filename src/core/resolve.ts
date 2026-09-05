@@ -1,11 +1,36 @@
-import type { CardConfigBase, EntityDomain, HomeAssistant, SlotDef } from "./types";
+import type {
+  CardConfigBase,
+  EntityDomain,
+  HassEntityRegistryEntry,
+  HomeAssistant,
+  SlotDef,
+} from "./types";
 
-function uniqueIdMatchesKey(uniqueId: string, key: string): boolean {
-  // ha-carlinko: carlinko_{vehicle_id}_{key}
-  if (uniqueId === key || uniqueId.endsWith(`_${key}`)) {
+const CARLINKO_PLATFORM = "carlinko";
+
+/** Match ha-carlinko EntitySpec.key against registry display / full entry. */
+function entryMatchesKey(
+  entry: HassEntityRegistryEntry,
+  key: string,
+): boolean {
+  // Real HA: hass.entities is EntityRegistryDisplayEntry — has translation_key,
+  // not unique_id. ha-carlinko sets translation_key = EntitySpec.key.
+  if (entry.translation_key === key) {
     return true;
   }
-  return uniqueId.startsWith("carlinko_") && uniqueId.endsWith(`_${key}`);
+  // Full registry / playground: unique_id = carlinko_{vehicle_id}_{key}
+  const uniqueId = entry.unique_id;
+  if (uniqueId) {
+    if (uniqueId === key || uniqueId.endsWith(`_${key}`)) {
+      return true;
+    }
+    if (uniqueId.startsWith("carlinko_") && uniqueId.endsWith(`_${key}`)) {
+      return true;
+    }
+  }
+  // Last resort: object_id suffix (renamed entities may keep _key).
+  const objectId = entry.entity_id.split(".", 2)[1] ?? "";
+  return objectId === key || objectId.endsWith(`_${key}`);
 }
 
 function domainsForKey(slotDomain: EntityDomain, key: string): EntityDomain[] {
@@ -24,6 +49,17 @@ function exists(hass: HomeAssistant, entityId: string | undefined): boolean {
   return Boolean(entityId && hass.states[entityId]);
 }
 
+function isExcluded(entry: HassEntityRegistryEntry): boolean {
+  if (entry.disabled_by || entry.hidden_by) {
+    return true;
+  }
+  // Display registry uses boolean `hidden` instead of `hidden_by`.
+  if (entry.hidden) {
+    return true;
+  }
+  return false;
+}
+
 function findOnDevice(
   hass: HomeAssistant,
   deviceId: string,
@@ -35,34 +71,41 @@ function findOnDevice(
     return undefined;
   }
 
-  const matches: string[] = [];
+  const matches: HassEntityRegistryEntry[] = [];
 
   for (const entry of Object.values(entities)) {
-    if (!entry?.entity_id || !entry.unique_id) {
+    if (!entry?.entity_id) {
       continue;
     }
     if (entry.device_id !== deviceId) {
       continue;
     }
-    if (entry.disabled_by || entry.hidden_by) {
+    if (isExcluded(entry)) {
       continue;
     }
     const domain = entry.entity_id.split(".", 1)[0] as EntityDomain;
     if (!domains.includes(domain)) {
       continue;
     }
-    if (!uniqueIdMatchesKey(entry.unique_id, key)) {
+    if (!entryMatchesKey(entry, key)) {
       continue;
     }
-    matches.push(entry.entity_id);
+    matches.push(entry);
   }
 
   if (matches.length === 0) {
     return undefined;
   }
 
-  const withState = matches.find((id) => exists(hass, id));
-  return withState ?? matches[0];
+  // Prefer carlinko platform when multiple domains/keys collide.
+  const ranked = [...matches].sort((a, b) => {
+    const ap = a.platform === CARLINKO_PLATFORM ? 0 : 1;
+    const bp = b.platform === CARLINKO_PLATFORM ? 0 : 1;
+    return ap - bp;
+  });
+
+  const withState = ranked.find((e) => exists(hass, e.entity_id));
+  return (withState ?? ranked[0]).entity_id;
 }
 
 /**

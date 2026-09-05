@@ -24,7 +24,7 @@ Keep platforms thin: cards call `resolve` + `hass` helpers; do not duplicate ent
 
 - Cards bind to a Home Assistant **`device_id`** (CarLinko vehicle device).
 - Slots map to ha-carlinko `EntitySpec.key` values — see [ENTITY_MAP.md](../ENTITY_MAP.md).
-- Resolution order: slot override → entities on `device_id` with matching `unique_id` → hide if missing.
+- Resolution order: slot override → entities on `device_id` matching `translation_key` / `unique_id` / object_id → hide if missing.
 - When adding or renaming slots, update `ENTITY_MAP.md` and `src/core/slots.ts` together.
 
 ## Secrets and privacy
