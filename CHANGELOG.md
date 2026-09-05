@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Overview card: state-colored hotspots on the vehicle image for quick actions; vertical EV/fuel gauges and promoted odometer/total range (text action row removed)
 - Overview hotspot anchors on hood / door / windshield / hatch; odometer and total range side-by-side with HV; consumption beside SOC/fuel gauges
 - Overview speed in the headline (next to odometer/range), shown when engine is on instead of when moving
+- Climate card: icon toolbar — left AC / + / setpoint / −, right quick cool / quick heat
 
 ### Notes
 

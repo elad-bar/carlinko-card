@@ -95,6 +95,20 @@ export const actionStyles = css`
     font-size: 0.85rem;
     cursor: pointer;
   }
+  .action.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    padding: 0;
+  }
+  .action.icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+  }
   .action:hover:not(:disabled) {
     border-color: var(--ck-accent);
   }
@@ -111,7 +125,6 @@ export const actionStyles = css`
     color: var(--ck-danger);
   }
 `;
-
 export const progressStyles = css`
   .bar-wrap {
     height: 6px;

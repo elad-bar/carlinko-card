@@ -44,6 +44,45 @@ const SEAT_ZONES: SeatZone[] = [
   { slot: "seat-rr", heat: "seat_heat_rr", vent: "seat_vent_rr" },
 ];
 
+const ICON_POWER = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M13 3h-2v10h2V3Zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12a7 7 0 1 1-14 0c0-2.12.95-4.03 2.47-5.32L6.05 5.17A8.96 8.96 0 0 0 3 12a9 9 0 1 0 18 0c0-2.74-1.22-5.2-3.17-6.83Z"
+    />
+  </svg>
+`;
+
+const ICON_PLUS = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z" />
+  </svg>
+`;
+
+const ICON_MINUS = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="currentColor" d="M5 11h14v2H5v-2Z" />
+  </svg>
+`;
+
+const ICON_SNOWFLAKE = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M12 2v3.5l1.5-1.5 1 1L12 8l-2.5-2.5 1-1L12 5.5V2Zm0 20v-3.5l-1.5 1.5-1-1L12 16l2.5 2.5-1 1L12 18.5V22Zm10-10h-3.5l1.5 1.5-1 1L16 12l2.5-2.5 1 1L18.5 12H22ZM2 12h3.5L4 10.5l1-1L8 12l-2.5 2.5-1-1L5.5 12H2Zm14.95-6.36-1.41 1.41.71.71L14.83 9.5l-1.41-1.41.71-.71 1.41 1.41ZM9.17 14.5l1.41 1.41-.71.71-1.41-1.41.71-.71ZM9.17 9.5l.71.71-1.41 1.41-.71-.71L9.17 9.5Zm5.66 5.66.71.71-1.41 1.41-.71-.71 1.41-1.41Z"
+    />
+  </svg>
+`;
+
+const ICON_FIRE = html`
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      fill="currentColor"
+      d="M17.66 11.2c.03 1.6-1.02 2.96-2.28 4.05C15.31 16.1 14 17.45 13.15 19c-.55.9-.98 1.93-.85 3h.85c.22-1.19.78-2.2 1.4-3.08.68-.96 1.43-1.86 2.07-2.85.89-1.38 1.53-2.9 1.34-4.52-.11-.94-.5-1.86-1.1-2.62.55.9.9 1.97.8 3.07ZM12 2S9 7 9 11c0 2.4 1.34 4.37 3 5.6 1.66-1.23 3-3.2 3-5.6 0-4-3-9-3-9Zm0 12.5c-.83-.9-1.5-2.1-1.5-3.5 0-1.8.9-4.1 1.5-5.7.6 1.6 1.5 3.9 1.5 5.7 0 1.4-.67 2.6-1.5 3.5Z"
+    />
+  </svg>
+`;
+
 function domainOf(entityId: string): string {
   return entityId.split(".", 1)[0];
 }
@@ -249,76 +288,70 @@ export class CarlinkoClimate extends LitElement {
         <div class="body-pad">
           ${climateEntity || s.quick_cool || s.quick_heat
             ? html`
-                <div class="actions-top">
-                  ${climateEntity
-                    ? renderActionButton({
-                        label: climateOn ? "Climate off" : "Climate on",
-                        disabled: this._busy,
-                        variant: climateOn ? "ok" : "",
-                        onClick: () => this._toggleClimate(),
-                      })
-                    : nothing}
-                  ${s.quick_cool && this.hass.states[s.quick_cool]
-                    ? renderActionButton({
-                        label: "Quick cool",
-                        disabled: this._busy,
-                        onClick: () =>
-                          this._run(() =>
-                            pressButton(this.hass!, s.quick_cool!),
-                          ),
-                      })
-                    : nothing}
-                  ${s.quick_heat && this.hass.states[s.quick_heat]
-                    ? renderActionButton({
-                        label: "Quick heat",
-                        disabled: this._busy,
-                        onClick: () =>
-                          this._run(() =>
-                            pressButton(this.hass!, s.quick_heat!),
-                          ),
-                      })
-                    : nothing}
+                <div class="controls-row">
+                  <div class="controls-left">
+                    ${climateEntity
+                      ? html`
+                          ${renderActionButton({
+                            label: climateOn ? "Climate off" : "Climate on",
+                            icon: ICON_POWER,
+                            disabled: this._busy,
+                            variant: climateOn ? "ok" : "",
+                            onClick: () => this._toggleClimate(),
+                          })}
+                          ${renderActionButton({
+                            label: "Increase temperature",
+                            icon: ICON_PLUS,
+                            disabled: this._busy || target === undefined,
+                            onClick: () => this._nudgeTemp(1),
+                          })}
+                          <span class="setpoint-value" title="Setpoint"
+                            >${target !== undefined
+                              ? `${target}${unit}`
+                              : "—"}</span
+                          >
+                          ${renderActionButton({
+                            label: "Decrease temperature",
+                            icon: ICON_MINUS,
+                            disabled: this._busy || target === undefined,
+                            onClick: () => this._nudgeTemp(-1),
+                          })}
+                        `
+                      : nothing}
+                  </div>
+                  <div class="controls-right">
+                    ${s.quick_cool && this.hass.states[s.quick_cool]
+                      ? renderActionButton({
+                          label: "Quick cool",
+                          icon: ICON_SNOWFLAKE,
+                          disabled: this._busy,
+                          onClick: () =>
+                            this._run(() =>
+                              pressButton(this.hass!, s.quick_cool!),
+                            ),
+                        })
+                      : nothing}
+                    ${s.quick_heat && this.hass.states[s.quick_heat]
+                      ? renderActionButton({
+                          label: "Quick heat",
+                          icon: ICON_FIRE,
+                          disabled: this._busy,
+                          onClick: () =>
+                            this._run(() =>
+                              pressButton(this.hass!, s.quick_heat!),
+                            ),
+                        })
+                      : nothing}
+                  </div>
                 </div>
               `
             : nothing}
-          ${climateEntity
+          ${climateEntity && current !== undefined
             ? html`
-                <div class="setpoint-row">
-                  <div class="setpoint">
-                    <span class="setpoint-label">Setpoint</span>
-                    <span class="setpoint-value"
-                      >${target !== undefined
-                        ? `${target}${unit}`
-                        : "—"}</span
-                    >
-                    <div class="nudge">
-                      <button
-                        type="button"
-                        class="action"
-                        ?disabled=${this._busy || target === undefined}
-                        @click=${() => this._nudgeTemp(-1)}
-                      >
-                        −
-                      </button>
-                      <button
-                        type="button"
-                        class="action"
-                        ?disabled=${this._busy || target === undefined}
-                        @click=${() => this._nudgeTemp(1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+                <div class="current-row">
+                  <span class="metric-label">Current</span>
+                  <span class="metric-value">${current}${unit}</span>
                 </div>
-                ${current !== undefined
-                  ? html`
-                      <div class="current-row">
-                        <span class="metric-label">Current</span>
-                        <span class="metric-value">${current}${unit}</span>
-                      </div>
-                    `
-                  : nothing}
               `
             : nothing}
           ${hasSeats
@@ -339,41 +372,26 @@ export class CarlinkoClimate extends LitElement {
     chipStyles,
     actionStyles,
     css`
-      .setpoint-row {
+      .controls-row {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 12px;
-      }
-      .actions-top {
-        display: flex;
-        flex-wrap: wrap;
+        justify-content: space-between;
         gap: 8px;
       }
-      .setpoint {
+      .controls-left,
+      .controls-right {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 8px;
-      }
-      .setpoint-label {
-        color: var(--ck-muted);
-        font-size: 0.85rem;
       }
       .setpoint-value {
         font-weight: 600;
         font-size: 1.15rem;
-        min-width: 3.5rem;
-      }
-      .nudge {
-        display: flex;
-        gap: 6px;
-      }
-      .nudge .action {
-        min-width: 2.25rem;
-        padding: 8px 10px;
-        font-size: 1rem;
-        font-weight: 600;
+        min-width: 3.25rem;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
       }
       .current-row {
         display: flex;
