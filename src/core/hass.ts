@@ -128,11 +128,16 @@ function withHassBase(
   if (/^https?:\/\//i.test(path)) {
     return path;
   }
-  const base = (hass?.hassUrl || "").replace(/\/$/, "");
-  if (!base) {
-    return path;
+  const hassUrl = hass?.hassUrl;
+  // Home Assistant exposes hassUrl(path); playground may pass an origin string.
+  if (typeof hassUrl === "function") {
+    return hassUrl(path);
   }
-  return path.startsWith("/") ? `${base}${path}` : `${base}/${path}`;
+  if (typeof hassUrl === "string" && hassUrl) {
+    const base = hassUrl.replace(/\/$/, "");
+    return path.startsWith("/") ? `${base}${path}` : `${base}/${path}`;
+  }
+  return path;
 }
 
 /** Build a displayable URL for an image entity. */

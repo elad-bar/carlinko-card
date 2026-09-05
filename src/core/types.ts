@@ -35,8 +35,11 @@ export interface HomeAssistant {
     category: string,
     integration?: string,
   ) => Promise<unknown>;
-  /** Absolute HA origin for playground / proxy image URLs (no trailing slash). */
-  hassUrl?: string;
+  /**
+   * HA: `(path) => absolute URL`. Playground may pass an origin string
+   * (no trailing slash) instead.
+   */
+  hassUrl?: string | ((path?: string) => string);
   config?: { external_url?: string; internal_url?: string };
 }
 

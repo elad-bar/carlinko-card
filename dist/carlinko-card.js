@@ -953,8 +953,14 @@ function as(t, e, s = "—") {
 function _e(t, e) {
   if (/^https?:\/\//i.test(e))
     return e;
-  const s = ((t == null ? void 0 : t.hassUrl) || "").replace(/\/$/, "");
-  return s ? e.startsWith("/") ? `${s}${e}` : `${s}/${e}` : e;
+  const s = t == null ? void 0 : t.hassUrl;
+  if (typeof s == "function")
+    return s(e);
+  if (typeof s == "string" && s) {
+    const r = s.replace(/\/$/, "");
+    return e.startsWith("/") ? `${r}${e}` : `${r}/${e}`;
+  }
+  return e;
 }
 function _t(t, e) {
   const s = j(t, e);
