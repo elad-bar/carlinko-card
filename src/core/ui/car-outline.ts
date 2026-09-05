@@ -1,5 +1,5 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, css, html, type PropertyValues } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 
 /**
  * Top-down car map with named seat/wheel slots.
@@ -10,12 +10,57 @@ export class CarlinkoCarOutline extends LitElement {
   /** Optional top-down vehicle image URL (e.g. vehicle_top entity). */
   @property({ type: String }) public src?: string;
 
+  @state() private _imageReady = false;
+  @state() private _imageFailed = false;
+
+  protected willUpdate(changed: PropertyValues): void {
+    if (changed.has("src")) {
+      this._imageReady = false;
+      this._imageFailed = false;
+    }
+  }
+
+  private _onImageLoad(): void {
+    this._imageReady = true;
+  }
+
+  private _onImageError(): void {
+    this._imageFailed = true;
+    this._imageReady = true;
+  }
+
+  protected updated(changed: PropertyValues): void {
+    if (!changed.has("src") && !changed.has("_imageFailed")) {
+      return;
+    }
+    const img = this.renderRoot.querySelector(
+      "img.car-img",
+    ) as HTMLImageElement | null;
+    if (img?.complete && img.naturalWidth > 0) {
+      this._imageReady = true;
+    }
+  }
+
   protected render() {
-    const hasImg = Boolean(this.src);
+    const showImg = Boolean(this.src) && !this._imageFailed;
+    const ready = !showImg || this._imageReady;
+    const wrapClass = [
+      showImg ? "has-img" : "",
+      ready ? "ready" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return html`
-      <div class="wrap ${hasImg ? "has-img" : ""}">
-        ${hasImg
-          ? html`<img class="car-img" src=${this.src!} alt="Vehicle top" />`
+      <div class="wrap ${wrapClass}">
+        ${showImg
+          ? html`<img
+              class="car-img"
+              src=${this.src!}
+              alt="Vehicle top"
+              @load=${this._onImageLoad}
+              @error=${this._onImageError}
+            />`
           : html`
               <svg viewBox="0 0 120 200" class="outline" aria-hidden="true">
                 <rect
@@ -77,8 +122,12 @@ export class CarlinkoCarOutline extends LitElement {
       width: 100%;
       aspect-ratio: 120 / 200;
     }
-    .wrap.has-img {
+    .wrap.has-img.ready {
       aspect-ratio: auto;
+    }
+    .wrap.has-img:not(.ready) .region {
+      visibility: hidden;
+      pointer-events: none;
     }
     .car-img {
       width: 100%;

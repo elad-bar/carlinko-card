@@ -1,5 +1,5 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { LitElement, css, html, type PropertyValues } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 
 /**
  * Front/hero vehicle image with named absolute hotspot regions.
@@ -10,13 +10,57 @@ export class CarlinkoVehicleStage extends LitElement {
   /** Optional vehicle image URL (e.g. vehicle_front entity). */
   @property({ type: String }) public src?: string;
 
+  @state() private _imageReady = false;
+
+  protected willUpdate(changed: PropertyValues): void {
+    if (changed.has("src")) {
+      this._imageReady = false;
+    }
+  }
+
+  private _onImageLoad(): void {
+    this._imageReady = true;
+  }
+
+  private _onImageError(): void {
+    this._imageReady = true;
+  }
+
+  protected updated(changed: PropertyValues): void {
+    if (!changed.has("src")) {
+      return;
+    }
+    const img = this.renderRoot.querySelector(
+      "img.car-img",
+    ) as HTMLImageElement | null;
+    if (img?.complete && img.naturalWidth > 0) {
+      this._imageReady = true;
+    }
+  }
+
   protected render() {
     const hasImg = Boolean(this.src);
+    const ready = !hasImg || this._imageReady;
+    const wrapClass = [
+      hasImg ? "has-img" : "",
+      ready ? "ready" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return html`
-      <div class="wrap ${hasImg ? "has-img" : ""}">
+      <div class="wrap ${wrapClass}">
         ${hasImg
-          ? html`<img class="car-img" src=${this.src!} alt="Vehicle" />`
-          : html`<div class="placeholder"><slot name="placeholder">No image</slot></div>`}
+          ? html`<img
+              class="car-img"
+              src=${this.src!}
+              alt="Vehicle"
+              @load=${this._onImageLoad}
+              @error=${this._onImageError}
+            />`
+          : html`<div class="placeholder">
+              <slot name="placeholder">No image</slot>
+            </div>`}
         <div class="region headline"><slot name="headline"></slot></div>
         <div class="region online"><slot name="online"></slot></div>
         <div class="region hv"><slot name="hv"></slot></div>
@@ -46,6 +90,10 @@ export class CarlinkoVehicleStage extends LitElement {
     /* Leave room above the vehicle so odometer / range / speed do not sit on the roof */
     .wrap.has-img {
       padding-top: 4.5rem;
+    }
+    .wrap.has-img:not(.ready) .region {
+      visibility: hidden;
+      pointer-events: none;
     }
     .car-img {
       display: block;
