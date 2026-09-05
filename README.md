@@ -4,15 +4,26 @@ Lovelace custom cards for vehicles managed by [ha-carlinko](https://github.com/e
 
 **Requires** the CarLinko integration. This repo does not talk to CarLinko cloud APIs.
 
-## Cards (Phase 1)
+## Cards
 
 | Type | Description |
 | --- | --- |
-| `custom:carlinko-overview` | Hero hotspots (lock / engine / defog / charge / trunk / online / HV / tyres), visual ranges/vitals |
-| `custom:carlinko-cabin` | Climate, seats, TPMS, and windows/sunroof on a top-down map |
+| `custom:carlinko-overview` | Hero vehicle image, status hotspots, visual ranges / SOC / fuel |
+| `custom:carlinko-cabin` | Climate, seats, TPMS, windows/sunroof, and body controls on a top-down map |
 | `custom:carlinko-charging` | SoC ring, plugged status, remaining, power, stop charging |
 
-Three Lovelace cards (Overview, Cabin, Charging) — see [docs/OBJECTIVE.md](docs/OBJECTIVE.md). Legacy `custom:carlinko-climate` / `custom:carlinko-tpms` / `custom:carlinko-windows` still load as Cabin aliases.
+<table>
+  <tr>
+    <th>Overview</th>
+    <th>Cabin</th>
+    <th>Charging</th>
+  </tr>
+  <tr>
+    <td valign="top"><img src="docs/screenshots/overview.png" alt="Overview card" /></td>
+    <td valign="top"><img src="docs/screenshots/cabin.png" alt="Cabin card" /></td>
+    <td valign="top"><img src="docs/screenshots/charging.png" alt="Charging card" /></td>
+  </tr>
+</table>
 
 ## Install (HACS)
 

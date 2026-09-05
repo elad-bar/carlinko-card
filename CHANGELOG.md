@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- README: live card screenshots (Overview, Cabin, Charging) above the fold
 - Card config uses required `device_id` (CarLinko vehicle device) instead of entity_prefix
 - Climate seat map uses `vehicle_top` image when available (SVG outline fallback)
 - Shared Lovelace device editor (`CarlinkoDeviceEditor`); Overview/Cabin expose top image override
