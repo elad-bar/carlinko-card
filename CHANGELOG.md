@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Cabin: seat heat/vent is one box per seat with two icon buttons and a click-to-open level menu (heat and vent stay exclusive)
+- Cabin: lock/unlock moved to the hood row next to engine and find (order: lock, engine, find); engine uses the default button color when off and green when on
 
 ## [0.1.7] - 2026-09-05
 

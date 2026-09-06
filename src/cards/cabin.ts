@@ -634,6 +634,7 @@ export class CarlinkoCabin extends LitElement {
     const chargerConnected = this._chargerConnected(slots);
     const showCharge =
       this._entityExists(chargeId) && chargerConnected;
+    const showLock = this._entityExists(lockId);
     const showEngine = this._entityExists(engineId);
     const showFind = this._entityExists(findId);
     if (
@@ -655,8 +656,26 @@ export class CarlinkoCabin extends LitElement {
     const trunkOpen = getStateValue(this.hass, trunkId) === "open";
 
     return html`
-      ${showEngine || showFind
+      ${showLock || showEngine || showFind
         ? html`<div slot="engine" class="map-actions">
+            ${showLock
+              ? renderActionButton({
+                  label: locked
+                    ? t(this.hass, "action.unlock_doors")
+                    : t(this.hass, "action.lock_doors"),
+                  icon: locked
+                    ? renderMdiIcon("mdi:car-door-lock")
+                    : renderMdiIcon("mdi:lock-open-variant"),
+                  disabled: this._busy,
+                  variant: locked ? "ok" : "danger",
+                  onClick: () =>
+                    this._run(() =>
+                      locked
+                        ? unlockLock(this.hass!, lockId!)
+                        : lockLock(this.hass!, lockId!),
+                    ),
+                })
+              : nothing}
             ${showEngine
               ? renderActionButton({
                   label: engineOn
@@ -664,7 +683,7 @@ export class CarlinkoCabin extends LitElement {
                     : t(this.hass, "action.engine_on"),
                   icon: renderMdiIcon("mdi:engine"),
                   disabled: this._busy,
-                  variant: engineOn ? "ok" : "danger",
+                  variant: engineOn ? "ok" : "",
                   onClick: () =>
                     this._run(() =>
                       engineOn
@@ -682,26 +701,6 @@ export class CarlinkoCabin extends LitElement {
                     this._run(() => pressButton(this.hass!, findId!)),
                 })
               : nothing}
-          </div>`
-        : nothing}
-      ${this._entityExists(lockId)
-        ? html`<div slot="lock" class="map-actions">
-            ${renderActionButton({
-              label: locked
-                ? t(this.hass, "action.unlock_doors")
-                : t(this.hass, "action.lock_doors"),
-              icon: locked
-                ? renderMdiIcon("mdi:car-door-lock")
-                : renderMdiIcon("mdi:lock-open-variant"),
-              disabled: this._busy,
-              variant: locked ? "ok" : "danger",
-              onClick: () =>
-                this._run(() =>
-                  locked
-                    ? unlockLock(this.hass!, lockId!)
-                    : lockLock(this.hass!, lockId!),
-                ),
-            })}
           </div>`
         : nothing}
       ${this._entityExists(defogId)
