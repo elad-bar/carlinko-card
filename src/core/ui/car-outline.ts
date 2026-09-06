@@ -166,6 +166,14 @@ export class CarlinkoCarOutline extends LitElement {
       min-height: 4px;
       pointer-events: auto;
     }
+    /*
+     * Regions paint in DOM order, so a popover in an earlier region (seat level
+     * menu) would sit under later regions. Raise the active region instead.
+     */
+    .region:hover,
+    .region:focus-within {
+      z-index: 20;
+    }
     /* Cabin seats: inset, clear of wheel TPMS */
     .seat-fl {
       left: 18%;

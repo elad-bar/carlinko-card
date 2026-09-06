@@ -87,14 +87,68 @@ function domainOf(entityId: string): string {
   return entityId.split(".", 1)[0];
 }
 
+type SeatKind = "heat" | "vent";
+
+function isSeatOffState(state: string | undefined): boolean {
+  if (!state) {
+    return true;
+  }
+  const n = state.toLowerCase();
+  return n === "off" || n === "unavailable";
+}
+
+function isSeatUnknownState(state: string | undefined): boolean {
+  return state?.toLowerCase() === "unknown";
+}
+
+function isSeatActiveState(state: string | undefined): boolean {
+  return Boolean(state) && !isSeatOffState(state) && !isSeatUnknownState(state);
+}
+
 @customElement("carlinko-cabin")
 export class CarlinkoCabin extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
 
   @state() protected _config?: CabinConfig;
   @state() private _busy = false;
+  @state() private _openSeatMenu: { slot: string; kind: SeatKind } | null =
+    null;
 
   private readonly _slotCache = new SlotMapCache();
+
+  private readonly _onDocPointerDown = (ev: PointerEvent): void => {
+    if (!this._openSeatMenu) {
+      return;
+    }
+    const path = ev.composedPath();
+    const keep = path.some(
+      (n) =>
+        n instanceof HTMLElement &&
+        (n.classList.contains("seat-icon") ||
+          n.classList.contains("seat-menu")),
+    );
+    if (!keep) {
+      this._closeSeatMenu();
+    }
+  };
+
+  private readonly _onDocKeyDown = (ev: KeyboardEvent): void => {
+    if (ev.key === "Escape" && this._openSeatMenu) {
+      this._closeSeatMenu();
+    }
+  };
+
+  public connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener("pointerdown", this._onDocPointerDown, true);
+    document.addEventListener("keydown", this._onDocKeyDown);
+  }
+
+  public disconnectedCallback(): void {
+    document.removeEventListener("pointerdown", this._onDocPointerDown, true);
+    document.removeEventListener("keydown", this._onDocKeyDown);
+    super.disconnectedCallback();
+  }
 
   public setConfig(config: CabinConfig): void {
     if (!config || typeof config.device_id !== "string") {
@@ -120,7 +174,11 @@ export class CarlinkoCabin extends LitElement {
   }
 
   protected shouldUpdate(changed: PropertyValues): boolean {
-    if (changed.has("_config") || changed.has("_busy")) {
+    if (
+      changed.has("_config") ||
+      changed.has("_busy") ||
+      changed.has("_openSeatMenu")
+    ) {
       return true;
     }
     if (changed.has("hass")) {
@@ -199,28 +257,94 @@ export class CarlinkoCabin extends LitElement {
     );
   }
 
-  private _cycleSelect(entityId: string): void {
+  private _closeSeatMenu(): void {
+    if (this._openSeatMenu) {
+      this._openSeatMenu = null;
+    }
+  }
+
+  private _toggleSeatMenu(slot: string, kind: SeatKind): void {
+    const cur = this._openSeatMenu;
+    if (cur && cur.slot === slot && cur.kind === kind) {
+      this._openSeatMenu = null;
+      return;
+    }
+    this._openSeatMenu = { slot, kind };
+  }
+
+  private _offSelectOption(entityId: string): string | undefined {
+    return getSelectOptions(this.hass, entityId).find(
+      (opt) => opt.toLowerCase() === "off",
+    );
+  }
+
+  private async _turnSeatOff(entityId: string): Promise<void> {
+    if (!this.hass?.states[entityId]) {
+      return;
+    }
+    const state = getStateValue(this.hass, entityId);
+    if (!isSeatActiveState(state)) {
+      return;
+    }
+    if (domainOf(entityId) === "select") {
+      const off = this._offSelectOption(entityId);
+      if (!off) {
+        return;
+      }
+      await selectOption(this.hass, entityId, off);
+      return;
+    }
+    await turnOff(this.hass, entityId);
+  }
+
+  private _setSeatLevel(
+    entityId: string,
+    option: string,
+    siblingId: string | undefined,
+  ): void {
     if (!this.hass) {
       return;
     }
-    const options = getSelectOptions(this.hass, entityId);
-    if (options.length === 0) {
-      return;
-    }
-    const current = getStateValue(this.hass, entityId) ?? options[0];
-    const idx = options.indexOf(current);
-    const next = options[(idx + 1) % options.length];
-    this._run(() => selectOption(this.hass!, entityId, next));
+    this._run(async () => {
+      if (option.toLowerCase() !== "off" && siblingId) {
+        await this._turnSeatOff(siblingId);
+      }
+      await selectOption(this.hass!, entityId, option);
+    });
   }
 
-  private _toggleBinary(entityId: string): void {
+  private _toggleSeatBinary(
+    entityId: string,
+    siblingId: string | undefined,
+  ): void {
     if (!this.hass) {
       return;
     }
     const on = getStateValue(this.hass, entityId) === "on";
-    this._run(() =>
-      on ? turnOff(this.hass!, entityId) : turnOn(this.hass!, entityId),
-    );
+    this._run(async () => {
+      if (!on && siblingId) {
+        await this._turnSeatOff(siblingId);
+      }
+      if (on) {
+        await turnOff(this.hass!, entityId);
+      } else {
+        await turnOn(this.hass!, entityId);
+      }
+    });
+  }
+
+  private _seatStateLabel(
+    entityId: string,
+    entityKey: string,
+    state: string | undefined,
+  ): string {
+    if (domainOf(entityId) === "select") {
+      return entityState(this.hass, "select", entityKey, state);
+    }
+    if (state === "on") {
+      return "On";
+    }
+    return entityState(this.hass, "select", entityKey, "off");
   }
 
   private _hasDirectTpms(slots: Record<string, string | undefined>): boolean {
@@ -246,38 +370,105 @@ export class CarlinkoCabin extends LitElement {
     });
   }
 
-  private _seatControl(
-    entityId: string | undefined,
-    entityKey: string | undefined,
-    kind: "H" | "V",
-  ): TemplateResult | typeof nothing {
-    if (!entityId || !entityKey || !this.hass?.states[entityId]) {
-      return nothing;
-    }
+  private _seatIcon(
+    zone: SeatZone,
+    kind: SeatKind,
+    entityId: string,
+    entityKey: string,
+    siblingId: string | undefined,
+    active: boolean,
+  ): TemplateResult {
     const state = getStateValue(this.hass, entityId);
     const domain = domainOf(entityId);
-    const role = kind === "H" ? "heat" : "vent";
     const roleLabel =
-      kind === "H" ? t(this.hass, "status.heat") : t(this.hass, "status.vent");
-    const stateLabel = entityState(this.hass, "select", entityKey, state);
-    const onClick =
-      domain === "select"
-        ? () => this._cycleSelect(entityId)
-        : () => this._toggleBinary(entityId);
+      kind === "heat"
+        ? t(this.hass, "status.heat")
+        : t(this.hass, "status.vent");
+    const stateLabel = this._seatStateLabel(entityId, entityKey, state);
+    const open =
+      this._openSeatMenu?.slot === zone.slot &&
+      this._openSeatMenu.kind === kind;
+    const isSelect = domain === "select";
+    const onClick = isSelect
+      ? (ev: Event) => {
+          ev.stopPropagation();
+          this._toggleSeatMenu(zone.slot, kind);
+        }
+      : () => this._toggleSeatBinary(entityId, siblingId);
+    const menuUp = zone.slot === "seat-rl" || zone.slot === "seat-rr";
+    const menuEnd = zone.slot === "seat-fr" || zone.slot === "seat-rr";
+    const options = isSelect ? getSelectOptions(this.hass, entityId) : [];
     return html`
-      <button
-        type="button"
-        class="seat-btn ${role}"
-        ?disabled=${this._busy}
-        title=${`${roleLabel}: ${stateLabel}`}
-        aria-label=${`${roleLabel}: ${stateLabel}`}
-        @click=${onClick}
+      <div
+        class="seat-icon-wrap"
+        @mouseenter=${() => {
+          if (isSelect && !this._busy) {
+            this._openSeatMenu = { slot: zone.slot, kind };
+          }
+        }}
+        @mouseleave=${() => {
+          if (isSelect) {
+            this._closeSeatMenu();
+          }
+        }}
       >
-        ${kind === "H"
-          ? renderMdiIcon("mdi:car-seat-heater")
-          : renderMdiIcon("mdi:car-seat-cooler")}
-        <span class="seat-state">${stateLabel}</span>
-      </button>
+        <button
+          type="button"
+          class="seat-icon ${kind}${active ? " active" : ""}${open
+            ? " open"
+            : ""}"
+          ?disabled=${this._busy}
+          title=${`${roleLabel}: ${stateLabel}`}
+          aria-label=${`${roleLabel}: ${stateLabel}`}
+          aria-haspopup=${isSelect ? "listbox" : nothing}
+          aria-expanded=${isSelect ? String(open) : nothing}
+          @click=${onClick}
+        >
+          ${kind === "heat"
+            ? renderMdiIcon("mdi:car-seat-heater")
+            : renderMdiIcon("mdi:car-seat-cooler")}
+        </button>
+        ${open && isSelect
+          ? html`
+              <div
+                class="seat-menu ${kind}${menuUp ? " up" : ""}${menuEnd
+                  ? " end"
+                  : ""}"
+                role="listbox"
+                aria-label=${roleLabel}
+              >
+                ${options.map((opt) => {
+                  const current = opt === state;
+                  const off = opt.toLowerCase() === "off";
+                  const label = entityState(
+                    this.hass,
+                    "select",
+                    entityKey,
+                    opt,
+                  );
+                  return html`
+                    <button
+                      type="button"
+                      class="seat-option${off ? " off" : ""}${current
+                        ? " current"
+                        : ""}"
+                      role="option"
+                      aria-selected=${String(current)}
+                      ?disabled=${this._busy}
+                      @click=${(ev: Event) => {
+                        ev.stopPropagation();
+                        this._closeSeatMenu();
+                        this._setSeatLevel(entityId, opt, siblingId);
+                      }}
+                    >
+                      ${label}
+                    </button>
+                  `;
+                })}
+              </div>
+            `
+          : nothing}
+      </div>
     `;
   }
 
@@ -285,18 +476,50 @@ export class CarlinkoCabin extends LitElement {
     zone: SeatZone,
     slots: Record<string, string | undefined>,
   ): TemplateResult | typeof nothing {
-    const heat = zone.heat ? slots[zone.heat] : undefined;
-    const vent = zone.vent ? slots[zone.vent] : undefined;
-    if (
-      (!heat || !this.hass?.states[heat]) &&
-      (!vent || !this.hass?.states[vent])
-    ) {
+    const heatId = zone.heat ? slots[zone.heat] : undefined;
+    const ventId = zone.vent ? slots[zone.vent] : undefined;
+    const heat =
+      heatId && this.hass?.states[heatId] ? heatId : undefined;
+    const vent =
+      ventId && this.hass?.states[ventId] ? ventId : undefined;
+    if (!heat && !vent) {
       return nothing;
     }
+    const heatState = heat ? getStateValue(this.hass, heat) : undefined;
+    const ventState = vent ? getStateValue(this.hass, vent) : undefined;
+    const heatOn = isSeatActiveState(heatState);
+    const ventOn = isSeatActiveState(ventState);
+    let mode: SeatKind | "off" | "unknown" = "off";
+    let label = entityState(this.hass, "select", "seat_heat_l", "off");
+    if (heatOn && zone.heat) {
+      mode = "heat";
+      label = this._seatStateLabel(heat!, zone.heat, heatState);
+    } else if (ventOn && zone.vent) {
+      mode = "vent";
+      label = this._seatStateLabel(vent!, zone.vent, ventState);
+    } else if (isSeatUnknownState(heatState) || isSeatUnknownState(ventState)) {
+      mode = "unknown";
+      const unknownKey = zone.heat ?? zone.vent ?? "seat_heat_l";
+      const unknownState = isSeatUnknownState(heatState)
+        ? heatState
+        : ventState;
+      label = entityState(this.hass, "select", unknownKey, unknownState);
+    }
+    const menuOpen = this._openSeatMenu?.slot === zone.slot;
     return html`
-      <div slot=${zone.slot} class="seat-zone">
-        ${this._seatControl(heat, zone.heat, "H")}
-        ${this._seatControl(vent, zone.vent, "V")}
+      <div
+        slot=${zone.slot}
+        class="seat-chip${menuOpen ? " menu-open" : ""}"
+      >
+        <div class="seat-icons">
+          ${heat && zone.heat
+            ? this._seatIcon(zone, "heat", heat, zone.heat, vent, heatOn)
+            : nothing}
+          ${vent && zone.vent
+            ? this._seatIcon(zone, "vent", vent, zone.vent, heat, ventOn)
+            : nothing}
+        </div>
+        <span class="seat-state ${mode}">${label}</span>
       </div>
     `;
   }
@@ -768,6 +991,9 @@ export class CarlinkoCabin extends LitElement {
     metricStyles,
     actionStyles,
     css`
+      ha-card {
+        overflow: visible;
+      }
       .controls-row {
         display: flex;
         flex-wrap: wrap;
@@ -795,7 +1021,7 @@ export class CarlinkoCabin extends LitElement {
         gap: 8px;
         padding: 4px 0;
       }
-      .seat-zone,
+      .seat-chip,
       .wheel-zone {
         display: flex;
         flex-direction: column;
@@ -804,7 +1030,30 @@ export class CarlinkoCabin extends LitElement {
       .wheel-zone {
         align-items: flex-start;
       }
-      .seat-btn,
+      /*
+       * No backdrop-filter here: it would create a stacking context and trap
+       * the open level menu behind the other seat/map regions.
+       */
+      .seat-chip {
+        position: relative;
+        align-items: center;
+        gap: 3px;
+        border: 1px solid var(--ck-border);
+        background: var(--ck-bg);
+        border-radius: 8px;
+        padding: 5px 7px 4px;
+      }
+      .seat-chip.menu-open {
+        z-index: 30;
+      }
+      .seat-icons {
+        display: inline-flex;
+        gap: 4px;
+      }
+      .seat-icon-wrap {
+        position: relative;
+      }
+      .seat-icon,
       .wheel-chip {
         border: 1px solid var(--ck-border);
         background: color-mix(in srgb, var(--ck-bg) 88%, transparent);
@@ -818,32 +1067,149 @@ export class CarlinkoCabin extends LitElement {
         white-space: nowrap;
         backdrop-filter: blur(2px);
       }
-      .seat-btn {
+      .seat-icon {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 5px 8px;
-        font-size: 0.8rem;
+        justify-content: center;
+        width: 1.7rem;
+        height: 1.7rem;
+        padding: 0;
+        color: var(--ck-muted);
+        backdrop-filter: none;
       }
-      .seat-btn ha-icon {
+      .seat-icon ha-icon {
         --mdc-icon-size: 1rem;
         width: 1rem;
         height: 1rem;
         flex-shrink: 0;
       }
-      .seat-btn.heat {
-        border-color: var(--ck-seat-heat);
+      .seat-icon.heat {
+        border-color: color-mix(in srgb, var(--ck-seat-heat) 45%, transparent);
+        color: color-mix(
+          in srgb,
+          var(--ck-seat-heat) 62%,
+          var(--ck-muted)
+        );
+      }
+      .seat-icon.vent {
+        border-color: color-mix(in srgb, var(--ck-seat-vent) 45%, transparent);
+        color: color-mix(
+          in srgb,
+          var(--ck-seat-vent) 62%,
+          var(--ck-muted)
+        );
+      }
+      .seat-icon.heat.active,
+      .seat-icon.heat.open {
         color: var(--ck-seat-heat);
+        border-color: var(--ck-seat-heat);
+        background: color-mix(in srgb, var(--ck-seat-heat) 20%, transparent);
       }
-      .seat-btn.vent {
-        border-color: var(--ck-seat-vent);
+      .seat-icon.vent.active,
+      .seat-icon.vent.open {
         color: var(--ck-seat-vent);
+        border-color: var(--ck-seat-vent);
+        background: color-mix(in srgb, var(--ck-seat-vent) 20%, transparent);
       }
-      .seat-btn .seat-state {
-        color: var(--ck-text);
+      .seat-icon.open {
+        box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 40%, transparent);
+      }
+      .seat-state {
         font-size: 0.72rem;
+        font-weight: 600;
         white-space: nowrap;
         line-height: 1.1;
+      }
+      .seat-state.off,
+      .seat-state.unknown {
+        color: var(--ck-muted);
+        font-weight: 500;
+      }
+      .seat-state.heat {
+        color: var(--ck-seat-heat);
+      }
+      .seat-state.vent {
+        color: var(--ck-seat-vent);
+      }
+      .seat-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        z-index: 8;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 92px;
+        padding: 4px;
+        border: 1px solid var(--ck-border);
+        border-radius: 8px;
+        background: color-mix(in srgb, var(--ck-bg) 94%, var(--ck-text) 6%);
+        box-shadow: 0 8px 20px color-mix(in srgb, #000 45%, transparent);
+      }
+      /* Keep pointer inside the wrap while moving icon -> menu (hover open). */
+      .seat-menu::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -8px;
+        height: 8px;
+      }
+      .seat-menu.up::before {
+        top: auto;
+        bottom: -8px;
+      }
+      .seat-menu.up {
+        top: auto;
+        bottom: calc(100% + 6px);
+      }
+      .seat-menu.end {
+        left: auto;
+        right: 0;
+      }
+      .seat-menu.heat {
+        border-color: color-mix(
+          in srgb,
+          var(--ck-seat-heat) 50%,
+          var(--ck-border)
+        );
+      }
+      .seat-menu.vent {
+        border-color: color-mix(
+          in srgb,
+          var(--ck-seat-vent) 50%,
+          var(--ck-border)
+        );
+      }
+      .seat-option {
+        display: block;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: var(--ck-text);
+        font: inherit;
+        font-size: 0.74rem;
+        text-align: left;
+        padding: 5px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .seat-menu.heat .seat-option {
+        color: color-mix(in srgb, var(--ck-seat-heat) 78%, var(--ck-text));
+      }
+      .seat-menu.vent .seat-option {
+        color: color-mix(in srgb, var(--ck-seat-vent) 78%, var(--ck-text));
+      }
+      .seat-option.off {
+        color: var(--ck-muted);
+      }
+      .seat-option.current {
+        background: color-mix(in srgb, currentColor 18%, transparent);
+        font-weight: 700;
+      }
+      .seat-option:hover:not(:disabled) {
+        background: color-mix(in srgb, currentColor 26%, transparent);
       }
       .wheel-chip {
         display: inline-flex;
@@ -888,12 +1254,13 @@ export class CarlinkoCabin extends LitElement {
       .wheel-chip.tone-danger .wheel-temp {
         color: var(--ck-muted);
       }
-      .seat-btn:hover:not(:disabled),
+      .seat-icon:hover:not(:disabled),
       .wheel-chip:hover {
         background: color-mix(in srgb, currentColor 14%, var(--ck-bg));
         border-color: currentColor;
       }
-      .seat-btn:disabled {
+      .seat-icon:disabled,
+      .seat-option:disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
@@ -927,17 +1294,26 @@ export class CarlinkoCabin extends LitElement {
       carlinko-car-outline {
         margin-top: 12px;
         max-width: 320px;
+        overflow: visible;
       }
       @container ck-card (max-width: 360px) {
-        .seat-btn {
-          padding: 4px 6px;
-          font-size: 0.7rem;
-          gap: 2px;
+        .seat-chip {
+          padding: 4px 5px 3px;
         }
-        .seat-btn ha-icon {
+        .seat-icon {
+          width: 1.45rem;
+          height: 1.45rem;
+        }
+        .seat-icon ha-icon {
           --mdc-icon-size: 0.85rem;
           width: 0.85rem;
           height: 0.85rem;
+        }
+        .seat-state {
+          font-size: 0.65rem;
+        }
+        .seat-menu {
+          min-width: 80px;
         }
         .wheel-chip {
           padding: 3px 5px;
