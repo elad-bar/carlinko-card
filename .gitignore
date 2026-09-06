@@ -10,6 +10,10 @@ playground/.env
 playground/.env.local
 *.pem
 
+# Local Home Assistant debug dumps (contain tokens, coordinates, MACs)
+ha_states.json
+ha_*.json
+
 # IDE / OS
 .DS_Store
 Thumbs.db

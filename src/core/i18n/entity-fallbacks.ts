@@ -26,6 +26,10 @@ export const ENTITY_NAME_FALLBACKS: Readonly<
     charging: "Charging",
     online: "Online",
     tyres_ok: "Tyre problem",
+    door_driver: "Driver door",
+    door_passenger: "Passenger door",
+    door_rear_left: "Rear left door",
+    door_rear_right: "Rear right door",
   },
   button: {
     charge_stop: "Stop charging",

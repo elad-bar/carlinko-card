@@ -67,6 +67,14 @@ type WheelZone = {
   temp: string;
 };
 
+type DoorZone = {
+  slot: string;
+  /** Cabin slot name resolved to an entity id. */
+  door: string;
+  /** ha-carlinko EntitySpec.key, for the translated entity name. */
+  key: string;
+};
+
 const SEAT_ZONES: SeatZone[] = [
   { slot: "seat-fl", heat: "seat_heat_l", vent: "seat_vent_l" },
   { slot: "seat-fr", heat: "seat_heat_r", vent: "seat_vent_r" },
@@ -79,6 +87,13 @@ const WHEEL_ZONES: WheelZone[] = [
   { slot: "wheel-fr", pressure: "tyre_fr", temp: "tyre_fr_temp" },
   { slot: "wheel-rl", pressure: "tyre_rl", temp: "tyre_rl_temp" },
   { slot: "wheel-rr", pressure: "tyre_rr", temp: "tyre_rr_temp" },
+];
+
+const DOOR_ZONES: DoorZone[] = [
+  { slot: "door-fl", door: "door_fl", key: "door_driver" },
+  { slot: "door-fr", door: "door_fr", key: "door_passenger" },
+  { slot: "door-rl", door: "door_rl", key: "door_rear_left" },
+  { slot: "door-rr", door: "door_rr", key: "door_rear_right" },
 ];
 
 const PRESSURE_SLOTS = ["tyre_fl", "tyre_fr", "tyre_rl", "tyre_rr"] as const;
@@ -591,6 +606,41 @@ export class CarlinkoCabin extends LitElement {
     return Boolean(entityId && this.hass?.states[entityId]);
   }
 
+  private _hasDoorSensors(
+    slots: Record<string, string | undefined>,
+  ): boolean {
+    return DOOR_ZONES.some((zone) => this._entityExists(slots[zone.door]));
+  }
+
+  private _doorZone(
+    zone: DoorZone,
+    slots: Record<string, string | undefined>,
+  ): TemplateResult | typeof nothing {
+    const doorId = slots[zone.door];
+    if (!this._entityExists(doorId)) {
+      return nothing;
+    }
+    const state = getStateValue(this.hass, doorId);
+    const open = state === "on";
+    const known = open || state === "off";
+    const tone = known ? (open ? "danger" : "ok") : "muted";
+    const stateLabel = known
+      ? t(this.hass, open ? "status.door_open" : "status.door_closed")
+      : t(this.hass, "status.door_unknown");
+    const label = `${entityName(this.hass, "binary_sensor", zone.key)}: ${stateLabel}`;
+    return html`
+      <div slot=${zone.slot} class="door-zone">
+        <button
+          type="button"
+          class="door-dot tone-${tone}"
+          title=${label}
+          aria-label=${label}
+          @click=${() => fireMoreInfo(this, doorId!)}
+        ></button>
+      </div>
+    `;
+  }
+
   private _hasWindowsControls(
     slots: Record<string, string | undefined>,
   ): boolean {
@@ -875,8 +925,10 @@ export class CarlinkoCabin extends LitElement {
     const directTpms = this._hasDirectTpms(s);
     const hasWindows = this._hasWindowsControls(s);
     const hasBody = this._hasBodyControls(s);
+    const hasDoors = this._hasDoorSensors(s);
     const topImg = imageEntityUrl(this.hass, s.image);
-    const showMap = hasSeats || directTpms || hasWindows || hasBody;
+    const showMap =
+      hasSeats || directTpms || hasWindows || hasBody || hasDoors;
 
     const hasClimateControls = Boolean(
       climateEntity ||
@@ -974,6 +1026,7 @@ export class CarlinkoCabin extends LitElement {
                   ${this._bodyActions(s)} ${this._windowsCluster(s)}
                   ${this._sunroofCluster(s)}
                   ${SEAT_ZONES.map((z) => this._seatZone(z, s))}
+                  ${DOOR_ZONES.map((z) => this._doorZone(z, s))}
                   ${directTpms
                     ? WHEEL_ZONES.map((z) => this._wheelZone(z, s))
                     : nothing}
@@ -1210,6 +1263,29 @@ export class CarlinkoCabin extends LitElement {
       .seat-option:hover:not(:disabled) {
         background: color-mix(in srgb, currentColor 26%, transparent);
       }
+      .door-dot {
+        display: block;
+        width: 14px;
+        height: 14px;
+        padding: 0;
+        border-radius: 50%;
+        border: 2px solid var(--ck-bg);
+        background: var(--ck-muted);
+        cursor: pointer;
+      }
+      .door-dot.tone-ok {
+        background: var(--ck-ok);
+        box-shadow: 0 0 8px color-mix(in srgb, var(--ck-ok) 60%, transparent);
+      }
+      .door-dot.tone-danger {
+        background: var(--ck-danger);
+        box-shadow: 0 0 8px
+          color-mix(in srgb, var(--ck-danger) 60%, transparent);
+      }
+      .door-dot:hover {
+        outline: 2px solid color-mix(in srgb, currentColor 45%, transparent);
+        outline-offset: 1px;
+      }
       .wheel-chip {
         display: inline-flex;
         align-items: center;
@@ -1326,6 +1402,10 @@ export class CarlinkoCabin extends LitElement {
         }
         .wheel-temp {
           font-size: 0.6rem;
+        }
+        .door-dot {
+          width: 12px;
+          height: 12px;
         }
         .map-actions .action.icon {
           width: 2.1rem;

@@ -97,6 +97,10 @@ export class CarlinkoCarOutline extends LitElement {
         <div class="region wheel-fr"><slot name="wheel-fr"></slot></div>
         <div class="region wheel-rl"><slot name="wheel-rl"></slot></div>
         <div class="region wheel-rr"><slot name="wheel-rr"></slot></div>
+        <div class="region door-fl"><slot name="door-fl"></slot></div>
+        <div class="region door-fr"><slot name="door-fr"></slot></div>
+        <div class="region door-rl"><slot name="door-rl"></slot></div>
+        <div class="region door-rr"><slot name="door-rr"></slot></div>
         <div class="region windows"><slot name="windows"></slot></div>
         <div class="region sunroof"><slot name="sunroof"></slot></div>
         <div class="region trunk"><slot name="trunk"></slot></div>
@@ -207,6 +211,27 @@ export class CarlinkoCarOutline extends LitElement {
     .wheel-rr {
       right: 0;
       top: 78%;
+    }
+    /* Door status dots: body sides, clear of the windows stack at left 3% */
+    .door-fl {
+      left: 11%;
+      top: 47%;
+      transform: translate(-50%, -50%);
+    }
+    .door-fr {
+      right: 11%;
+      top: 47%;
+      transform: translate(50%, -50%);
+    }
+    .door-rl {
+      left: 11%;
+      top: 70%;
+      transform: translate(-50%, -50%);
+    }
+    .door-rr {
+      right: 11%;
+      top: 70%;
+      transform: translate(50%, -50%);
     }
     /* Stack under lock, same left edge — vertical window then vent */
     .windows {

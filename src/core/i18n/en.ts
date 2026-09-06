@@ -23,6 +23,9 @@ export const CARD_EN = {
     hv_prefix: "HV",
     heat: "Heat",
     vent: "Vent",
+    door_open: "Open",
+    door_closed: "Closed",
+    door_unknown: "Unknown",
   },
   climate: {
     on: "Climate on",
