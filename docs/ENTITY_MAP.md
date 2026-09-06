@@ -76,6 +76,10 @@ Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 | tyre_rl_temp | `tyre_rl_temp` | sensor | optional | |
 | tyre_rr | `tyre_rr` | sensor | optional | |
 | tyre_rr_temp | `tyre_rr_temp` | sensor | optional | |
+| door_fl | `door_driver` | binary_sensor | optional | Status dot on driver door; green closed / red open |
+| door_fr | `door_passenger` | binary_sensor | optional | Status dot on passenger door; green closed / red open |
+| door_rl | `door_rear_left` | binary_sensor | optional | Status dot on rear left door; green closed / red open |
+| door_rr | `door_rear_right` | binary_sensor | optional | Status dot on rear right door; green closed / red open |
 | windows | `windows` | cover | optional | Open or Close icon on windshield (state-based) |
 | windows_vent | `windows_vent` | button | optional | Vent icon on windshield |
 | sunroof | `sunroof` | cover | optional | Open or Close icon on sunroof (state-based) |
@@ -88,7 +92,7 @@ Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 | charge_stop | `charge_stop` | button | optional | Stop / release charging map button (rear-left); hidden when `charge_mode` is not `ac`/`dc`; Charging card remains detail |
 | trunk | `liftgate` | cover | optional | Open / close map button (rear) |
 
-**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); windows open/vent stacked vertically under lock (same left edge); sunroof icons on glass roof; engine / find / lock / defog / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, windows/sunroof, nor body controls exist.
+**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); green/red door-open dots on each door side; windows open/vent stacked vertically under lock (same left edge); sunroof icons on glass roof; engine / find / lock / defog / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, door sensors, windows/sunroof, nor body controls exist.
 
 **INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.8] - 2026-09-06
 
+### Added
+
+- Cabin: green/red status dots on each door (`door_driver` / `door_passenger` / `door_rear_left` / `door_rear_right`); red when open, green when closed
+
 ### Changed
 
 - Cabin: seat heat/vent is one box per seat with two icon buttons and a click-to-open level menu (heat and vent stay exclusive)
