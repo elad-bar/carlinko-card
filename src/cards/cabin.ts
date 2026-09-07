@@ -666,6 +666,8 @@ export class CarlinkoCabin extends LitElement {
       this._entityExists(slots.engine) ||
       this._entityExists(slots.find) ||
       this._entityExists(slots.defog) ||
+      this._entityExists(slots.windshield_heat) ||
+      this._entityExists(slots.steer_heat) ||
       (this._entityExists(slots.charge_stop) &&
         this._chargerConnected(slots)) ||
       this._entityExists(slots.trunk)
@@ -679,6 +681,8 @@ export class CarlinkoCabin extends LitElement {
     const engineId = slots.engine;
     const findId = slots.find;
     const defogId = slots.defog;
+    const windshieldHeatId = slots.windshield_heat;
+    const steerHeatId = slots.steer_heat;
     const chargeId = slots.charge_stop;
     const trunkId = slots.trunk;
     const chargerConnected = this._chargerConnected(slots);
@@ -687,11 +691,16 @@ export class CarlinkoCabin extends LitElement {
     const showLock = this._entityExists(lockId);
     const showEngine = this._entityExists(engineId);
     const showFind = this._entityExists(findId);
+    const showDefog = this._entityExists(defogId);
+    const showWindshieldHeat = this._entityExists(windshieldHeatId);
+    const showSteerHeat = this._entityExists(steerHeatId);
     if (
       !lockId &&
       !showEngine &&
       !showFind &&
-      !defogId &&
+      !showDefog &&
+      !showWindshieldHeat &&
+      !showSteerHeat &&
       !showCharge &&
       !trunkId
     ) {
@@ -703,6 +712,8 @@ export class CarlinkoCabin extends LitElement {
     const engineOn = isOn(this.hass, engineId);
     const defogOn = isOn(this.hass, defogId);
     const defogReadOnly = Boolean(defogId?.startsWith("binary_sensor."));
+    const windshieldHeatOn = isOn(this.hass, windshieldHeatId);
+    const steerHeatOn = isOn(this.hass, steerHeatId);
     const trunkOpen = getStateValue(this.hass, trunkId) === "open";
 
     return html`
@@ -753,18 +764,46 @@ export class CarlinkoCabin extends LitElement {
               : nothing}
           </div>`
         : nothing}
-      ${this._entityExists(defogId)
+      ${showDefog || showWindshieldHeat || showSteerHeat
         ? html`<div slot="defog" class="map-actions">
-            ${renderActionButton({
-              label: defogOn
-                ? t(this.hass, "action.defog_off")
-                : t(this.hass, "action.defog_on"),
-              icon: renderMdiIcon("mdi:car-defrost-front"),
-              disabled: this._busy || defogReadOnly,
-              variant: defogOn ? "danger" : "",
-              onClick: () =>
-                this._run(() => toggleSwitch(this.hass!, defogId!)),
-            })}
+            ${showSteerHeat
+              ? renderActionButton({
+                  label: steerHeatOn
+                    ? t(this.hass, "action.steer_heat_off")
+                    : t(this.hass, "action.steer_heat_on"),
+                  icon: renderMdiIcon("mdi:steering"),
+                  disabled: this._busy,
+                  variant: steerHeatOn ? "heat" : "",
+                  onClick: () =>
+                    this._run(() => toggleSwitch(this.hass!, steerHeatId!)),
+                })
+              : nothing}
+            ${showDefog
+              ? renderActionButton({
+                  label: defogOn
+                    ? t(this.hass, "action.defog_off")
+                    : t(this.hass, "action.defog_on"),
+                  icon: renderMdiIcon("mdi:car-defrost-front"),
+                  disabled: this._busy || defogReadOnly,
+                  variant: defogOn ? "danger" : "",
+                  onClick: () =>
+                    this._run(() => toggleSwitch(this.hass!, defogId!)),
+                })
+              : nothing}
+            ${showWindshieldHeat
+              ? renderActionButton({
+                  label: windshieldHeatOn
+                    ? t(this.hass, "action.windshield_heat_off")
+                    : t(this.hass, "action.windshield_heat_on"),
+                  icon: renderMdiIcon("mdi:car-windshield"),
+                  disabled: this._busy,
+                  variant: windshieldHeatOn ? "heat" : "",
+                  onClick: () =>
+                    this._run(() =>
+                      toggleSwitch(this.hass!, windshieldHeatId!),
+                    ),
+                })
+              : nothing}
           </div>`
         : nothing}
       ${showCharge

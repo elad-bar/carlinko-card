@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.9] - 2026-09-07
+
+### Added
+
+- Cabin: steering wheel heat (`steer_heat`) and windshield heat (`windshield_heat`) icon buttons, sharing the windshield row with defog (order: steering wheel heat, defog, windshield heat) (ha-carlinko 0.1.11; both are capability-gated, so they only appear on cars that report them)
+
 ## [0.1.8] - 2026-09-06
 
 ### Added

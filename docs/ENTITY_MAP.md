@@ -88,11 +88,13 @@ Climate, TPMS, windows/sunroof, and body/access controls on one top-down map.
 | engine | `engine` | switch | optional | Engine on/off map button (hood); shares hood cluster with Find |
 | find | `find` | button | optional | Find car (Search) map button next to engine on hood |
 | defog | `defrost_cmd` | switch | optional | Fallback key `defrost` (binary, read-only); windshield map button |
+| steer_heat | `steer_heat` | switch | optional | Windshield map button, left of defog; cap-gated in ha-carlinko (`steerHeat`) |
+| windshield_heat | `windshield_heat` | switch | optional | Windshield map button, right of defog; cap-gated in ha-carlinko (`windshieldHeat`) |
 | charge_mode | `charge_mode` | sensor | optional | Enum `none` / `ac` / `dc`; gates Stop charge visibility (show only when plugged in) |
 | charge_stop | `charge_stop` | button | optional | Stop / release charging map button (rear-left); hidden when `charge_mode` is not `ac`/`dc`; Charging card remains detail |
 | trunk | `liftgate` | cover | optional | Open / close map button (rear) |
 
-**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); green/red door-open dots on each door side; windows open/vent stacked vertically under lock (same left edge); sunroof icons on glass roof; engine / find / lock / defog / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, door sensors, windows/sunroof, nor body controls exist.
+**Map:** Seat heat/vent in cabin; tyre pressure/temp at wheels when direct TPMS (borders colored from `tyres_ok` / `tyre_status`); green/red door-open dots on each door side; windows open/vent stacked vertically under lock (same left edge); sunroof icons on glass roof; steering wheel heat / defog / windshield heat share one row on the windshield (in that order); engine / find / lock / charge / trunk map buttons on the body. Overall tyre status also on Overview as a hotspot. Hide the map when neither seats, direct wheels, door sensors, windows/sunroof, nor body controls exist.
 
 **INT-01:** ha-carlinko climate does **not** set `current_temperature` today (target only when `ac.temp` is supported). The card shows a Current row only if `attributes.current_temperature` is present at runtime.
 

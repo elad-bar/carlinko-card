@@ -42,6 +42,8 @@ export const ENTITY_NAME_FALLBACKS: Readonly<
   switch: {
     engine: "Engine",
     defrost_cmd: "Defog",
+    windshield_heat: "Windshield heat",
+    steer_heat: "Steering wheel heat",
   },
   lock: {
     lock: "Lock",

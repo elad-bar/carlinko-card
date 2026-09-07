@@ -91,6 +91,8 @@ export const CABIN_SLOTS: readonly SlotDef[] = [
     domain: "switch",
     fallbackKeys: ["defrost"],
   },
+  { slot: "windshield_heat", key: "windshield_heat", domain: "switch" },
+  { slot: "steer_heat", key: "steer_heat", domain: "switch" },
   { slot: "charge_mode", key: "charge_mode", domain: "sensor" },
   { slot: "charge_stop", key: "charge_stop", domain: "button" },
   { slot: "trunk", key: "liftgate", domain: "cover" },
