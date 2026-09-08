@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-09-08
+
+### Fixed
+
+- Charging: charge state and charge mode show translated state labels (Charging / AC) from ha-carlinko instead of raw states (`charging`, `ac`)
+- Charging: the charge mode row label comes from ha-carlinko (`entityName`) instead of the card's own "Mode" string, matching the charge state row
+
 ## [0.1.9] - 2026-09-07
 
 ### Added

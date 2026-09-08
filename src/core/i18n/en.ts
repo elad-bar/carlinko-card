@@ -19,7 +19,6 @@ export const CARD_EN = {
     soc: "SoC",
     power: "Power",
     time: "Time",
-    mode: "Mode",
     hv_prefix: "HV",
     heat: "Heat",
     vent: "Vent",

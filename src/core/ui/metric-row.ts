@@ -3,15 +3,22 @@ import {
   fireMoreInfo,
   formatState,
   getNumericState,
+  getStateValue,
 } from "../hass";
-import type { HomeAssistant } from "../types";
+import { entityState } from "../i18n";
+import type { EntityDomain, HomeAssistant } from "../types";
 
 export function renderMetricRow(
   host: HTMLElement,
   hass: HomeAssistant | undefined,
   label: string,
   entityId: string | undefined,
-  opts?: { suffix?: string; numeric?: boolean },
+  opts?: {
+    suffix?: string;
+    numeric?: boolean;
+    /** Enum sensor: render the translated state label instead of the raw state. */
+    stateKey?: { domain: EntityDomain | string; key: string };
+  },
 ): TemplateResult | typeof nothing {
   if (!hass || !entityId || !hass.states[entityId]) {
     return nothing;
@@ -23,6 +30,11 @@ export function renderMetricRow(
       return nothing;
     }
     value = opts.suffix ? `${n}${opts.suffix}` : String(n);
+  } else if (opts?.stateKey) {
+    const raw = getStateValue(hass, entityId);
+    if (raw && raw !== "unknown" && raw !== "unavailable") {
+      value = entityState(hass, opts.stateKey.domain, opts.stateKey.key, raw);
+    }
   }
   return html`
     <button

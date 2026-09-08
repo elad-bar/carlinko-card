@@ -251,12 +251,14 @@ export class CarlinkoCharging extends LitElement {
                     this.hass,
                     entityName(this.hass, "sensor", "charge_state"),
                     s.charge_state,
+                    { stateKey: { domain: "sensor", key: "charge_state" } },
                   )}
                   ${renderMetricRow(
                     this,
                     this.hass,
-                    t(this.hass, "status.mode"),
+                    entityName(this.hass, "sensor", "charge_mode"),
                     s.charge_mode,
+                    { stateKey: { domain: "sensor", key: "charge_mode" } },
                   )}
                 </div>
               `
